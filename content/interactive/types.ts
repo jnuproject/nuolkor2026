@@ -31,6 +31,7 @@ export type LessonActivity = {
   durationMinutes?: number;
   minimum?: number;
   optional?: boolean;
+  hidden?: boolean;
 };
 
 export type LessonStage = {
@@ -54,3 +55,16 @@ export type InteractiveDayPlan = {
   artifact: string;
   stages: LessonStage[];
 };
+
+export function activityRequiresEvidence(activity: LessonActivity): boolean {
+  return (
+    !activity.optional &&
+    !activity.hidden &&
+    activity.kind !== "timer" &&
+    activity.kind !== "read"
+  );
+}
+
+export function stageReportsProgress(stage: LessonStage): boolean {
+  return stage.activities.some(activityRequiresEvidence);
+}

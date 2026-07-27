@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { interactiveDays } from "@/content/interactive";
+import { stageReportsProgress } from "@/content/interactive/types";
 import {
   interactiveText,
   teacherCueText,
@@ -82,6 +83,11 @@ export function ClassroomDashboard() {
     (day) => day.day === (dashboard?.session.day ?? teacherSession?.day ?? selectedDay),
   );
   const currentStage = plan?.stages[dashboard?.session.currentStage ?? 0];
+  const currentStageReportsProgress = currentStage
+    ? stageReportsProgress(currentStage)
+    : false;
+  const progressStageTotal =
+    plan?.stages.filter(stageReportsProgress).length ?? 0;
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -399,10 +405,16 @@ export function ClassroomDashboard() {
         <article>
           <span>{uiText(language, "Current stage done").toUpperCase()}</span>
           <strong>
-            {summary.doneCurrent}/{summary.total}
+            {!currentStageReportsProgress
+              ? "—"
+              : `${summary.doneCurrent}/${summary.total}`}
           </strong>
           <small>
-            {currentStage ? interactiveText(language, currentStage.title) : ""}
+            {!currentStageReportsProgress
+              ? uiText(language, "Class operation")
+              : currentStage
+                ? interactiveText(language, currentStage.title)
+                : ""}
           </small>
         </article>
         <article className={summary.needsHelp ? "has-alert" : ""}>
@@ -531,10 +543,14 @@ export function ClassroomDashboard() {
               <span>{String(index + 1).padStart(2, "0")}</span>
               <strong>{interactiveText(language, stage.title)}</strong>
               <small>
-                {uiText(language, "{done}/{total} done", {
-                  done: count,
-                  total: summary.total,
-                })}
+                {(() => {
+                  return !stageReportsProgress(stage)
+                    ? uiText(language, "Class operation")
+                    : uiText(language, "{done}/{total} done", {
+                        done: count,
+                        total: summary.total,
+                      });
+                })()}
               </small>
             </button>
           );
@@ -587,13 +603,15 @@ export function ClassroomDashboard() {
                   <div className="participant-progress">
                     <span>{uiText(language, "Day progress").toUpperCase()}</span>
                     <strong>
-                      {participant.completedCount}/{plan?.stages.length}
+                      {participant.completedCount}/{progressStageTotal}
                     </strong>
                     <div>
                       <i
                         style={{
                           width: `${Math.round(
-                            (participant.completedCount / (plan?.stages.length ?? 1)) * 100,
+                            (participant.completedCount /
+                              Math.max(1, progressStageTotal)) *
+                              100,
                           )}%`,
                         }}
                       />

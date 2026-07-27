@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { getDayCourseware } from "@/content/courseware";
 import { getInteractiveDay } from "@/content/interactive";
 import { uiText } from "@/content/translations/ui-ko";
 import { consumeClassroomAccessToken } from "@/lib/classroom-access";
@@ -71,11 +72,13 @@ export function ClassroomLesson({ code }: { code: string }) {
   }, [code, language, storageKey]);
 
   const plan = classroom ? getInteractiveDay(classroom.day) : undefined;
-  if (plan && classroom) {
+  const courseware = classroom ? getDayCourseware(classroom.day) : undefined;
+  if (plan && courseware && classroom) {
     return (
       <LessonRunner
         classroomCode={code}
         classroomToken={classroom.participantToken}
+        courseware={courseware}
         plan={plan}
       />
     );

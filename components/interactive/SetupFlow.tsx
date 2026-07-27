@@ -354,11 +354,15 @@ export function SetupFlow() {
             })}
           </nav>
           <a
-            href={sitePath("/downloads/setting.html")}
+            href={
+              language === "ko"
+                ? sitePath("/downloads/setting.html")
+                : "https://opencode.ai/docs/providers/#nvidia"
+            }
             rel="noreferrer"
             target="_blank"
           >
-            {uiText(language, "Open full original setup guide ↗")}
+            {uiText(language, "Open detailed setup guide ↗")}
           </a>
         </aside>
 
@@ -610,11 +614,15 @@ export function InstructorSetupConsole() {
         </div>
         <div>
           <a
-            href={sitePath("/downloads/setting.html")}
+            href={
+              language === "ko"
+                ? sitePath("/downloads/setting.html")
+                : "https://opencode.ai/docs/providers/#nvidia"
+            }
             rel="noreferrer"
             target="_blank"
           >
-            {uiText(language, "Original detailed guide ↗")}
+            {uiText(language, "Open detailed setup guide ↗")}
           </a>
           <Link className="start-live-link" href="/start">
             {uiText(language, "Student screen")}

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { courseReferences } from "@/content/courseware/references";
 import { interactiveDays } from "@/content/interactive";
 import { getOverviewKorean } from "@/content/overview-ko";
 import { getReadings } from "@/lib/readings";
@@ -32,18 +33,26 @@ export function CourseOverview() {
                     </span>{" "}
                     <Copy>{plan.title}</Copy>
                   </summary>
+                  <p className="toc-group-label">
+                    <BilingualText en="Background reading" ko="보충 읽기" />
+                  </p>
                   <ul>
                     {readings.map((reading, index) => (
                       <li key={reading.id}>
-                        <Link href={`/day/${plan.day}`}>
-                          {plan.day}.{index + 1} <Copy>{reading.title}</Copy>
+                        <Link href={`/day/${plan.day}?reading=${index}`}>
+                          R{index + 1} <Copy>{reading.title}</Copy>
                         </Link>
                       </li>
                     ))}
+                  </ul>
+                  <p className="toc-group-label">
+                    <BilingualText en="Live lesson" ko="실강 교안" />
+                  </p>
+                  <ul>
                     {plan.stages.map((stage, index) => (
                       <li key={stage.id}>
-                        <Link href={`/day/${plan.day}`}>
-                          {plan.day}.{readings.length + index + 1}{" "}
+                        <Link href={`/day/${plan.day}?stage=${index}`}>
+                          {String(index + 1).padStart(2, "0")}{" "}
                           <Copy>{stage.title}</Copy>
                         </Link>
                       </li>
@@ -117,6 +126,45 @@ export function CourseOverview() {
             </Link>
           </div>
 
+          <section className="course-material-map">
+            <article>
+              <span>01 · LEARN</span>
+              <h2>
+                <BilingualText en="Lecture" ko="강의" />
+              </h2>
+              <p>
+                <BilingualText
+                  en="Concepts, worked examples, counterexamples, live demonstrations, and retrieval questions."
+                  ko="개념, 완성 사례, 반례, 라이브 시연, 회수 질문을 다룹니다."
+                />
+              </p>
+            </article>
+            <article>
+              <span>02 · BUILD</span>
+              <h2>
+                <BilingualText en="Practice" ko="실습" />
+              </h2>
+              <p>
+                <BilingualText
+                  en="Learners make decisions, build, test, and leave observable evidence."
+                  ko="학생이 결정하고, 만들고, 시험하여 관찰 가능한 증거를 남깁니다."
+                />
+              </p>
+            </article>
+            <article>
+              <span>03 · RUN</span>
+              <h2>
+                <BilingualText en="Class operation" ko="수업 운영" />
+              </h2>
+              <p>
+                <BilingualText
+                  en="Setup, timers, breaks, and help signals are visually separated from the teaching content."
+                  ko="세팅, 타이머, 휴식, 도움 신호는 학습 내용과 시각적으로 구분해 운영합니다."
+                />
+              </p>
+            </article>
+          </section>
+
           <section className="book-index">
             <h2>
               <BilingualText en="Contents" ko="목차" />
@@ -142,7 +190,7 @@ export function CourseOverview() {
                         <BilingualText en="Guide" ko="강사 가이드" />
                       </Link>
                       <Link href={`/day/${plan.day}/present`}>
-                        <BilingualText en="TV" ko="수업 화면" />
+                        <BilingualText en="Class screens" ko="수업 진행 화면" />
                       </Link>
                       <Link href={`/cards/day/${plan.day}`}>
                         <BilingualText en="Cards" ko="활동 카드" />
@@ -153,11 +201,14 @@ export function CourseOverview() {
                     <Copy>{plan.question}</Copy>
                   </p>
                   <ol>
+                    <li className="index-section-label">
+                      <BilingualText en="Background reading" ko="보충 읽기" />
+                    </li>
                     {readings.map((reading, index) => (
                       <li key={reading.id}>
-                        <Link href={`/day/${plan.day}`}>
+                        <Link href={`/day/${plan.day}?reading=${index}`}>
                           <span className="index-item-number">
-                            {plan.day}.{index + 1}
+                            R{index + 1}
                           </span>
                           <Copy>{reading.title}</Copy>
                           <i>
@@ -166,11 +217,14 @@ export function CourseOverview() {
                         </Link>
                       </li>
                     ))}
+                    <li className="index-section-label">
+                      <BilingualText en="Live lesson and practice" ko="실강 교안과 실습" />
+                    </li>
                     {plan.stages.map((stage, index) => (
                       <li key={stage.id}>
-                        <Link href={`/day/${plan.day}`}>
+                        <Link href={`/day/${plan.day}?stage=${index}`}>
                           <span className="index-item-number">
-                            {plan.day}.{readings.length + index + 1}
+                            {String(index + 1).padStart(2, "0")}
                           </span>
                           <Copy>{stage.title}</Copy>
                           <i>{stage.start}</i>
@@ -181,6 +235,41 @@ export function CourseOverview() {
                 </article>
               );
             })}
+          </section>
+
+          <section className="course-references">
+            <header>
+              <span>RESEARCH BASIS</span>
+              <h2>
+                <BilingualText en="Sources behind the course" ko="교안 설계 참고 자료" />
+              </h2>
+              <p>
+                <BilingualText
+                  en="The course rewrites these principles for this classroom; it does not copy another provider's slides or project topics."
+                  ko="아래 원칙을 이 수업에 맞게 재구성했으며, 다른 기관의 슬라이드나 프로젝트 주제를 복제하지 않았습니다."
+                />
+              </p>
+            </header>
+            <div>
+              {courseReferences.map((reference) => (
+                <a
+                  href={reference.url}
+                  key={reference.url}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <strong>
+                    <BilingualText
+                      en={reference.title.en}
+                      ko={reference.title.ko}
+                    />
+                  </strong>
+                  <span>
+                    <BilingualText en={reference.note.en} ko={reference.note.ko} />
+                  </span>
+                </a>
+              ))}
+            </div>
           </section>
         </main>
       </div>

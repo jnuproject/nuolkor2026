@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { InstructorPlanView } from "@/components/interactive/InstructorPlanView";
+import { getDayCourseware } from "@/content/courseware";
 import { getInteractiveDay } from "@/content/interactive";
 
 export function generateStaticParams() {
@@ -13,9 +14,10 @@ export default async function InstructorDayPage({
 }) {
   const value = Number((await params).day);
   const plan = getInteractiveDay(value);
-  if (!plan) {
+  const courseware = getDayCourseware(value);
+  if (!plan || !courseware) {
     notFound();
   }
 
-  return <InstructorPlanView plan={plan} />;
+  return <InstructorPlanView courseware={courseware} plan={plan} />;
 }

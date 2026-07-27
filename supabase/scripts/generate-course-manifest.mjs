@@ -29,9 +29,13 @@ function parseSource(source, sourcePath, days) {
       );
     }
     currentActivity.required =
-      !currentActivity.optional && currentActivity.kind !== "timer";
+      !currentActivity.optional &&
+      !currentActivity.hidden &&
+      currentActivity.kind !== "timer" &&
+      currentActivity.kind !== "read";
     delete currentActivity.kind;
     delete currentActivity.optional;
+    delete currentActivity.hidden;
     currentStage.activities.push(currentActivity);
     currentActivity = undefined;
   };
@@ -78,6 +82,7 @@ function parseSource(source, sourcePath, days) {
         id: activityMatch[1],
         kind: undefined,
         optional: false,
+        hidden: false,
       };
       continue;
     }
@@ -92,6 +97,11 @@ function parseSource(source, sourcePath, days) {
 
     if (/^ {10}optional: true,$/.test(line)) {
       currentActivity.optional = true;
+      continue;
+    }
+
+    if (/^ {10}hidden: true,$/.test(line)) {
+      currentActivity.hidden = true;
     }
   }
 

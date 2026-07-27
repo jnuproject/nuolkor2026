@@ -1,14 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import type { DayInfo } from "@/content/course";
-import type { PresentationSlide } from "@/content/present";
+import { useEffect, useState } from "react";
 import {
-  interactiveText,
-  teacherCueText,
-} from "@/content/translations/interactive-ko";
-import { getLocalizedPresentationSlides } from "@/content/translations/presentations-ko";
+  localized,
+  TeachingSlide,
+} from "@/components/courseware/TeachingSlide";
+import type { DayInfo } from "@/content/course";
+import type { TeachingSlide as TeachingSlideData } from "@/content/courseware/types";
+import { getInteractiveDay } from "@/content/interactive";
+import { interactiveText } from "@/content/translations/interactive-ko";
 import { uiText } from "@/content/translations/ui-ko";
 import { useLanguage } from "@/lib/language";
 import { LanguageToggle } from "./LanguageToggle";
@@ -18,12 +19,6 @@ function formatTime(totalSeconds: number): string {
   const minutesPart = Math.floor(safe / 60);
   const secondsPart = safe % 60;
   return `${String(minutesPart).padStart(2, "0")}:${String(secondsPart).padStart(2, "0")}`;
-}
-
-function minuteLabel(totalMinutes: number): string {
-  return `${String(Math.floor(totalMinutes / 60)).padStart(2, "0")}:${String(
-    totalMinutes % 60,
-  ).padStart(2, "0")}`;
 }
 
 const showcasePhases = [
@@ -37,13 +32,10 @@ export function Presenter({
   slides,
 }: {
   day: DayInfo;
-  slides: PresentationSlide[];
+  slides: TeachingSlideData[];
 }) {
   const language = useLanguage();
-  const localizedSlides = useMemo(
-    () => getLocalizedPresentationSlides(day.day, language, slides),
-    [day.day, language, slides],
-  );
+  const localizedSlides = slides;
   const [index, setIndex] = useState(0);
   const [running, setRunning] = useState(false);
   const [blank, setBlank] = useState(false);
@@ -52,44 +44,50 @@ export function Presenter({
   const [showcasePhase, setShowcasePhase] = useState(0);
   const slide = localizedSlides[index];
   const next = localizedSlides[index + 1];
-  const slideSeconds = slide ? Math.max(60, (slide.endMinute - slide.startMinute) * 60) : 60;
+  const plan = getInteractiveDay(day.day);
+  const stage = plan?.stages.find((item) => item.id === slide?.stageId);
+  const stageNumber = stage
+    ? plan?.stages.findIndex((item) => item.id === stage.id) ?? -1
+    : -1;
+  const slideSeconds = slide ? Math.max(60, slide.minutes * 60) : 60;
+  const stageDuration = Math.max(60, (stage?.minutes ?? slide?.minutes ?? 1) * 60);
   const activeDuration = showcase ? showcasePhases[showcasePhase].seconds : slideSeconds;
   const [seconds, setSeconds] = useState(slideSeconds);
+  const [stageSeconds, setStageSeconds] = useState(stageDuration);
+  const [stageRunning, setStageRunning] = useState(false);
 
-  const resetTimer = useCallback(
-    (nextIndex = index) => {
-      const nextSlide = localizedSlides[nextIndex];
-      setSeconds(
-        showcase
-          ? showcasePhases[showcasePhase].seconds
-          : Math.max(60, (nextSlide.endMinute - nextSlide.startMinute) * 60),
-      );
-      setRunning(false);
-    },
-    [index, localizedSlides, showcase, showcasePhase],
-  );
+  function resetTimer(nextIndex = index) {
+    const nextSlide = localizedSlides[nextIndex];
+    setSeconds(
+      showcase
+        ? showcasePhases[showcasePhase].seconds
+        : Math.max(60, nextSlide.minutes * 60),
+    );
+    setRunning(false);
+  }
 
-  const goTo = useCallback(
-    (nextIndex: number) => {
-      const bounded = Math.max(
-        0,
-        Math.min(localizedSlides.length - 1, nextIndex),
+  function goTo(nextIndex: number) {
+    const bounded = Math.max(
+      0,
+      Math.min(localizedSlides.length - 1, nextIndex),
+    );
+    const nextSlide = localizedSlides[bounded];
+    const nextStage = plan?.stages.find((item) => item.id === nextSlide.stageId);
+    const changesStage = nextSlide.stageId !== slide?.stageId;
+    setIndex(bounded);
+    setShowcase(false);
+    setShowcasePhase(0);
+    setSeconds(
+      Math.max(60, localizedSlides[bounded].minutes * 60),
+    );
+    setRunning(false);
+    if (changesStage) {
+      setStageSeconds(
+        Math.max(60, (nextStage?.minutes ?? nextSlide.minutes) * 60),
       );
-      setIndex(bounded);
-      setShowcase(false);
-      setShowcasePhase(0);
-      setSeconds(
-        Math.max(
-          60,
-          (localizedSlides[bounded].endMinute -
-            localizedSlides[bounded].startMinute) *
-            60,
-        ),
-      );
-      setRunning(false);
-    },
-    [localizedSlides],
-  );
+      setStageRunning(false);
+    }
+  }
 
   useEffect(() => {
     if (!running) {
@@ -110,11 +108,60 @@ export function Presenter({
   }, [running]);
 
   useEffect(() => {
+    if (!stageRunning) {
+      return;
+    }
+
+    const interval = window.setInterval(() => {
+      setStageSeconds((current) => {
+        if (current <= 1) {
+          setStageRunning(false);
+          return 0;
+        }
+        return current - 1;
+      });
+    }, 1000);
+
+    return () => window.clearInterval(interval);
+  }, [stageRunning]);
+
+  useEffect(() => {
+    function goToFromKeyboard(nextIndex: number) {
+      const bounded = Math.max(
+        0,
+        Math.min(localizedSlides.length - 1, nextIndex),
+      );
+      const nextSlide = localizedSlides[bounded];
+      const nextStage = plan?.stages.find((item) => item.id === nextSlide.stageId);
+      const changesStage =
+        nextSlide.stageId !== localizedSlides[index]?.stageId;
+      setIndex(bounded);
+      setShowcase(false);
+      setShowcasePhase(0);
+      setSeconds(Math.max(60, localizedSlides[bounded].minutes * 60));
+      setRunning(false);
+      if (changesStage) {
+        setStageSeconds(
+          Math.max(60, (nextStage?.minutes ?? nextSlide.minutes) * 60),
+        );
+        setStageRunning(false);
+      }
+    }
+
     function onKeyDown(event: KeyboardEvent) {
+      const target = event.target;
+      if (
+        target instanceof HTMLElement &&
+        target.closest(
+          "button, a, input, textarea, select, summary, [contenteditable='true']",
+        )
+      ) {
+        return;
+      }
       if (event.key === "ArrowRight") {
-        goTo(index + 1);
+        goToFromKeyboard(index + 1);
       } else if (event.key === "ArrowLeft") {
-        goTo(index - 1);
+        goToFromKeyboard(index - 1);
       } else if (event.key === " ") {
         event.preventDefault();
         setRunning((current) => !current);
@@ -129,7 +176,7 @@ export function Presenter({
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [goTo, index]);
+  }, [index, localizedSlides, plan]);
 
   if (!slide) {
     return (
@@ -140,7 +187,6 @@ export function Presenter({
     );
   }
 
-  const dense = slide.content.length > 380 || slide.content.split("\n").length > 10;
   const alert =
     running || seconds === 0
       ? seconds === 0
@@ -169,8 +215,13 @@ export function Presenter({
         <div>
           <span>
             {uiText(language, "Day {day}", { day: day.day }).toUpperCase()}
+            {stageNumber >= 0 ? ` · ${String(stageNumber + 1).padStart(2, "0")}` : ""}
           </span>
-          <strong>{interactiveText(language, day.phase)}</strong>
+          <strong>
+            {stage
+              ? interactiveText(language, stage.title)
+              : interactiveText(language, day.phase)}
+          </strong>
           <LanguageToggle />
         </div>
         <div className="presenter-progress">
@@ -179,7 +230,6 @@ export function Presenter({
               current: index + 1,
               total: localizedSlides.length,
             }).toUpperCase()}
-            {slide.timeLabel ? ` · ${slide.timeLabel}` : ""}
           </span>
           <div>
             <i
@@ -203,44 +253,32 @@ export function Presenter({
                         ? "Feedback"
                         : "Switch",
                   ).toUpperCase()
-                : slide.timeLabel}
+                : `${slide.minutes} ${uiText(language, "min")}`}
             </span>
           )}
-          <strong className={seconds === 0 ? "is-elapsed" : ""}>{formatTime(seconds)}</strong>
+          <div className="presenter-stage-clock">
+            <span>{uiText(language, "Stage remaining").toUpperCase()}</span>
+            <b className={stageSeconds === 0 ? "is-elapsed" : ""}>
+              {formatTime(stageSeconds)}
+            </b>
+          </div>
+          <div className="presenter-slide-clock">
+            <span>{uiText(language, "Slide remaining").toUpperCase()}</span>
+            <strong className={seconds === 0 ? "is-elapsed" : ""}>
+              {formatTime(seconds)}
+            </strong>
+          </div>
         </div>
       </div>
 
-      <section className={`presenter-stage ${dense ? "is-dense" : ""}`}>
-        <span className="presenter-kicker">
-          {showcase
-            ? uiText(language, "Showcase · {phase}", {
-                phase: uiText(
-                  language,
-                  showcasePhases[showcasePhase].label === "DEMO"
-                    ? "Demo"
-                    : showcasePhases[showcasePhase].label === "FEEDBACK"
-                      ? "Feedback"
-                      : "Switch",
-                  ),
-              }).toUpperCase()
-            : language === "ko"
-              ? slide.section ?? interactiveText(language, day.title)
-              : slide.section && !/[가-힣]/.test(slide.section)
-                ? slide.section
-                : interactiveText(language, day.title)}
-        </span>
-        <h1>{slide.title}</h1>
-        <div className="presenter-copy">{slide.content}</div>
+      <section className="presenter-stage">
+        <TeachingSlide key={slide.id} slide={slide} variant="presenter" />
       </section>
 
       {next && !showcase ? (
         <button className="presenter-next" onClick={() => goTo(index + 1)} type="button">
-          <span>
-            {uiText(language, "Next · {time}", {
-              time: minuteLabel(next.startMinute),
-            }).toUpperCase()}
-          </span>
-          <strong>{next.title}</strong>
+          <span>{uiText(language, "Next").toUpperCase()}</span>
+          <strong>{localized(next.title, language)}</strong>
         </button>
       ) : null}
 
@@ -253,17 +291,19 @@ export function Presenter({
             <span>
               {uiText(
                 language,
-                "Instructor notes — do not project this panel to students",
+                "These notes appear on this screen. Open them only on a private instructor display.",
               )}
             </span>
             <button onClick={() => setNotes(false)} type="button">
               {uiText(language, "Close (N)")}
             </button>
           </header>
-          {slide.cues.length > 0 ? (
+          {slide.teacherNotes.length > 0 ? (
             <ul>
-              {slide.cues.map((cue) => (
-                <li key={cue}>{teacherCueText(language, cue)}</li>
+              {slide.teacherNotes.map((cue, cueIndex) => (
+                <li key={`${slide.id}-note-${cueIndex}`}>
+                  {localized(cue, language)}
+                </li>
               ))}
             </ul>
           ) : (
@@ -271,12 +311,6 @@ export function Presenter({
               {uiText(language, "This screen has no separate instructor cue.")}
             </p>
           )}
-          {slide.completion ? (
-            <p className="notes-completion">
-              <strong>{uiText(language, "Completion signal")}</strong>{" "}
-              {slide.completion}
-            </p>
-          ) : null}
         </aside>
       ) : null}
 
@@ -307,6 +341,36 @@ export function Presenter({
         </button>
         <button onClick={() => resetTimer()} type="button">
           {uiText(language, "Reset")}
+        </button>
+        <button
+          className={stageRunning ? "is-active" : ""}
+          onClick={() => {
+            if (stageSeconds === 0) {
+              setStageSeconds(stageDuration);
+              setStageRunning(true);
+              return;
+            }
+            setStageRunning((value) => !value);
+          }}
+          type="button"
+        >
+          {uiText(
+            language,
+            stageRunning
+              ? "Pause stage clock"
+              : stageSeconds === 0
+                ? "Start stage clock again"
+                : "Start stage clock",
+          )}
+        </button>
+        <button
+          onClick={() => {
+            setStageSeconds(stageDuration);
+            setStageRunning(false);
+          }}
+          type="button"
+        >
+          {uiText(language, "Reset stage clock")}
         </button>
         <button onClick={() => goTo(index + 1)} type="button">
           {uiText(language, "Next →")}

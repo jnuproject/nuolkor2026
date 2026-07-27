@@ -1,8 +1,7 @@
 import { notFound } from "next/navigation";
 import { Presenter } from "@/components/Presenter";
 import { getDayInfo, isDayNumber } from "@/content/course";
-import { curriculumContent } from "@/content/generated";
-import { parsePresentationSlides } from "@/content/present";
+import { getClassSlides } from "@/content/courseware";
 
 export function generateStaticParams() {
   return [1, 2, 3, 4, 5, 6].map((day) => ({ day: String(day) }));
@@ -23,7 +22,6 @@ export default async function PresentDayPage({
     notFound();
   }
 
-  const content = curriculumContent.days[String(value) as keyof typeof curriculumContent.days];
-  const slides = parsePresentationSlides(content.present, value);
+  const slides = getClassSlides(value);
   return <Presenter day={day} slides={slides} />;
 }

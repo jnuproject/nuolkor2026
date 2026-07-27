@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { LessonRunner } from "@/components/interactive/LessonRunner";
+import { getDayCourseware } from "@/content/courseware";
 import { getInteractiveDay } from "@/content/interactive";
 import { getReadings } from "@/lib/readings";
 
@@ -14,9 +15,16 @@ export default async function StudentDayPage({
 }) {
   const value = Number((await params).day);
   const plan = getInteractiveDay(value);
-  if (!plan) {
+  const courseware = getDayCourseware(value);
+  if (!plan || !courseware) {
     notFound();
   }
 
-  return <LessonRunner plan={plan} readings={getReadings(value)} />;
+  return (
+    <LessonRunner
+      courseware={courseware}
+      plan={plan}
+      readings={getReadings(value)}
+    />
+  );
 }

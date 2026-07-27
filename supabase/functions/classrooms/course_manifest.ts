@@ -30,7 +30,7 @@ export const COURSE_MANIFEST = {
         "activities": [
           {
             "id": "day1-readiness-check",
-            "required": true
+            "required": false
           }
         ]
       },
@@ -87,7 +87,7 @@ export const COURSE_MANIFEST = {
         "activities": [
           {
             "id": "day1-tool-roles",
-            "required": true
+            "required": false
           },
           {
             "id": "day1-correct-location",
@@ -168,7 +168,7 @@ export const COURSE_MANIFEST = {
         "activities": [
           {
             "id": "day2-loop-order",
-            "required": true
+            "required": false
           },
           {
             "id": "day2-day1-test",
@@ -194,7 +194,7 @@ export const COURSE_MANIFEST = {
         "activities": [
           {
             "id": "day2-frame-read",
-            "required": true
+            "required": false
           },
           {
             "id": "day2-frame-write",
@@ -211,7 +211,7 @@ export const COURSE_MANIFEST = {
         "activities": [
           {
             "id": "day2-handoff-read",
-            "required": true
+            "required": false
           },
           {
             "id": "day2-handoff-draft",
@@ -305,11 +305,11 @@ export const COURSE_MANIFEST = {
         "activities": [
           {
             "id": "day3-loop-recall",
-            "required": true
+            "required": false
           },
           {
             "id": "day3-ownership-check",
-            "required": true
+            "required": false
           }
         ]
       },
@@ -348,7 +348,7 @@ export const COURSE_MANIFEST = {
         "activities": [
           {
             "id": "day3-priority-read",
-            "required": true
+            "required": false
           },
           {
             "id": "day3-priority-list",
@@ -451,7 +451,7 @@ export const COURSE_MANIFEST = {
         "activities": [
           {
             "id": "day4-code-role-read",
-            "required": true
+            "required": false
           },
           {
             "id": "day4-code-map-prompt",
@@ -468,7 +468,7 @@ export const COURSE_MANIFEST = {
         "activities": [
           {
             "id": "day4-action-flow-read",
-            "required": true
+            "required": false
           },
           {
             "id": "day4-action-trace-prompt",
@@ -485,7 +485,7 @@ export const COURSE_MANIFEST = {
         "activities": [
           {
             "id": "day4-sprint-loop",
-            "required": true
+            "required": false
           },
           {
             "id": "day4-test-before-sprint",
@@ -511,7 +511,7 @@ export const COURSE_MANIFEST = {
         "activities": [
           {
             "id": "day4-recovery-read",
-            "required": true
+            "required": false
           },
           {
             "id": "day4-recovery-choice",
@@ -579,7 +579,7 @@ export const COURSE_MANIFEST = {
         "activities": [
           {
             "id": "day5-evidence-read",
-            "required": true
+            "required": false
           },
           {
             "id": "day5-evidence-choice",
@@ -596,7 +596,7 @@ export const COURSE_MANIFEST = {
         "activities": [
           {
             "id": "day5-four-types",
-            "required": true
+            "required": false
           },
           {
             "id": "day5-four-cards",
@@ -750,7 +750,7 @@ export const COURSE_MANIFEST = {
         "activities": [
           {
             "id": "day6-freeze-rules",
-            "required": true
+            "required": false
           },
           {
             "id": "day6-final-copy",
@@ -791,10 +791,6 @@ export const COURSE_MANIFEST = {
       {
         "id": "day6-showcase",
         "activities": [
-          {
-            "id": "day6-presenter-ready",
-            "required": true
-          },
           {
             "id": "day6-showcase-timer",
             "required": false

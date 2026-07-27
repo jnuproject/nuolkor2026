@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "test": "npm run build && node --test tests/static-export.test.mjs",
+    "test": "npm run build && node supabase/scripts/generate-course-manifest.mjs --check && node --test tests/static-export.test.mjs",
     "lint": "eslint . --ignore-pattern out --ignore-pattern .next",
     "content:sync": "node scripts/sync-content.mjs"
   },

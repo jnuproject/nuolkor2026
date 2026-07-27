@@ -13,8 +13,8 @@ const day1Ko: Record<string, string> = {
     "컴퓨터와 코딩 도구를 준비하세요.",
   "Use the side signal to show Green, Yellow, or Red.":
     "옆의 상태 신호에서 초록색, 노란색, 빨간색으로 현재 상태를 알려 주세요.",
-  "Every learner checks each readiness item and shows their current status with the side signal.":
-    "모든 학습자가 준비 항목을 하나씩 확인하고 옆의 상태 신호로 현재 상태를 알립니다.",
+  "The required tool and folder are open, and every learner shows their current status with the side signal.":
+    "필요한 도구와 폴더가 열려 있고, 모든 학습자가 옆 상태 신호로 현재 상태를 알립니다.",
   "Ready to begin": "시작 준비",
   "Check each item you can confirm now.":
     "지금 확인할 수 있는 항목을 모두 체크하세요.",
@@ -38,8 +38,19 @@ const day1Ko: Record<string, string> = {
     "TELL → WATCH → CHECK → FIX → SAVE 전체 과정을 지켜보세요.",
   "Record what the person does, not only what AI does.":
     "AI가 한 일뿐 아니라 사람이 한 일도 기록하세요.",
-  "The learner records one human decision and orders all five loop steps.":
-    "학습자가 사람의 결정 한 가지를 기록하고 다섯 단계의 순서를 맞춥니다.",
+  "The learner records the human goal, test evidence, decision, and one claim that still needs testing.":
+    "학습자가 사람의 목표, 테스트 증거, 결정, 아직 검증이 필요한 주장 하나를 기록합니다.",
+  "Recover the decisions from the demo": "시연 속 판단 구조 복원하기",
+  "Record the goal, the test evidence, and the decision made after the test.":
+    "목표, 테스트 증거, 테스트 후 내린 결정을 기록하세요.",
+  "Human goal": "사람이 세운 목표",
+  "Test action and observed evidence": "테스트 행동과 관찰한 증거",
+  "Human decision after the test": "테스트 후 사람이 내린 결정",
+  "Challenge one untested claim": "검증되지 않은 주장 하나 찾기",
+  "Write one statement from the demo that would still need a real test before you trust it.":
+    "시연에서 들은 말 중 믿기 전에 실제 테스트가 더 필요한 문장 하나를 적으세요.",
+  "The claim was... I would test it by...":
+    "그 주장은... 나는 다음 방법으로 테스트하겠습니다...",
   "Watch for the loop": "제작 루프 관찰하기",
   "Mark each step when you see it in the demo.":
     "시연에서 각 단계를 볼 때마다 표시하세요.",
@@ -283,6 +294,32 @@ const day1Ko: Record<string, string> = {
     "내가 내린 결정 한 가지... 페이지가 작동함을 증명한 확인 한 가지...",
   "I decided... I proved it by...":
     "나는 ...라고 결정했습니다. ...을 통해 증명했습니다.",
+  "A tested five-promise first page and two safe changes":
+    "다섯 가지 약속을 테스트한 첫 페이지와 안전한 변경 두 가지",
+  "AI, after it reports that its own tests passed":
+    "자체 테스트가 통과했다고 보고한 AI",
+  "Not yet. A tool report is still a claim until the person runs the real browser test.":
+    "아직 아닙니다. 사람이 실제 브라우저 테스트를 실행하기 전까지 도구의 보고는 주장일 뿐입니다.",
+  "The person, after reading the generated code but without using the page":
+    "페이지를 사용하지 않고 생성된 코드만 읽은 사람",
+  "Not yet. Reading code does not replace observable browser evidence.":
+    "아직 아닙니다. 코드를 읽는 것은 관찰 가능한 브라우저 증거를 대신하지 못합니다.",
+  "index.html opens with all five exact promises from the prompt and offline backup.":
+    "index.html이 열리고 프롬프트와 오프라인 백업의 정확한 다섯 가지 약속이 모두 보입니다.",
+  'The title is exactly "My First Build".':
+    '제목이 정확히 "My First Build"입니다.',
+  'The message is exactly "I am learning to build, test, and improve with AI."':
+    '안내 문장이 정확히 "I am learning to build, test, and improve with AI."입니다.',
+  'The "Human in Control" card shows the exact control statement.':
+    '"Human in Control" 카드에 정확한 주도권 문장이 보입니다.',
+  'The button is labeled "Test the page".':
+    '버튼 문구가 "Test the page"입니다.',
+  'Clicking it shows "The button works!"':
+    '버튼을 누르면 "The button works!"가 나타납니다.',
+  "Open index.html — the exact title, message, and Human in Control card are visible.":
+    "index.html 열기 — 정확한 제목, 안내 문장, Human in Control 카드가 보입니다.",
+  "The learner answers the responsibility choice and writes one testable success statement.":
+    "학습자가 책임에 관한 선택 문제에 답하고 테스트 가능한 성공 기준을 한 문장으로 씁니다.",
 };
 
 const day2Ko: Record<string, string> = {
@@ -297,8 +334,8 @@ const day2Ko: Record<string, string> = {
   "Recall the loop without notes.": "노트를 보지 않고 루프를 떠올려 보세요.",
   "Open the Day 1 final Save Point and test it once.":
     "1일차 최종 저장본을 열고 한 번 테스트하세요.",
-  "The learner orders all five steps and records one passing or failing Day 1 test.":
-    "학습자가 다섯 단계의 순서를 맞추고 1일차 테스트 결과 하나를 기록합니다.",
+  "The learner records one passing or failing Day 1 test with Action, Expected, and Actual.":
+    "학습자가 행동, 예상, 실제 결과를 포함한 1일차 통과 또는 실패 테스트 하나를 기록합니다.",
   "Recall the loop": "루프 떠올리기",
   "Write the five words in order.": "다섯 단어를 순서대로 쓰세요.",
   "TELL → WATCH → CHECK → FIX → SAVE": "TELL → WATCH → CHECK → FIX → SAVE",
@@ -492,6 +529,10 @@ const day2Ko: Record<string, string> = {
     "예상 결과를 먼저 쓰세요. 그런 다음 각 입력을 실행하고 실제 결과를 기록하세요.",
   Empty: "빈 입력",
   abc: "abc",
+  "2.5": "2.5",
+  "0": "0",
+  "1": "1",
+  "10": "10",
   "Enter a value.": "Enter a value.",
   "Use a whole number.": "Use a whole number.",
   "Use a number from 1 to 10.": "Use a number from 1 to 10.",
@@ -545,6 +586,71 @@ const day2Ko: Record<string, string> = {
     "가장 명확했던 요청 문장... 가장 유용했던 실패 증거...",
   "The line was... The evidence was...":
     "그 문장은... 그 증거는...",
+  "Use all seven parts: Goal, Context, Feature, Rules, Constraints, Do not change, and Success means.":
+    "Goal, Context, Feature, Rules, Constraints, Do not change, Success means 일곱 요소를 모두 사용하세요.",
+  "Keep technical limits separate from the working behavior you must protect.":
+    "기술적 제한과 보호해야 할 작동 중인 동작을 구분하세요.",
+  "Constraints — technical and safety limits.":
+    "Constraints — 기술 및 안전 제한.",
+  "Do not change — working behavior to protect.":
+    "Do not change — 보호해야 할 작동 중인 동작.",
+  "Constraints: [technical and safety limits]":
+    "Constraints: [기술 및 안전 제한]",
+  "Do not change: [working behavior to protect]":
+    "Do not change: [보호해야 할 작동 중인 동작]",
+  "The current file and behavior are named.":
+    "현재 파일과 동작이 명시되어 있습니다.",
+  "The feature and exact behavior are named.":
+    "기능과 정확한 동작이 명시되어 있습니다.",
+  "Technical and safety limits are named.":
+    "기술 및 안전 제한이 명시되어 있습니다.",
+  "Working behavior to protect is named.":
+    "보호해야 할 작동 중인 동작이 명시되어 있습니다.",
+  "Use Current, Works, Evidence, Next, Keep, and Success.":
+    "Current, Works, Evidence, Next, Keep, Success 여섯 요소를 사용하세요.",
+  "The learner writes all six Context Handoff parts with one real test record.":
+    "학습자가 실제 테스트 기록 하나와 Context Handoff 여섯 요소를 모두 작성합니다.",
+  "Six parts of a handoff": "인계문의 여섯 요소",
+  "Works: only tested behavior.": "Works: 테스트한 동작만.",
+  "Next: one change.": "Next: 변경 하나.",
+  "Keep: working behavior to protect.":
+    "Keep: 보호해야 할 작동 중인 동작.",
+  "Success: the new test and regression tests.":
+    "Success: 새 테스트와 회귀 테스트.",
+  "Write one line for each of the six parts.":
+    "여섯 요소를 각각 한 줄로 쓰세요.",
+  "Current... Works... Evidence... Next... Keep... Success...":
+    "Current... Works... Evidence... Next... Keep... Success...",
+  "Keep names the old behavior to protect.":
+    "Keep에 보호해야 할 기존 동작이 적혀 있습니다.",
+  "Success includes the new action and visible result.":
+    "Success에 새 행동과 보이는 결과가 포함되어 있습니다.",
+  "Success includes regression tests for protected behavior.":
+    "Success에 보호할 동작의 회귀 테스트가 포함되어 있습니다.",
+  "Works: [tested passing cases].":
+    "Works: [테스트로 통과한 경우].",
+  'Next: add one "Clear" button that empties the input and result, then returns focus to the input.':
+    'Next: 입력과 결과를 비운 뒤 입력 칸으로 초점을 돌리는 "Clear" 버튼 하나를 추가한다.',
+  "Success: after any check, Clear empties the input and result, focus returns to the input, and all six old tests still pass.":
+    "Success: 어떤 확인 뒤에도 Clear가 입력과 결과를 비우고 초점이 입력 칸으로 돌아오며 기존 여섯 테스트가 모두 통과한다.",
+  "Clear empties the input and result and returns focus to the input.":
+    "Clear가 입력과 결과를 비우고 초점을 입력 칸으로 돌립니다.",
+  'Goal: Create a local page titled "Prompt Precision Lab" that checks one input.':
+    'Goal: 입력 하나를 확인하는 "Prompt Precision Lab" 로컬 페이지를 만든다.',
+  "Context: Work in day2-prompt-lab and create only index.html.":
+    "Context: day2-prompt-lab에서 작업하고 index.html만 만든다.",
+  'Feature: Show the instruction, a text input labeled "Number", and a "Check input" button.':
+    'Feature: 안내 문장, "Number"라는 입력 칸, "Check input" 버튼을 표시한다.',
+  'Rules: empty/spaces → "Enter a value."; not a number or not whole → "Use a whole number."; below 1 or above 10 → "Use a number from 1 to 10."; whole number 1–10 → "Accepted: N".':
+    'Rules: 빈칸/공백 → "Enter a value."; 숫자가 아니거나 정수가 아님 → "Use a whole number."; 1 미만 또는 10 초과 → "Use a number from 1 to 10."; 1–10 정수 → "Accepted: N".',
+  "Constraints: Use one local file and no external library, API, login, payment, or personal data.":
+    "Constraints: 로컬 파일 하나만 사용하고 외부 라이브러리, API, 로그인, 결제, 개인정보를 쓰지 않는다.",
+  "Do not change: Keep the exact title, labels, four rules, and result messages in this request.":
+    "Do not change: 이 요청의 정확한 제목, 라벨, 네 규칙, 결과 문구를 유지한다.",
+  'Success means: empty shows "Enter a value."; 5 shows "Accepted: 5"; day2-base.html opens and passes both tests.':
+    'Success means: 빈칸에는 "Enter a value.", 5에는 "Accepted: 5"가 나오고 day2-base.html도 열려 두 테스트를 통과한다.',
+  "Before changing a file, show a short plan mapped to all seven parts.":
+    "파일을 바꾸기 전에 일곱 요소에 연결된 짧은 계획을 보여 주세요.",
 };
 
 const day3Ko: Record<string, string> = {
@@ -562,8 +668,8 @@ const day3Ko: Record<string, string> = {
     "주제는 여러분이 선택합니다. AI나 강사가 대신 고르지 않습니다.",
   "Keep AI chat and my-app closed for now.":
     "지금은 AI 채팅과 my-app을 열지 마세요.",
-  "The learner writes all five loop words and confirms the project ownership rules.":
-    "학습자가 루프의 다섯 단어를 모두 쓰고 프로젝트 주도권 규칙을 확인합니다.",
+  "The class can say the loop aloud and explain why the learner—not AI or the teacher—owns the project decisions.":
+    "학급이 빌드 루프를 소리 내어 말하고, AI나 강사가 아니라 학습자가 프로젝트 결정을 책임지는 이유를 설명할 수 있습니다.",
   "Write the five words in order. Do not use notes.":
     "노트를 보지 말고 다섯 단어를 순서대로 쓰세요.",
   "Project ownership": "프로젝트 주도권",
@@ -794,6 +900,96 @@ const day3Ko: Record<string, string> = {
     "4일차에 가장 먼저 확인할 내용을 쓰세요.",
   "On Day 4, I will first ...":
     "4일차에는 먼저 ...하겠습니다.",
+  "A reviewed Project Brief and a working v0 in my-app":
+    "검토를 마친 프로젝트 기획서와 my-app에서 작동하는 v0",
+  Observation: "관찰",
+  "v0 IN / v0 OUT": "v0 포함 / v0 제외",
+  "States: Before / Action / After": "상태: 행동 전 / 행동 / 행동 후",
+  "Test: Action / Expected": "테스트: 행동 / 예상 결과",
+  "Accessibility and safety: use visible words, never color alone, and no private or secret data":
+    "접근성과 안전: 보이는 문구를 사용하고 색만으로 전달하지 않으며 개인정보나 비밀정보를 쓰지 않기",
+  "Plan review and READY gate": "계획 검토 및 READY 관문",
+  "Use one shared rubric for AI review, self-check, peer check, and focused teacher help.":
+    "AI 검토, 자가검수, 짝 검수, 강사의 집중 지원에 하나의 공통 루브릭을 사용하세요.",
+  "Self-check every Brief field, then ask a partner to use the same rubric.":
+    "Brief의 모든 항목을 자가검수한 뒤 짝에게 같은 루브릭으로 확인해 달라고 하세요.",
+  "Build when both checks pass. Use Yellow only when one mismatch needs teacher review.":
+    "두 검수가 모두 통과하면 제작하세요. 불일치를 강사가 확인해야 할 때만 Yellow를 사용하세요.",
+  "The learner records the AI review, completes the shared self/peer rubric, and either reaches READY or resolves one Yellow mismatch with the teacher.":
+    "학습자가 AI 검토를 기록하고 공통 자가·짝 루브릭을 완료한 뒤 READY가 되거나 Yellow 불일치를 강사와 해결합니다.",
+  "Review this Project Brief without changing my topic or adding features.\n\nObservation: [what I noticed]\nUser: [my user]\nProblem: [one current difficulty]\nSuccess: [one action and visible result]\nMUST: [MUST 1 / MUST 2 / MUST 3]\nNICE: [NICE 1 / NICE 2]\nv0 IN: [one smallest path]\nv0 OUT: [everything excluded]\nStates: Before [ ] / Action [ ] / After [ ]\nTest: Action [ ] / Expected [ ]\nAccessibility and safety: visible words, never color alone, no private or secret data.\n\nUse exactly these headings in your review. For each heading, write PASS or one specific RISK. Check that the fields agree, v0 is small enough for today, the test matches Success, and no excluded item returns. Give only ways to make this same plan smaller or clearer. Do not suggest a new topic or feature. Do not edit files.":
+    "내 주제를 바꾸거나 기능을 추가하지 말고 이 Project Brief를 검토해 주세요.\n\nObservation: [내가 관찰한 것]\nUser: [내 사용자]\nProblem: [현재 어려움 하나]\nSuccess: [행동 하나와 보이는 결과]\nMUST: [MUST 1 / MUST 2 / MUST 3]\nNICE: [NICE 1 / NICE 2]\nv0 IN: [가장 작은 경로 하나]\nv0 OUT: [제외할 모든 것]\nStates: Before [ ] / Action [ ] / After [ ]\nTest: Action [ ] / Expected [ ]\nAccessibility and safety: 보이는 문구, 색만으로 전달하지 않기, 개인정보와 비밀정보 없음.\n\n검토에서도 정확히 이 제목을 사용하세요. 각 제목마다 PASS 또는 구체적인 RISK 하나를 쓰세요. 항목들이 서로 일치하는지, v0가 오늘 만들 만큼 작은지, Test가 Success와 일치하는지, 제외한 항목이 다시 들어오지 않았는지 확인하세요. 같은 계획을 더 작거나 명확하게 만드는 방법만 제시하세요. 새 주제나 기능을 제안하지 말고 파일을 편집하지 마세요.",
+  "Observation, User, Problem, and Success still form one chain.":
+    "Observation, User, Problem, Success가 여전히 하나의 연결을 이룹니다.",
+  "MUST/NICE and v0 IN/OUT agree.":
+    "MUST/NICE와 v0 IN/OUT이 서로 일치합니다.",
+  "Before, Action, and After match Success.":
+    "Before, Action, After가 Success와 일치합니다.",
+  "The Test action and Expected result match the states.":
+    "Test의 행동과 예상 결과가 상태와 일치합니다.",
+  "Accessibility and safety use visible words, never color alone, and no private or secret data.":
+    "접근성과 안전에서 보이는 문구를 사용하고 색만으로 전달하지 않으며 개인정보나 비밀정보를 쓰지 않습니다.",
+  "The reply keeps my topic and adds no feature.":
+    "답변이 내 주제를 유지하고 기능을 추가하지 않습니다.",
+  "I recorded each PASS or one specific risk.":
+    "각 PASS 또는 구체적 위험 하나를 기록했습니다.",
+  "Self → peer → Yellow": "자가검수 → 짝 검수 → Yellow",
+  "Use the same rubric in this order. Do not join a whole-class approval queue.":
+    "같은 루브릭을 이 순서로 사용하세요. 전원 강사 승인 대기열에 서지 마세요.",
+  "I self-checked every Project Brief heading.":
+    "Project Brief의 모든 제목을 자가검수했습니다.",
+  "My partner checked the same headings and named any mismatch.":
+    "짝이 같은 제목을 확인하고 불일치를 말했습니다.",
+  "If both checks pass, I mark READY and begin the reviewed v0.":
+    "두 검수가 모두 통과하면 READY로 표시하고 검토한 v0를 시작합니다.",
+  "If one or more headings disagree, I mark Yellow and ask the teacher to check only those headings.":
+    "하나 이상의 제목이 일치하지 않으면 Yellow로 표시하고 강사에게 해당 제목만 확인해 달라고 합니다.",
+  "Build only the reviewed READY v0.":
+    "검토를 마친 READY v0만 만드세요.",
+  "my-app/index.html shows the reviewed MUST 1 path, the learner records a passing browser test, and day3-v0-save.html passes the same test.":
+    "my-app/index.html에 검토한 MUST 1 경로가 나타나고, 학습자가 통과한 브라우저 테스트를 기록하며, day3-v0-save.html이 같은 테스트를 통과합니다.",
+  "Complete the brackets from the reviewed Brief. Ask for the smallest READY v0. Read the plan and file changes before you test.":
+    "검토한 Brief를 바탕으로 대괄호를 채우세요. 가장 작은 READY v0를 요청하고 테스트 전에 계획과 파일 변경을 읽으세요.",
+  "Work only in my-app/index.html.\n\nObservation: [reviewed observation]\nUser: [reviewed user]\nProblem: [reviewed problem]\nSuccess: [reviewed action and visible result]\nMUST 1: [reviewed MUST 1]\nv0 IN: [reviewed smallest path]\nv0 OUT: [reviewed exclusions]\nStates: Before [ ] / Action [ ] / After [ ]\nTest: Action [ ] / Expected [ ]\nAccessibility and safety: use visible words, never color alone, and no private or secret data.\n\nBuild only this v0 path through MUST 1.\nDo not add MUST 2, MUST 3, any NICE item, login, server, external API, personal data, or extra file.\nFirst show a short plan mapped to the same Brief headings. Do not edit until I approve the plan.":
+    "my-app/index.html에서만 작업하세요.\n\nObservation: [검토한 관찰]\nUser: [검토한 사용자]\nProblem: [검토한 문제]\nSuccess: [검토한 행동과 보이는 결과]\nMUST 1: [검토한 MUST 1]\nv0 IN: [검토한 가장 작은 경로]\nv0 OUT: [검토한 제외 항목]\nStates: Before [ ] / Action [ ] / After [ ]\nTest: Action [ ] / Expected [ ]\nAccessibility and safety: 보이는 문구를 사용하고 색만으로 전달하지 않으며 개인정보나 비밀정보를 쓰지 않기.\n\nMUST 1을 통과하는 이 v0 경로만 만드세요.\nMUST 2, MUST 3, NICE 항목, 로그인, 서버, 외부 API, 개인정보, 추가 파일을 넣지 마세요.\n먼저 같은 Brief 제목에 연결된 짧은 계획을 보여 주세요. 내가 계획을 승인하기 전에는 편집하지 마세요.",
+  "The reviewed user action can be performed.":
+    "검토한 사용자 동작을 실행할 수 있습니다.",
+  "No work outside the reviewed v0 appears.":
+    "검토한 v0 범위 밖의 내용이 없습니다.",
+  "MUST 1–3 / NICE up to 2": "MUST 1–3개 / NICE 최대 2개",
+  "Write one to three MUST items; MUST 1 is required.":
+    "MUST 항목을 한 개에서 세 개까지 쓰세요. MUST 1은 필수입니다.",
+  "Write up to two NICE items; leave them blank if none are useful.":
+    "NICE 항목은 최대 두 개까지 쓰세요. 필요한 항목이 없으면 비워 두세요.",
+  "The learner records one to three MUST items, zero to two NICE items, and names the smallest v0 path through MUST 1.":
+    "학습자가 MUST 항목 한 개에서 세 개, NICE 항목 0개에서 두 개를 기록하고 MUST 1을 통과하는 가장 작은 v0 경로를 정합니다.",
+  "MUST = one to three items needed for the project promise; MUST 1 is required.":
+    "MUST = 프로젝트의 약속에 필요한 항목 한 개에서 세 개. MUST 1은 필수.",
+  "NICE = zero to two useful items for later; leave the slots blank if none are needed.":
+    "NICE = 나중에 유용한 항목 0개에서 두 개. 필요한 항목이 없으면 칸을 비워 두기.",
+  "Write MUST 1, add MUST 2–3 only when the promise needs them, and add no more than two NICE items.":
+    "MUST 1을 쓰고, 프로젝트의 약속에 필요할 때만 MUST 2–3을 추가하세요. NICE는 두 개를 넘기지 마세요.",
+  "MUST 1 (required)": "MUST 1 (필수)",
+  "MUST 2 (optional)": "MUST 2 (선택)",
+  "MUST 3 (optional)": "MUST 3 (선택)",
+  "NICE 1 (optional)": "NICE 1 (선택)",
+  "NICE 2 (optional)": "NICE 2 (선택)",
+  "Every optional MUST or NICE item stays out of v0.":
+    "MUST 1 이외에 적어 둔 MUST와 NICE 항목은 모두 v0 범위 밖에 둡니다.",
+  "MUST 1 (required) / MUST 2–3 (optional)":
+    "MUST 1 (필수) / MUST 2–3 (선택)",
+  "NICE 1–2 (optional; write none if not needed)":
+    "NICE 1–2 (선택; 필요하지 않으면 없음이라고 쓰기)",
+  "I did not add any optional MUST or NICE item.":
+    "MUST 1 이외의 MUST나 NICE 항목을 v0에 추가하지 않았습니다.",
+  "Review this Project Brief without changing my topic or adding features.\n\nObservation: [what I noticed]\nUser: [my user]\nProblem: [one current difficulty]\nSuccess: [one action and visible result]\nMUST: [MUST 1 is required; add MUST 2 and MUST 3 only if the promise needs them]\nNICE: [zero to two optional items; write none if they are not needed]\nv0 IN: [one smallest path through MUST 1]\nv0 OUT: [every other listed item and exclusion]\nStates: Before [ ] / Action [ ] / After [ ]\nTest: Action [ ] / Expected [ ]\nAccessibility and safety: visible words, never color alone, no private or secret data.\n\nUse exactly these headings in your review. For each heading, write PASS or one specific RISK. Check that the fields agree, there are one to three MUST items and no more than two NICE items, blank optional slots did not become features, v0 is small enough for today, the test matches Success, and every item outside v0 remains outside. Give only ways to make this same plan smaller or clearer. Do not suggest a new topic or feature. Do not edit files.":
+    "내 주제를 바꾸거나 기능을 추가하지 말고 이 Project Brief를 검토해 주세요.\n\nObservation: [내가 관찰한 것]\nUser: [내 사용자]\nProblem: [현재 어려움 하나]\nSuccess: [행동 하나와 보이는 결과]\nMUST: [MUST 1은 필수. 프로젝트의 약속에 필요할 때만 MUST 2와 MUST 3 추가]\nNICE: [선택 항목 0개에서 두 개. 필요하지 않으면 없음이라고 쓰기]\nv0 IN: [MUST 1을 통과하는 가장 작은 경로 하나]\nv0 OUT: [그 밖에 적어 둔 항목과 제외 항목 모두]\nStates: Before [ ] / Action [ ] / After [ ]\nTest: Action [ ] / Expected [ ]\nAccessibility and safety: 보이는 문구를 사용하고 색만으로 전달하지 않으며 개인정보나 비밀정보를 쓰지 않기.\n\n검토에서도 정확히 이 제목을 사용하세요. 각 제목마다 PASS 또는 구체적인 RISK 하나를 쓰세요. 항목들이 서로 일치하는지, MUST가 한 개에서 세 개이고 NICE가 두 개를 넘지 않는지, 비워 둔 선택 칸이 기능으로 바뀌지 않았는지, v0가 오늘 만들 만큼 작은지, Test가 Success와 일치하는지, v0 밖의 모든 항목이 계속 밖에 있는지 확인하세요. 같은 계획을 더 작거나 명확하게 만드는 방법만 제시하세요. 새 주제나 기능을 제안하지 말고 파일을 편집하지 마세요.",
+  "The Brief has MUST 1, no more than three MUST items, and no more than two NICE items.":
+    "Brief에 MUST 1이 있고, MUST 항목은 세 개 이하이며 NICE 항목은 두 개 이하입니다.",
+  "Only listed items appear in v0 IN/OUT; blank optional slots did not become features.":
+    "v0 IN/OUT에는 내가 적은 항목만 있고, 비워 둔 선택 칸이 기능으로 바뀌지 않았습니다.",
+  "Work only in my-app/index.html.\n\nObservation: [reviewed observation]\nUser: [reviewed user]\nProblem: [reviewed problem]\nSuccess: [reviewed action and visible result]\nMUST 1: [reviewed MUST 1]\nv0 IN: [reviewed smallest path]\nv0 OUT: [reviewed optional items and exclusions]\nStates: Before [ ] / Action [ ] / After [ ]\nTest: Action [ ] / Expected [ ]\nAccessibility and safety: use visible words, never color alone, and no private or secret data.\n\nBuild only this v0 path through MUST 1.\nDo not add any optional MUST or NICE item, login, server, external API, personal data, or extra file.\nFirst show a short plan mapped to the same Brief headings. Do not edit until I approve the plan.":
+    "my-app/index.html에서만 작업하세요.\n\nObservation: [검토한 관찰]\nUser: [검토한 사용자]\nProblem: [검토한 문제]\nSuccess: [검토한 행동과 보이는 결과]\nMUST 1: [검토한 MUST 1]\nv0 IN: [검토한 가장 작은 경로]\nv0 OUT: [검토한 선택 항목과 제외 항목]\nStates: Before [ ] / Action [ ] / After [ ]\nTest: Action [ ] / Expected [ ]\nAccessibility and safety: 보이는 문구를 사용하고 색만으로 전달하지 않으며 개인정보나 비밀정보를 쓰지 않기.\n\nMUST 1을 통과하는 이 v0 경로만 만드세요.\nMUST 1 이외의 MUST나 NICE 항목, 로그인, 서버, 외부 API, 개인정보, 추가 파일을 넣지 마세요.\n먼저 같은 Brief 제목에 연결된 짧은 계획을 보여 주세요. 내가 계획을 승인하기 전에는 편집하지 마세요.",
 };
 
 const day4Ko: Record<string, string> = {
@@ -1093,6 +1289,64 @@ const day4Ko: Record<string, string> = {
     "5일차에 가장 먼저 테스트할 내용을 쓰세요.",
   "On Day 5, I will first test ...":
     "5일차에는 먼저 ...을 테스트하겠습니다.",
+  "Action path and optional storage": "동작 경로와 선택적 저장",
+  "Trace Event → handler → State → render → Screen.":
+    "Event → handler → State → render → Screen 순서로 추적하세요.",
+  "Record Storage load/save separately, or write 'not used.'":
+    "Storage 불러오기와 저장은 별도로 기록하고, 사용하지 않으면 'not used'라고 쓰세요.",
+  "The learner records and verifies Event, handler, State, render, and Screen for one real action, plus a separate Storage load/save note or 'not used.'":
+    "학습자가 실제 동작 하나의 Event, handler, State, render, Screen을 기록하고 검증하며, Storage 불러오기·저장을 별도로 기록하거나 'not used'라고 씁니다.",
+  "Read the action-path questions and the separate storage question.":
+    "동작 경로 질문과 별도의 저장 질문을 읽으세요.",
+  "Handler: Which listener or function received the event?":
+    "Handler: 어떤 리스너나 함수가 이벤트를 받았나요?",
+  "Render: Which code turned state into interface output?":
+    "Render: 어떤 코드가 상태를 화면 출력으로 바꾸었나요?",
+  "Storage, if promised: What loads into State on start, and what saves from State after a change?":
+    "Storage를 약속한 경우: 시작할 때 무엇을 State로 불러오고, 변경 후 무엇을 State에서 저장하나요?",
+  "Read my current project only. Do not edit any file.\n\nTrace this working user action: [my action]\n\nAction path:\nEvent → handler → State → render → Screen\n\nSeparate persistence check:\nStorage → State on start, and State → Storage after a change.\nIf persistence is not promised, write 'Storage: not used.'\n\nPoint to the real file and nearby code for each step. Keep the answer short.":
+    "현재 프로젝트를 읽기만 하고 어떤 파일도 편집하지 마세요.\n\n작동하는 다음 사용자 동작을 추적하세요: [내 동작]\n\n동작 경로:\nEvent → handler → State → render → Screen\n\n별도의 지속 저장 확인:\n시작할 때 Storage → State, 변경 후 State → Storage.\n지속 저장을 약속하지 않았다면 'Storage: not used.'라고 쓰세요.\n\n각 단계마다 실제 파일과 가까운 코드를 가리키세요. 답은 짧게 쓰세요.",
+  "Write the five-step action path. Then record the separate storage branch or 'not used,' run the action, and refresh once.":
+    "5단계 동작 경로를 쓰세요. 그런 다음 별도의 저장 분기를 기록하거나 'not used'라고 쓰고, 동작을 실행한 뒤 한 번 새로고침하세요.",
+  Handler: "처리 함수",
+  Render: "렌더링",
+  "Storage load/save or not used": "Storage 불러오기·저장 또는 사용 안 함",
+  "TELL — ask for one reviewed READY change":
+    "TELL — 검토를 마친 READY 변경 하나 요청하기",
+  "Review one slice": "기능 하나 검토하기",
+  "Use self-check and peer-check to make one Day 3 slice READY or identify one Yellow mismatch.":
+    "자가검수와 짝 검수로 3일차 기능 하나를 READY 상태로 만들거나 Yellow 불일치 하나를 찾으세요.",
+  "Self-check, then peer-check the same gate. Use Yellow only for a mismatch or help request.":
+    "자가검수한 뒤 짝이 같은 관문을 검수하세요. 불일치나 도움 요청이 있을 때만 Yellow를 사용하세요.",
+  "The learner records one slice with success, regression, and limits, completes the same self/peer gate, and either marks READY or resolves one Yellow mismatch with focused teacher help.":
+    "학습자가 성공 기준, 회귀 테스트, 제한 조건을 갖춘 기능 하나를 기록하고 같은 자가·짝 검수 관문을 완료한 뒤 READY로 표시하거나 강사의 집중 지원으로 Yellow 불일치 하나를 해결합니다.",
+  "Self + peer scope gate": "자가검수 + 짝 범위 관문",
+  "Self-check each item, then have a partner repeat the same gate. Check an item here only when both agree it passes.":
+    "각 항목을 자가검수한 뒤 짝이 같은 관문을 다시 확인하게 하세요. 두 사람이 모두 통과에 동의한 항목만 여기에서 체크하세요.",
+  "READY or Yellow": "READY 또는 Yellow",
+  "Choose READY when both checks pass. Choose Yellow only for a mismatch or help request, then show the teacher that item.":
+    "두 검수가 모두 통과하면 READY를 고르세요. 불일치나 도움 요청이 있을 때만 Yellow를 고르고 해당 항목만 강사에게 보여 주세요.",
+  "READY — both checks pass": "READY — 두 검수 모두 통과",
+  "Continue with only this reviewed slice.":
+    "검토를 마친 이 기능만 계속 제작하세요.",
+  "Yellow — one mismatch or help request":
+    "Yellow — 불일치 또는 도움 요청 한 가지",
+  "Ask the teacher to review only the mismatched item.":
+    "강사에게 불일치 항목만 확인해 달라고 하세요.",
+  "Build one reviewed READY slice, recover safely, regress, save, and hand off.":
+    "검토를 마친 READY 기능 하나를 만들고 안전하게 복구하고 회귀 테스트한 뒤 저장하고 인계하세요.",
+  "Build only the reviewed READY slice.":
+    "검토를 마친 READY 기능만 만드세요.",
+  "The reviewed READY slice and one old action pass in the browser and in my-app-day4-slice, and the learner completes a safe Context Handoff.":
+    "검토를 마친 READY 기능과 기존 동작 하나가 브라우저와 my-app-day4-slice에서 모두 통과하고, 학습자가 안전한 Context Handoff를 완성합니다.",
+  "Complete the brackets from the reviewed READY slice. Ask for a plan first and accept only the smallest first step.":
+    "검토를 마친 READY 기능을 바탕으로 대괄호를 채우세요. 먼저 계획을 요청하고 가장 작은 첫 단계만 받아들이세요.",
+  "Work only in my current project.\n\nMy reviewed READY MUST slice is:\n[my own words]\n\nSuccess means:\nWhen I [action], I see [visible result].\n\nKeep this working:\n[old action and expected result]\n\nAllowed files:\n[reviewed file list]\n\nDo not add a library, server, login, external API, personal data, or extra feature.\nFirst show a short plan:\n1. what you will change;\n2. how I will test success;\n3. how I will test the old action.\n\nDo not edit until I approve the AI plan.":
+    "현재 프로젝트 안에서만 작업하세요.\n\n검토를 마친 나의 READY MUST 기능:\n[내 표현으로 쓰기]\n\n성공 기준:\n내가 [동작]하면 [보이는 결과]가 나타난다.\n\n계속 작동해야 할 것:\n[기존 동작과 예상 결과]\n\n변경을 허용한 파일:\n[검토한 파일 목록]\n\n라이브러리, 서버, 로그인, 외부 API, 개인정보, 추가 기능을 넣지 마세요.\n먼저 짧은 계획을 보여 주세요:\n1. 무엇을 바꿀지\n2. 성공을 어떻게 테스트할지\n3. 기존 동작을 어떻게 테스트할지\n\n내가 AI의 계획을 승인하기 전에는 편집하지 마세요.",
+  "The reviewed READY slice passes.":
+    "검토를 마친 READY 기능이 통과합니다.",
+  "The reviewed new result can be shown.":
+    "검토를 마친 새 결과를 보여 줄 수 있습니다.",
 };
 
 const day5Ko: Record<string, string> = {
@@ -1141,6 +1395,36 @@ const day5Ko: Record<string, string> = {
   "Open the copy and run the main path.":
     "사본을 열고 핵심 경로를 실행하세요.",
   "Write test cards": "테스트 카드 작성",
+  "Write a HAPPY test and handle each relevant risk with a visible expected result.":
+    "HAPPY 테스트를 작성하고, 해당하는 위험마다 눈으로 확인할 수 있는 예상 결과를 정하세요.",
+  "Write one HAPPY test.": "HAPPY 테스트 하나를 작성하세요.",
+  "For EMPTY, INVALID, and BOUNDARY, write a test when the condition exists; otherwise write N/A and why.":
+    "EMPTY, INVALID, BOUNDARY는 해당 조건이 있을 때 테스트를 작성하고, 해당하지 않으면 N/A와 그 이유를 쓰세요.",
+  "A HAPPY card checks a MUST feature, and EMPTY, INVALID, and BOUNDARY each have either a relevant test card or N/A with a reason.":
+    "HAPPY 카드는 MUST 기능을 확인하고, EMPTY, INVALID, BOUNDARY에는 각각 관련 테스트 카드 또는 이유를 적은 N/A가 있습니다.",
+  "Test risk types": "테스트 위험 유형",
+  "Read each type, then decide whether the risk exists in your feature.":
+    "각 유형을 읽고 내 기능에 그 위험이 있는지 판단하세요.",
+  "EMPTY — required input is missing; use N/A when no input is required.":
+    "EMPTY — 필수 입력이 비어 있음. 입력이 필요 없는 기능이면 N/A를 사용하세요.",
+  "INVALID — a stated value or action rule is violated; use N/A when no such rule exists.":
+    "INVALID — 정해 둔 값 또는 동작 규칙을 위반함. 그런 규칙이 없으면 N/A를 사용하세요.",
+  "BOUNDARY — the edge of a stated limit; use N/A when the feature has no limit.":
+    "BOUNDARY — 정해 둔 제한의 경계. 기능에 제한이 없으면 N/A를 사용하세요.",
+  "Write the relevant test cards": "해당하는 테스트 카드 작성하기",
+  "HAPPY is required. For each other type, record Feature, Action or Input, and Expected—or N/A with a reason. Do not run it yet.":
+    "HAPPY는 필수입니다. 나머지 유형마다 기능, 동작 또는 입력, 예상 결과를 기록하거나, 해당하지 않으면 N/A와 이유를 쓰세요. 아직 실행하지 마세요.",
+  "EMPTY or N/A + reason": "EMPTY 또는 N/A + 이유",
+  "INVALID or N/A + reason": "INVALID 또는 N/A + 이유",
+  "BOUNDARY or N/A + reason": "BOUNDARY 또는 N/A + 이유",
+  "Check the quality of the tests and N/A decisions.":
+    "테스트와 N/A 판단이 타당한지 확인하세요.",
+  "The HAPPY card checks a MUST feature.":
+    "HAPPY 카드가 MUST 기능을 확인합니다.",
+  "Every relevant card has an action or input.":
+    "해당하는 모든 카드에 동작이나 입력이 있습니다.",
+  "Every N/A names why that risk does not exist in this feature.":
+    "모든 N/A에 그 위험이 이 기능에 해당하지 않는 이유가 적혀 있습니다.",
   "Write four tests with visible expected results.":
     "눈에 보이는 예상 결과가 있는 테스트 네 개를 쓰세요.",
   "Write one HAPPY, EMPTY, INVALID, and BOUNDARY test.":
@@ -1178,6 +1462,10 @@ const day5Ko: Record<string, string> = {
     "카드 하나 이상이 MUST 기능을 확인합니다.",
   "No card says only “It works.”":
     "어떤 카드도 “작동한다”라고만 쓰지 않았습니다.",
+  "I can identify the focused control while using Tab.":
+    "Tab 키로 이동할 때 현재 초점을 받은 요소를 알아볼 수 있습니다.",
+  "Every input has a visible label, or this project has no input.":
+    "모든 입력 요소에 보이는 레이블이 있거나, 이 프로젝트에는 입력 요소가 없습니다.",
   "Two peer-test rounds": "동료 테스트 2회",
   "Watch a peer use the project and record what really happens.":
     "동료가 프로젝트를 사용하는 모습을 보고 실제로 일어난 일을 기록하세요.",
@@ -1313,6 +1601,9 @@ const day5Ko: Record<string, string> = {
   "Failed test before": "수정 전 실패한 테스트",
   "Actual result after": "수정 후 실제 결과",
   "Main HAPPY re-test": "핵심 HAPPY 재테스트",
+  "50-minute fix window": "50분 수정 시간",
+  "Repeat CHECK → FIX → CHECK → SAVE. Use the remaining time to close the record and stop before the final smoke test.":
+    "CHECK → FIX → CHECK → SAVE를 반복하세요. 남은 시간에는 기록을 마무리하고 최종 스모크 테스트 전에는 수정을 멈추세요.",
   "Other MUST paths": "다른 MUST 경로",
   "Save Point": "저장 지점",
   "The failed test passes.": "실패했던 테스트가 통과합니다.",
@@ -1352,12 +1643,38 @@ const day5Ko: Record<string, string> = {
     "여러 파일 프로젝트라면 프로젝트를 my-app-day5-release-candidate로 복사하세요.",
   "Open the release candidate copy.": "출시 후보 사본을 여세요.",
   "Run the smoke test on the copy.": "사본에서 스모크 테스트를 실행하세요.",
+  "Refresh and verify the project's stated storage behavior, then run the main path again":
+    "새로고침한 뒤 프로젝트가 약속한 저장 동작을 확인하고 핵심 경로를 다시 실행하기",
+  "After refresh, stored or reset state matches the project promise and the main path can run again.":
+    "새로고침 후 저장되거나 초기화된 상태가 프로젝트의 약속과 일치하고 핵심 경로를 다시 실행할 수 있습니다.",
   "Draft the demo path": "데모 경로 초안 작성하기",
   "Write only the actions and visible result.":
     "동작과 눈에 보이는 결과만 쓰세요.",
   "Open:\nClick or enter:\nShow:\nStop:":
     "열기:\n클릭 또는 입력:\n보여 줄 결과:\n종료:",
   "Write the exact path for Day 6.": "6일차에 사용할 정확한 경로를 쓰세요.",
+  "Review the fix plan": "수정 계획 검토하기",
+  "Use self-check and peer-check to make one small fix READY or identify one Yellow mismatch.":
+    "자가검수와 짝 검수로 작은 수정 하나를 READY 상태로 만들거나 Yellow 불일치 하나를 찾으세요.",
+  "The first fix has Problem, Evidence, Small fix, Success means, and Must keep working; the learner completes the same self/peer gate and either marks READY or resolves one Yellow mismatch with focused teacher help.":
+    "첫 수정에 Problem, Evidence, Small fix, Success means, Must keep working이 모두 있고, 학습자가 같은 자가·짝 검수 관문을 완료한 뒤 READY로 표시하거나 강사의 집중 지원으로 Yellow 불일치 하나를 해결합니다.",
+  "Self → peer → Yellow gate": "자가검수 → 짝 검수 → Yellow 관문",
+  "Self-check the five plan criteria, then have a partner repeat them. If both agree, mark READY; if one item differs or needs help, mark Yellow and show only that item to the teacher.":
+    "계획 기준 다섯 가지를 자가검수한 뒤 짝이 같은 기준을 다시 확인하게 하세요. 두 사람이 모두 동의하면 READY로 표시하고, 항목 하나가 다르거나 도움이 필요하면 Yellow로 표시한 뒤 그 항목만 강사에게 보여 주세요.",
+  "One working MUST path is named for regression.":
+    "회귀 테스트할 작동 중인 MUST 경로 하나가 명시되어 있습니다.",
+  "My partner repeated the same five checks.":
+    "짝이 같은 다섯 가지 검사를 반복했습니다.",
+  "Both checks agree, or I marked the mismatched item Yellow for focused teacher help.":
+    "두 검수 결과가 일치하거나, 불일치 항목을 Yellow로 표시해 강사의 집중 지원을 요청했습니다.",
+  "Fix one reviewed READY problem at a time, re-test, and save only working code.":
+    "검토를 마친 READY 문제를 한 번에 하나씩 수정하고 다시 테스트한 뒤 작동하는 코드만 저장하세요.",
+  "At least the first reviewed READY fix passes its failed test, the main HAPPY path and named MUST paths still pass, and a working Save Point is recorded.":
+    "검토를 마친 첫 READY 수정이 실패했던 테스트를 통과하고, 핵심 HAPPY 경로와 기록한 MUST 경로가 계속 통과하며, 작동하는 Save Point가 기록됩니다.",
+  "Complete this request for one reviewed READY problem. Read it before you send it.":
+    "검토를 마친 READY 문제 하나에 맞게 이 요청을 완성하고 보내기 전에 읽으세요.",
+  "Record all five results after each reviewed READY fix.":
+    "검토를 마친 READY 수정마다 결과 다섯 가지를 기록하세요.",
 };
 
 const day6Ko: Record<string, string> = {
@@ -1383,10 +1700,22 @@ const day6Ko: Record<string, string> = {
   "Run the full path": "전체 경로 실행하기",
   "Test from the beginning, refresh, and test again.":
     "처음부터 테스트하고 새로고침한 뒤 다시 테스트하세요.",
+  "Test from a known start, refresh and compare the result with the project's stated storage behavior, then run the path with a second safe sample.":
+    "알려진 시작 상태에서 테스트하고, 새로고침 후 결과가 프로젝트의 저장 약속과 일치하는지 비교한 다음, 안전한 두 번째 샘플로 경로를 실행하세요.",
   "Run the demo path": "데모 경로 실행하기",
   "Confirm the final file or folder": "최종 파일 또는 폴더 확인하기",
+  "Run the demo path with Sample A or another safe sample":
+    "샘플 A 또는 다른 안전한 샘플로 데모 경로 실행하기",
+  "Refresh and compare stored or reset state with the project promise":
+    "새로고침한 뒤 저장되거나 초기화된 상태를 프로젝트의 약속과 비교하기",
+  "Run the path with Sample B or a different safe sample":
+    "샘플 B 또는 다른 안전한 샘플로 경로 실행하기",
   "The MUST results appear.": "MUST 결과가 나타납니다.",
   "The path works again.": "경로가 다시 작동합니다.",
+  "After refresh, the state matches the project's promise.":
+    "새로고침 후 상태가 프로젝트의 약속과 일치합니다.",
+  "The second sample produces the expected result without a false duplicate.":
+    "두 번째 샘플이 잘못된 중복 없이 예상 결과를 냅니다.",
   "The exact version is known.": "정확한 버전을 알고 있습니다.",
   "Choose the status supported by your test.":
     "테스트 증거에 맞는 상태를 고르세요.",
@@ -1509,11 +1838,15 @@ const day6Ko: Record<string, string> = {
     "증거를 보여 주고 다음 발표자의 시간을 지켜 주세요.",
   "The learner completes the scheduled demo within the slot or uses the approved fallback, and the audience records visible evidence.":
     "학습자가 정해진 시간 안에 데모를 마치거나 승인된 대체 방법을 사용하고 청중은 눈에 보인 증거를 기록합니다.",
+  "The learner completes the scheduled demo within the slot or follows the prepared final-backup → Day 5 candidate → Day 5 test-record ladder, and the audience records what the evidence actually proves.":
+    "학습자가 정해진 시간 안에 데모를 완료하거나 준비한 최종 백업 → 5일차 후보본 → 5일차 테스트 기록 순서로 대체하고, 청중은 그 증거가 실제로 무엇을 입증하는지 기록합니다.",
   "Presenter ready": "발표자 준비",
   "Check these items before your slot.": "발표 전에 다음 항목을 확인하세요.",
   "The final file is open.": "최종 파일이 열려 있습니다.",
   "The click path is ready.": "클릭 경로가 준비되었습니다.",
   "A fallback is ready.": "대체 자료가 준비되었습니다.",
+  "The Day 5 candidate and Day 5 test record are easy to locate.":
+    "5일차 후보본과 5일차 테스트 기록을 쉽게 찾을 수 있습니다.",
   "Private tabs are closed.": "개인 탭을 닫았습니다.",
   "Four-minute showcase slot": "4분 발표 시간",
   "Repeat this timer for each presenter: 2:00 demo, 1:00 feedback, 1:00 switch.":
@@ -1572,9 +1905,23 @@ const day6Ko: Record<string, string> = {
   "Useful prompts": "유용한 프롬프트",
   "Two-minute demo script": "2분 데모 대본",
   "Feedback and reflection": "피드백과 회고",
+  "I created the final backup: my-app/day6-final.html for a one-file project, or my-app-day6-final for a multi-file project.":
+    "최종 백업을 만들었습니다. 단일 파일 프로젝트는 my-app/day6-final.html, 다중 파일 프로젝트는 my-app-day6-final입니다.",
+  "I opened the final backup.": "최종 백업을 열었습니다.",
+  "The full demo path passes in the final backup.":
+    "최종 백업에서 전체 데모 경로가 통과합니다.",
+  "Start from the final backup, show evidence, and respect the next presenter.":
+    "최종 백업에서 시작해 증거를 보여 주고 다음 발표자의 시간을 지키세요.",
+  "The learner starts from the final backup, completes the scheduled demo or makes one controlled retry before using the Day 5 candidate and then the Day 5 test record, and the audience records what the evidence actually proves.":
+    "학습자가 최종 백업에서 시작해 정해진 데모를 완료하거나, 통제된 재시도 한 번 후 5일차 후보본과 5일차 테스트 기록 순으로 전환하며, 청중은 그 증거가 실제로 무엇을 입증하는지 기록합니다.",
 };
 
 const courseKo: Record<string, string> = {
+  BREAK: "휴식",
+  STUDIO: "제작 실습",
+  SHARE: "공유",
+  "_____ → _____ → _____ → _____ → _____":
+    "_____ → _____ → _____ → _____ → _____",
   Make: "만들기",
   "Run the full TELL → WATCH → CHECK → FIX → SAVE loop.":
     "TELL → WATCH → CHECK → FIX → SAVE 전체 루프를 실행합니다.",
@@ -1808,6 +2155,8 @@ const teacherCueEnglishByKorean: Record<string, string> = {
     "Have learners write Expected before they run the action and record Actual.",
   "기능 내용을 대신 제안하지 말고 네 테스트 유형이 학생의 기존 기능에 적용됐는지만 확인한다.":
     "Do not suggest feature content; only check that the four test types were applied to the learner's existing features.",
+  "기능 내용을 대신 제안하지 말고 EMPTY·INVALID·BOUNDARY가 학생의 기존 기능에 실제로 적용되는지 확인한다. 해당하지 않으면 N/A와 이유를 인정한다.":
+    "Do not suggest feature content for the learner. Check whether EMPTY, INVALID, and BOUNDARY actually apply to the learner's existing feature; accept N/A with a reason when a type does not apply.",
   "‘It works’처럼 관찰할 수 없는 결과는 다시 쓰게 한다.":
     "Have learners rewrite unobservable results such as ‘It works.’",
   "제작자가 키보드나 마우스를 잡지 않고 관찰만 하게 한다.":
@@ -1878,8 +2227,14 @@ const teacherCueEnglishByKorean: Record<string, string> = {
     "Use the same timing for every presenter: two minutes for the demo, one minute for questions or feedback, and one minute to switch.",
   "20명 기준 4분 슬롯을 반복하고, 학생이 많으면 두 조로 병렬 운영한다.":
     "Repeat four-minute slots for up to 20 learners; if there are more, run two groups in parallel.",
+  "발표 시작·동기화에 8분을 두고, 조당 발표 창은 72분이다. N명이면 G = ceil(N ÷ 18)개 조로 나누며, 1–18명은 1개 조, 19–36명은 2개 조, 37–54명은 3개 조다.":
+    "Allow 8 minutes to launch and synchronize the showcase; each group's presentation window is 72 minutes. For N learners, use G = ceil(N ÷ 18) groups: one group for 1–18 learners, two for 19–36, and three for 37–54.",
+  "각 조에 진행 담당, 시간 담당, 증거 기록 담당을 지정한다. 8분에 전 조가 1번 슬롯을 시작하고 80분에 발표·대체·결석 인원을 합산해 보고한다.":
+    "Assign a facilitator, timekeeper, and evidence recorder in each group. Have all groups begin slot 1 at minute 8 and report the totals for presentations, fallbacks, and absences at minute 80.",
   "실행 실패 시 Final 백업, Day 5 후보, 강사가 승인한 대체 증거 순으로 전환한다.":
     "If the demo fails, switch in order to the Final backup, the Day 5 candidate, and then teacher-approved alternative evidence.",
+  "실행 실패 시 Final 백업, Day 5 후보, Day 5 테스트 기록 순으로 전환한다. 테스트 기록만 보일 때는 과거 통과를 증명할 뿐 현재 라이브 동작은 증명하지 못한다고 밝힌다.":
+    "If the live run fails, move in order to the Final backup, the Day 5 candidate, and the Day 5 test record. When only the test record is shown, state that it proves a past pass, not current live operation.",
   "서로 다른 발표 두 개에 대해 실제 관찰, 명확한 결정, 질문을 기록하게 한다.":
     "For two different presentations, have learners record a real observation, one clear decision, and one question.",
   "영어 유창성, 주제 취향, 화려함에 대한 평가는 받지 않는다.":
@@ -1892,6 +2247,70 @@ const teacherCueEnglishByKorean: Record<string, string> = {
     "Have learners complete a final statement that distinguishes AI's role from the learner's responsibility.",
   "최종 백업, 테스트 증거, 대본, 피드백, 회고의 위치를 확인하게 한다.":
     "Confirm the locations of the final backup, test evidence, script, feedback, and reflection.",
+  "응답은 짧은 영어, 짧은 라오어 메모(동료나 통역 지원), 그림, 몸짓 모두 허용하고 언어 유창성보다 판단을 본다.":
+    "Accept short English, a brief Lao note supported by a peer or interpreter, a sketch, or a gesture; assess the decision rather than language fluency.",
+  "학생은 짧은 영어, 라오어 메모, 작은 그림 중 편한 방식으로 관찰을 먼저 표현하고 필요하면 동료나 통역이 영어 한 줄로 옮긴다.":
+    "Let learners express an observation first with short English, a Lao note, or a small sketch; a peer or interpreter may help turn it into one short English line.",
+  "영어 문장이 막히면 라오어 메모와 그림으로 뜻을 먼저 고정한 뒤 동료나 통역과 짧은 영어 문장으로 바꾸게 한다.":
+    "If an English sentence blocks progress, let the learner fix the meaning first with a Lao note and sketch, then work with a peer or interpreter to make one short English sentence.",
+  "Observation, User, Problem, Success, MUST/NICE, v0 IN/OUT, States, Test, 접근성·안전을 자가검수와 짝 검수에 똑같이 사용한다.":
+    "Use Observation, User, Problem, Success, MUST/NICE, v0 IN/OUT, States, Test, accessibility, and safety identically for self-check and peer check.",
+  "전원 승인 줄을 만들지 않는다. 자가검수와 짝 검수가 모두 통과하면 READY, 불일치가 하나라도 있으면 Yellow로 표시하고 강사는 그 항목만 확인한다.":
+    "Do not create a whole-class approval queue. Mark the plan READY when self and peer checks both pass; if any item disagrees, mark Yellow and have the teacher check only that item.",
+  "READY 또는 Yellow 확인 완료 전에는 my-app이나 index.html을 만들지 않게 한다.":
+    "Do not let learners create my-app or index.html until they reach READY or resolve the Yellow check.",
+  "READY 학생과 Yellow 불일치를 해결한 학생만 my-app/index.html을 만들게 한다.":
+    "Only READY learners and learners who resolved their Yellow mismatch should create my-app/index.html.",
+  "AI가 범위를 넓히면 즉시 멈추고 검토한 READY v0로 되돌린다.":
+    "If AI expands the scope, stop immediately and return to the reviewed READY v0.",
+  "짧은 영어를 기본으로 하되 라오어 메모를 동료나 통역이 짧게 옮기거나, 학생이 화면과 그림을 가리키고 몸짓으로 행동을 보여도 된다. 언어 유창성이나 주제 취향보다 사용자·문제·작동 증거를 본다.":
+    "Use short English by default, but allow a peer or interpreter to translate a brief Lao note, or let the learner point to the screen and sketch and show the action with a gesture. Assess user, problem, and working evidence rather than fluency or topic preference.",
+  "MUST 1은 필수지만 프로젝트에 필요하지 않은 MUST 2·3을 억지로 만들지 않게 한다.":
+    "Require MUST 1, but do not make learners invent MUST 2 or MUST 3 when the project does not need them.",
+  "NICE는 최대 두 개이며 없어도 된다. 적은 NICE 항목은 오늘 범위에서 제외하도록 범위 문을 운영한다.":
+    "Allow up to two NICE items and accept none. Keep any listed NICE items outside today's scope.",
+  "학생 자신의 기존 동작 하나를 Event → handler → State → render → Screen 순서로 추적하게 한다.":
+    "Have learners trace one existing action from their own project through Event → handler → State → render → Screen.",
+  "각 단계에 AI 설명이 아니라 실제 파일·코드와 브라우저 증거를 연결하게 한다.":
+    "Have learners connect each step to real files, code, and browser evidence rather than an AI explanation.",
+  "Storage는 화면 뒤의 다음 단계가 아니다. 지속 저장을 약속한 경우에만 Storage → State 불러오기와 State → Storage 저장을 별도로 기록하고, 없으면 not used로 쓴다.":
+    "Storage is not the next step after Screen. Only when persistence is promised, record Storage → State loading and State → Storage saving separately; otherwise write 'not used.'",
+  "전원 강사 승인 줄을 만들지 않는다. 학생이 같은 여섯 항목으로 자가검수한 뒤 짝이 다시 검수하게 한다.":
+    "Do not create a whole-class teacher approval queue. Have each learner self-check the same six items, then have a partner repeat the check.",
+  "자가검수와 짝검수가 모두 통과하면 학생이 READY로 표시하고 바로 진행한다.":
+    "When both the self-check and peer check pass, have the learner mark READY and continue immediately.",
+  "두 검수가 다르거나 도움이 필요하면 Yellow로 표시한다. 강사는 불일치 항목만 확인하고 같은 목표를 작게 만드는 질문만 한다.":
+    "If the two checks disagree or help is needed, mark Yellow. The teacher checks only the mismatched item and asks questions that make the same goal smaller.",
+  "READY 또는 Yellow 불일치 해결을 마친 조각만 Studio에서 시작하게 한다.":
+    "Allow learners to begin in Studio only with a READY slice or after resolving its Yellow mismatch.",
+  "앞 3분에는 짝검증 경로와 종료 기준을 안내하고 편집을 멈추게 한다.":
+    "During the first three minutes, explain the peer-verification path and stopping criteria, and have learners stop editing.",
+  "다음 4분에는 짝이 복사본에서 새 동작과 기존 동작을 직접 실행한다. 파일명만 확인하는 것은 증거로 인정하지 않는다.":
+    "During the next four minutes, have partners run the new action and the old action in the copy themselves. Do not accept a file name alone as evidence.",
+  "마지막 3분에는 side signal, Day 5 첫 행동, exit 기록을 완료하며 새 AI 요청은 보내지 않는다.":
+    "During the final three minutes, complete the side signal, the first Day 5 action, and the exit record; do not send a new AI request.",
+  "앞 4분에는 테스터·제작자 규칙과 안전한 샘플 데이터 사용을 시연한다.":
+    "During the first four minutes, demonstrate the tester and maker rules and the use of safe sample data.",
+  "다음 12분에는 첫 라운드를 진행하고, 2분 동안 기록을 저장한 뒤 역할과 프로젝트를 바꾼다.":
+    "Run the first round for the next 12 minutes, save the records for two minutes, then switch roles and projects.",
+  "마지막 12분에는 둘째 라운드를 진행한다. 제작자는 키보드나 마우스를 잡지 않고, 취향 대신 멈춤·반복·예상 밖 행동을 기록한다.":
+    "Run the second round during the final 12 minutes. The maker does not touch the keyboard or mouse, and records pauses, repetitions, and unexpected actions rather than judgments of taste.",
+  "전원 강사 승인 줄을 만들지 않는다. 학생이 같은 기준으로 자가검수한 뒤 짝이 다시 검수하게 한다.":
+    "Do not create a whole-class teacher approval queue. Have each learner self-check with the same criteria, then have a partner repeat the check.",
+  "자가검수와 짝검수가 모두 통과하면 READY로 표시한다. 불일치나 도움 요청은 Yellow로 표시하고 강사는 그 항목만 확인한다.":
+    "Mark the fix READY when both the self-check and peer check pass. Mark a mismatch or help request Yellow, and have the teacher check only that item.",
+  "READY 또는 Yellow 불일치 해결 전에는 AI 변경 요청을 보내지 않게 하며, 강사는 학생의 프로젝트 선택을 대신 쓰지 않는다.":
+    "Do not let learners send an AI change request before reaching READY or resolving the Yellow mismatch, and do not let the teacher write the learner's project choice for them.",
+  "학생이 검수한 READY Fix 1부터 시작하고 한 번에 하나의 변경만 요청하게 한다.":
+    "Have learners begin with their reviewed READY Fix 1 and request only one change at a time.",
+  "앞 5분에는 활성 프로젝트에서 최종 smoke test 다섯 항목을 기록하게 한다.":
+    "During the first five minutes, have learners record all five final smoke-test results in the active project.",
+  "다음 5분에는 단일 파일은 day5-release-candidate.html, 다중 파일은 my-app-day5-release-candidate로 복사하고 복사본을 직접 연다.":
+    "During the next five minutes, copy a single-file project to day5-release-candidate.html or a multi-file project to my-app-day5-release-candidate, then open the copy directly.",
+  "마지막 5분에는 복사본에서 핵심 경로를 다시 통과하고 Open·Click or enter·Show·Stop 데모 경로를 저장하게 한다.":
+    "During the final five minutes, rerun the main path in the copy and save the Open · Click or enter · Show · Stop demo path.",
+  "발표는 Final 백업에서 시작한다. 실행 실패 시 알려진 시작 상태에서 한 번만 재시도한 뒤 Day 5 후보, Day 5 테스트 기록 순으로 전환한다. 테스트 기록만 보일 때는 과거 통과를 증명할 뿐 현재 라이브 동작은 증명하지 못한다고 밝힌다.":
+    "Start every presentation from the Final backup. If the live run fails, retry once from a known start, then move to the Day 5 candidate and the Day 5 test record in that order. When only the test record is shown, state that it proves a past pass, not current live operation.",
 };
 
 export function teacherCueText(

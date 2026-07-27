@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import type { DayCourseware } from "@/content/courseware";
 import type { InteractiveDayPlan } from "@/content/interactive";
 import {
   interactiveText,
@@ -11,10 +12,25 @@ import { uiText } from "@/content/translations/ui-ko";
 import { useLanguage } from "@/lib/language";
 import { LanguageToggle } from "../LanguageToggle";
 
-export function InstructorPlanView({ plan }: { plan: InteractiveDayPlan }) {
+export function InstructorPlanView({
+  plan,
+  courseware,
+}: {
+  plan: InteractiveDayPlan;
+  courseware: DayCourseware;
+}) {
   const language = useLanguage();
   const [selected, setSelected] = useState(0);
   const stage = plan.stages[selected];
+  const coursewareStage = courseware.stages.find(
+    (item) => item.stageId === stage.id,
+  );
+  const evidenceActivities = stage.activities.filter(
+    (activity) =>
+      activity.kind !== "read" &&
+      activity.kind !== "timer" &&
+      !activity.hidden,
+  );
 
   return (
     <main className="instructor-plan">
@@ -115,6 +131,49 @@ export function InstructorPlanView({ plan }: { plan: InteractiveDayPlan }) {
             </ol>
           </div>
 
+          {coursewareStage?.slides.length ? (
+            <section className="instructor-teaching-sequence">
+              <header>
+                <div>
+                  <span>{uiText(language, "Teaching sequence").toUpperCase()}</span>
+                  <strong>
+                    {uiText(language, "{count} authored slides", {
+                      count: coursewareStage.slides.length,
+                    })}
+                  </strong>
+                </div>
+                <Link href={`/day/${plan.day}/present`} target="_blank">
+                  {uiText(language, "Open lecture slides ↗")}
+                </Link>
+              </header>
+              <ol>
+                {coursewareStage.slides.map((slide, index) => (
+                  <li key={slide.id}>
+                    <div>
+                      <i>{String(index + 1).padStart(2, "0")}</i>
+                      <div>
+                        <small>{slide.kicker[language]}</small>
+                        <strong>{slide.title[language]}</strong>
+                      </div>
+                      <em>
+                        {uiText(language, "{minutes} min", {
+                          minutes: slide.minutes,
+                        })}
+                      </em>
+                    </div>
+                    <ul>
+                      {slide.teacherNotes.map((note, noteIndex) => (
+                        <li key={`${slide.id}-note-${noteIndex}`}>
+                          {note[language]}
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          ) : null}
+
           <div className="student-screen-preview">
             <span>{uiText(language, "Student screen").toUpperCase()}</span>
             <h3>{uiText(language, "What students see now")}</h3>
@@ -125,9 +184,10 @@ export function InstructorPlanView({ plan }: { plan: InteractiveDayPlan }) {
             </ol>
           </div>
 
-          <div className="instructor-activity-preview">
-            <span>{uiText(language, "Interactive activities").toUpperCase()}</span>
-            {stage.activities.map((activity, index) => (
+          {evidenceActivities.length ? (
+            <div className="instructor-activity-preview">
+              <span>{uiText(language, "Evidence activities").toUpperCase()}</span>
+              {evidenceActivities.map((activity, index) => (
               <article key={activity.id}>
                 <i>{String(index + 1).padStart(2, "0")}</i>
                 <div>
@@ -138,8 +198,9 @@ export function InstructorPlanView({ plan }: { plan: InteractiveDayPlan }) {
                   <p>{interactiveText(language, activity.instruction)}</p>
                 </div>
               </article>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : null}
 
           <div className="instructor-completion">
             <span>{uiText(language, "Criteria for moving to the next stage")}</span>
