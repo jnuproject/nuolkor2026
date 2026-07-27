@@ -5495,11 +5495,11 @@ a {
   display: none;
 }
 
-html[data-home-language="ko"] .lang-en {
+html[data-language="ko"] .lang-en {
   display: none;
 }
 
-html[data-home-language="ko"] .lang-ko {
+html[data-language="ko"] .lang-ko {
   display: inline;
 }
 
@@ -5614,7 +5614,7 @@ html[data-home-language="ko"] .lang-ko {
 }
 
 .language-toggle button[data-language-option="en"],
-html[data-home-language="ko"]
+html[data-language="ko"]
   .language-toggle
   button[data-language-option="ko"] {
   color: #fff;
@@ -5622,7 +5622,7 @@ html[data-home-language="ko"]
   box-shadow: 0 1px 3px rgb(17 24 39 / 0.2);
 }
 
-html[data-home-language="ko"]
+html[data-language="ko"]
   .language-toggle
   button[data-language-option="en"] {
   color: var(--muted);

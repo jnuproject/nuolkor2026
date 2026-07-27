@@ -1,39 +1,27 @@
 import type { Metadata } from "next";
 import { OfflineRegister } from "@/components/OfflineRegister";
-import { sitePath } from "@/lib/site-path";
+import {
+  LANGUAGE_STORAGE_KEY,
+  LEGACY_LANGUAGE_STORAGE_KEY,
+} from "@/lib/language-constants";
 import "./globals.css";
 
 const siteOrigin = new URL("https://jnuproject.github.io/");
 const siteUrl = new URL("nuolkor2026/", siteOrigin);
 const socialImage = new URL("og.png", siteUrl).toString();
-const languageBasePath = sitePath("/").replace(/\/$/, "");
 const description =
   "A six-day, 18-hour interactive vibe coding classroom with guided activities, live progress, help signals, and instructor controls.";
 
 const languageInitScript = `
   (function () {
     try {
-      var basePath = ${JSON.stringify(languageBasePath)};
-      var path = window.location.pathname;
-      if (
-        basePath &&
-        (path === basePath || path.indexOf(basePath + "/") === 0)
-      ) {
-        path = path.slice(basePath.length) || "/";
-      }
-      path = path.replace(/\\/+$/, "") || "/";
-      var isHome =
-        path === "/" ||
-        path === "/overview";
-      if (!isHome) {
-        document.documentElement.lang = "en";
-        delete document.documentElement.dataset.homeLanguage;
-        return;
-      }
-      var key = "build-loop:home-language:v1";
+      var key = ${JSON.stringify(LANGUAGE_STORAGE_KEY)};
+      var legacyKey = ${JSON.stringify(LEGACY_LANGUAGE_STORAGE_KEY)};
       var saved = null;
       try {
-        saved = window.localStorage.getItem(key);
+        saved =
+          window.localStorage.getItem(key) ||
+          window.localStorage.getItem(legacyKey);
       } catch (_) {}
       var language =
         saved === "ko" || saved === "en"
@@ -41,7 +29,7 @@ const languageInitScript = `
           : (window.navigator.language || "").toLowerCase().indexOf("ko") === 0
             ? "ko"
             : "en";
-      document.documentElement.dataset.homeLanguage = language;
+      document.documentElement.dataset.language = language;
       document.documentElement.lang = language;
     } catch (_) {}
   })();

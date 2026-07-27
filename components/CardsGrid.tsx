@@ -3,6 +3,10 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { DayInfo } from "@/content/course";
+import { getLocalizedCardsMarkdown } from "@/content/translations/cards-ko";
+import { interactiveText } from "@/content/translations/interactive-ko";
+import { uiText } from "@/content/translations/ui-ko";
+import { useLanguage } from "@/lib/language";
 
 export type ClassroomCard = {
   number: number;
@@ -40,18 +44,38 @@ export function parseClassroomCards(markdown: string): {
 }
 
 export function CardsGrid({ day, markdown }: { day: DayInfo; markdown: string }) {
-  const { intro, cards } = parseClassroomCards(markdown);
+  const language = useLanguage();
+  const localizedMarkdown = getLocalizedCardsMarkdown(
+    day.day,
+    language,
+    markdown,
+  );
+  const { intro, cards } = parseClassroomCards(localizedMarkdown);
 
   return (
     <main className="cards-page">
       <section className="cards-hero">
         <div>
-          <span className="eyebrow">DAY {day.day} · CLASSROOM CARDS</span>
-          <h1>{day.shortTitle} Cards</h1>
-          <p>{intro || "Quick-reference cards for the desk, screen, or printer."}</p>
+          <span className="eyebrow">
+            {uiText(language, "Day {day} · Classroom cards", {
+              day: day.day,
+            }).toUpperCase()}
+          </span>
+          <h1>
+            {uiText(language, "{title} Cards", {
+              title: interactiveText(language, day.shortTitle),
+            })}
+          </h1>
+          <p>
+            {intro ||
+              uiText(
+                language,
+                "Quick-reference cards for the desk, screen, or printer.",
+              )}
+          </p>
         </div>
         <button className="cards-print" onClick={() => window.print()} type="button">
-          🖨 Print cards
+          🖨 {uiText(language, "Print cards")}
         </button>
       </section>
 
@@ -59,7 +83,11 @@ export function CardsGrid({ day, markdown }: { day: DayInfo; markdown: string })
         {cards.map((card) => (
           <article className="classroom-card" key={card.number}>
             <header>
-              <span>CARD {card.number}</span>
+              <span>
+                {uiText(language, "Card {number}", {
+                  number: card.number,
+                }).toUpperCase()}
+              </span>
               <h2>{card.title}</h2>
             </header>
             <div className="classroom-card-body">

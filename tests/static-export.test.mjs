@@ -40,6 +40,7 @@ test("exports the bilingual course overview at the GitHub Pages base path", asyn
     assert.match(html, /바이브 코딩 부트캠프/);
     assert.match(html, /AI와 첫 프로토타입/);
     assert.match(html, /완성하고, 발표하고, 돌아보기/);
+    assert.match(html, /build-loop:language:v2/);
     assert.match(html, /build-loop:home-language:v1/);
     assert.match(html, /\/nuolkor2026\/_next\//);
     assert.doesNotMatch(html, /react-loading-skeleton|codex-preview/i);
@@ -47,13 +48,17 @@ test("exports the bilingual course overview at the GitHub Pages base path", asyn
 });
 
 test("exports all classroom-facing routes without a runtime Next server", async () => {
-  const [lesson, presenter, join, classroom, instructor] = await Promise.all([
-    readRoute(path.join("day", "1")),
-    readRoute(path.join("day", "1", "present")),
-    readRoute("join"),
-    readRoute("class"),
-    readRoute(path.join("instructor", "live")),
-  ]);
+  const [lesson, presenter, join, classroom, instructor, setup, cards, guide] =
+    await Promise.all([
+      readRoute(path.join("day", "1")),
+      readRoute(path.join("day", "1", "present")),
+      readRoute("join"),
+      readRoute("class"),
+      readRoute(path.join("instructor", "live")),
+      readRoute("start"),
+      readRoute(path.join("cards", "day", "1")),
+      readRoute(path.join("instructor", "day", "1")),
+    ]);
 
   assert.match(lesson, /SELF-PACED/);
   assert.match(lesson, /Welcome and readiness/);
@@ -64,6 +69,21 @@ test("exports all classroom-facing routes without a runtime Next server", async 
   assert.match(instructor, /Start a live classroom\./);
   assert.match(instructor, /Students join with one code\./);
   assert.match(instructor, /INSTRUCTOR LAUNCH PIN/);
+
+  for (const html of [
+    lesson,
+    presenter,
+    join,
+    classroom,
+    instructor,
+    setup,
+    cards,
+    guide,
+  ]) {
+    assert.match(html, /build-loop:language:v2/);
+    assert.match(html, />한국어</);
+    assert.match(html, />English</);
+  }
 });
 
 test("copies offline teaching files and a base-path-aware service worker", async () => {
@@ -93,6 +113,11 @@ test("embeds only public Supabase configuration in the browser bundle", async ()
   assert.match(javascript, /\/functions\/v1\/classrooms/);
   assert.match(javascript, /sb_publishable_TsBcP5_aoEg8hZYPMooU8Q_ENRVK5ON/);
   assert.match(javascript, /x-instructor-pin/);
+  assert.match(javascript, /환영 및 준비 확인/);
+  assert.match(javascript, /최종 준비 확인/);
+  assert.match(javascript, /수업에 참여하세요/);
+  assert.match(javascript, /완료는 하나의 결정/);
+  assert.match(javascript, /1일차 — 수업 활동 카드/);
   assert.doesNotMatch(javascript, /participant-token|build-loop:teacher:current/);
   assert.doesNotMatch(javascript, /sb_secret_|service_role/i);
   assert.doesNotMatch(javascript, /chatgpt\.site/i);

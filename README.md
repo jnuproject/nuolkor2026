@@ -5,11 +5,14 @@ the National University of Laos.
 
 ## Classroom views
 
-- **Student** — English activities, saved checks, copyable prompts, and help signals
-- **Instructor** — Korean facilitation notes, timing, and recovery guidance
-- **Present** — projector-ready English screens, timer, and keyboard controls
-- **Cards** — printable quick-reference material
+- **Student** — Korean/English activities, saved checks, copyable prompts, and help signals
+- **Instructor** — Korean/English facilitation views, timing, and recovery guidance
+- **Present** — projector-ready Korean/English screens, timer, and keyboard controls
+- **Cards** — Korean/English printable quick-reference material
 - **Live classroom** — room code, participant progress, help status, and instructor controls
+
+The language selection applies to every route and follows the learner or
+instructor across the whole site.
 
 ## Architecture
 

@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import type { LessonActivity } from "@/content/interactive";
+import { interactiveText } from "@/content/translations/interactive-ko";
+import { uiText } from "@/content/translations/ui-ko";
+import { useLanguage } from "@/lib/language";
 import { StageTimer } from "./StageTimer";
 
 export type ActivityState = {
@@ -104,6 +107,7 @@ export function ActivityCard({
   state,
   onUpdate,
 }: ActivityCardProps) {
+  const language = useLanguage();
   const [copied, setCopied] = useState(false);
   const value = state?.value;
 
@@ -112,13 +116,16 @@ export function ActivityCard({
       <span>{String(number).padStart(2, "0")}</span>
       <div>
         <small>
-          {activity.kind.replace("-", " ")}
-          {activity.optional ? " · optional" : ""}
+          {uiText(language, activity.kind.replace("-", " "))}
+          {activity.optional ? ` · ${uiText(language, "optional")}` : ""}
         </small>
-        <h3>{activity.title}</h3>
+        <h3>{interactiveText(language, activity.title)}</h3>
       </div>
       <i className={state?.completed ? "is-done" : ""}>
-        {state?.completed ? "DONE" : activity.optional ? "IF NEEDED" : "DO"}
+        {uiText(
+          language,
+          state?.completed ? "Done" : activity.optional ? "If needed" : "Do",
+        ).toUpperCase()}
       </i>
     </header>
   );
@@ -127,17 +134,20 @@ export function ActivityCard({
     return (
       <section className="activity-card activity-timer-card">
         {header}
-        <p>{activity.instruction}</p>
+        <p>{interactiveText(language, activity.instruction)}</p>
         {activity.content?.length ? (
           <div className="activity-hints">
             {activity.content.map((line) => (
-              <span key={line}>{line}</span>
+              <span key={line}>{interactiveText(language, line)}</span>
             ))}
           </div>
         ) : null}
         <StageTimer minutes={activity.durationMinutes ?? 5} />
         <small className="timer-guide-note">
-          The timer guides the activity. Your work, not the clock, is the completion evidence.
+          {uiText(
+            language,
+            "The timer guides the activity. Your work, not the clock, is the completion evidence.",
+          )}
         </small>
       </section>
     );
@@ -150,7 +160,7 @@ export function ActivityCard({
     return (
       <section className="activity-card">
         {header}
-        <p>{activity.instruction}</p>
+        <p>{interactiveText(language, activity.instruction)}</p>
         <div className="interactive-checklist">
           {items.map((item) => {
             const checked = selected.includes(item);
@@ -166,14 +176,17 @@ export function ActivityCard({
                   }}
                   type="checkbox"
                 />
-                <span>{item}</span>
+                <span>{interactiveText(language, item)}</span>
               </label>
             );
           })}
         </div>
         {minimum < items.length ? (
           <small className="activity-requirement">
-            Complete at least {minimum} of {items.length}.
+            {uiText(language, "Complete at least {minimum} of {total}.", {
+              minimum,
+              total: items.length,
+            })}
           </small>
         ) : null}
       </section>
@@ -196,17 +209,17 @@ export function ActivityCard({
       return (
         <section className="activity-card">
           {header}
-          <p>{activity.instruction}</p>
+          <p>{interactiveText(language, activity.instruction)}</p>
           <div className="answer-field-grid">
             {fields.map((field) => (
               <label key={field}>
-                <span>{field}</span>
+                <span>{interactiveText(language, field)}</span>
                 <textarea
                   onBlur={() => update(answers, true)}
                   onChange={(event) =>
                     update({ ...answers, [field]: event.target.value })
                   }
-                  placeholder="Write your evidence…"
+                  placeholder={uiText(language, "Write your evidence…")}
                   rows={2}
                   value={stringValue(answers[field])}
                 />
@@ -214,7 +227,13 @@ export function ActivityCard({
             ))}
           </div>
           <small className="activity-requirement">
-            Complete {minimum === fields.length ? "every field" : `at least ${minimum} fields`}.
+            {uiText(
+              language,
+              minimum === fields.length
+                ? "Complete every field."
+                : "Complete at least {minimum} fields.",
+              { minimum },
+            )}
           </small>
         </section>
       );
@@ -225,29 +244,42 @@ export function ActivityCard({
     return (
       <section className="activity-card">
         {header}
-        <p>{activity.instruction}</p>
+        <p>{interactiveText(language, activity.instruction)}</p>
         {activity.prompt ? (
-          <pre className="answer-prompt">{activity.prompt}</pre>
+          <pre className="answer-prompt">
+            {interactiveText(language, activity.prompt)}
+          </pre>
         ) : null}
         <textarea
-          aria-label={activity.title}
+          aria-label={interactiveText(language, activity.title)}
           onBlur={() => onUpdate(text, textIsComplete(activity, text), true)}
           onChange={(event) =>
             onUpdate(event.target.value, textIsComplete(activity, event.target.value), false)
           }
           placeholder={
-            activity.placeholder ??
-            (required > 1 ? "Use one line for each part…" : "Write your evidence…")
+            activity.placeholder
+              ? interactiveText(language, activity.placeholder)
+              : uiText(
+                  language,
+                  required > 1
+                    ? "Use one line for each part…"
+                    : "Write your evidence…",
+                )
           }
           rows={Math.max(3, Math.min(9, required + 1))}
           value={text}
         />
         <small className="autosave-note">
           {activity.expected?.length
-            ? "Check the requested words and order before you finish."
+            ? uiText(
+                language,
+                "Check the requested words and order before you finish.",
+              )
             : required > 1
-              ? `Use at least ${required} complete lines.`
-              : "Saved when you leave this box."}
+              ? uiText(language, "Use at least {required} complete lines.", {
+                  required,
+                })
+              : uiText(language, "Saved when you leave this box.")}
         </small>
       </section>
     );
@@ -271,7 +303,9 @@ export function ActivityCard({
     return (
       <section className="activity-card">
         {header}
-        <p>{activity.prompt ?? activity.instruction}</p>
+        <p>
+          {interactiveText(language, activity.prompt ?? activity.instruction)}
+        </p>
         <div className="choice-grid">
           {activity.options?.map((option) => (
             <button
@@ -291,7 +325,7 @@ export function ActivityCard({
               }
               type="button"
             >
-              <span>{option.label}</span>
+              <span>{interactiveText(language, option.label)}</span>
             </button>
           ))}
         </div>
@@ -301,7 +335,7 @@ export function ActivityCard({
               hasCorrectOption ? (isCorrect ? "is-correct" : "is-retry") : ""
             }`}
           >
-            {chosen.feedback}
+            {interactiveText(language, chosen.feedback)}
           </div>
         ) : null}
       </section>
@@ -312,14 +346,17 @@ export function ActivityCard({
     const data = recordValue(value);
     const checks = stringArray(data.checks);
     const expected = activity.expected ?? [];
-    const prompt = activity.prompt ?? activity.content?.join("\n") ?? "";
+    const prompt = interactiveText(
+      language,
+      activity.prompt ?? activity.content?.join("\n") ?? "",
+    );
     const confirmed = Boolean(data.confirmed);
     const complete = confirmed && checks.length === expected.length;
 
     return (
       <section className="activity-card activity-prompt-card">
         {header}
-        <p>{activity.instruction}</p>
+        <p>{interactiveText(language, activity.instruction)}</p>
         <div className="prompt-box">
           <pre>{prompt}</pre>
           <button
@@ -331,7 +368,7 @@ export function ActivityCard({
             }}
             type="button"
           >
-            {copied ? "Copied ✓" : "Copy prompt"}
+            {uiText(language, copied ? "Copied ✓" : "Copy prompt")}
           </button>
         </div>
         {expected.length ? (
@@ -353,7 +390,7 @@ export function ActivityCard({
                     }}
                     type="checkbox"
                   />
-                  <span>{item}</span>
+                  <span>{interactiveText(language, item)}</span>
                 </label>
               );
             })}
@@ -373,8 +410,14 @@ export function ActivityCard({
           />
           <span>
             {activity.optional
-              ? "I needed this, filled every bracket, and used the request."
-              : "I filled every bracket, read the request, and used it in the coding tool."}
+              ? uiText(
+                  language,
+                  "I needed this, filled every bracket, and used the request.",
+                )
+              : uiText(
+                  language,
+                  "I filled every bracket, read the request, and used it in the coding tool.",
+                )}
           </span>
         </label>
       </section>
@@ -408,13 +451,13 @@ export function ActivityCard({
       return (
         <section className="activity-card">
           {header}
-          <p>{activity.instruction}</p>
+          <p>{interactiveText(language, activity.instruction)}</p>
           <div className="test-field-group">
             {fieldLabels.map((field) => {
               const isResult = /pass|not yet|result/i.test(field);
               return (
                 <label key={field}>
-                  <span>{field}</span>
+                  <span>{interactiveText(language, field)}</span>
                   {isResult ? (
                     <select
                       onChange={(event) => {
@@ -423,9 +466,9 @@ export function ActivityCard({
                       }}
                       value={stringValue(fields[field])}
                     >
-                      <option value="">Choose…</option>
-                      <option value="PASS">PASS</option>
-                      <option value="NOT YET">NOT YET</option>
+                      <option value="">{uiText(language, "Choose…")}</option>
+                      <option value="PASS">{uiText(language, "Pass")}</option>
+                      <option value="NOT YET">{uiText(language, "Not yet")}</option>
                     </select>
                   ) : (
                     <input
@@ -433,7 +476,7 @@ export function ActivityCard({
                       onChange={(event) =>
                         update({ ...fields, [field]: event.target.value })
                       }
-                      placeholder="Record what you observed…"
+                      placeholder={uiText(language, "Record what you observed…")}
                       value={stringValue(fields[field])}
                     />
                   )}
@@ -443,9 +486,9 @@ export function ActivityCard({
           </div>
           {activity.expected?.length ? (
             <div className="test-quality-guide">
-              <span>CHECK AGAINST</span>
+              <span>{uiText(language, "Check against").toUpperCase()}</span>
               {activity.expected.map((item) => (
-                <p key={item}>{item}</p>
+                <p key={item}>{interactiveText(language, item)}</p>
               ))}
             </div>
           ) : null}
@@ -482,14 +525,16 @@ export function ActivityCard({
       return (
         <section className="activity-card">
           {header}
-          <p>{activity.instruction}</p>
+          <p>{interactiveText(language, activity.instruction)}</p>
           <div className="test-card-builder">
             {rows.map((row) => (
               <article key={row}>
-                <strong>{row}</strong>
+                <strong>
+                  {uiText(language, interactiveText(language, row))}
+                </strong>
                 {expected.map((field) => (
                   <label key={field}>
-                    <span>{field}</span>
+                    <span>{interactiveText(language, field)}</span>
                     <input
                       onBlur={() => update(rowData, true)}
                       onChange={(event) =>
@@ -509,7 +554,11 @@ export function ActivityCard({
             ))}
           </div>
           <small className="activity-requirement">
-            {completedRows}/{minimum} required test cards complete
+            {uiText(
+              language,
+              "{done}/{minimum} required test cards complete",
+              { done: completedRows, minimum },
+            )}
           </small>
         </section>
       );
@@ -545,17 +594,29 @@ export function ActivityCard({
     return (
       <section className="activity-card">
         {header}
-        <p>{activity.instruction}</p>
+        <p>{interactiveText(language, activity.instruction)}</p>
         <div className="multi-test-record">
           {rows.map((row, index) => (
             <article key={row}>
               <header>
-                <span>TEST {String(index + 1).padStart(2, "0")}</span>
-                <strong>{row}</strong>
-                {pairedExpected ? <small>Expected: {expected[index]}</small> : null}
+                <span>
+                  {uiText(language, "Test {number}", {
+                    number: String(index + 1).padStart(2, "0"),
+                  }).toUpperCase()}
+                </span>
+                <strong>
+                  {uiText(language, interactiveText(language, row))}
+                </strong>
+                {pairedExpected ? (
+                  <small>
+                    {uiText(language, "Expected: {expected}", {
+                      expected: interactiveText(language, expected[index]),
+                    })}
+                  </small>
+                ) : null}
               </header>
               <label>
-                <span>ACTUAL RESULT</span>
+                <span>{uiText(language, "Actual result").toUpperCase()}</span>
                 <input
                   onBlur={() => updateRows(rowData, criteria, true)}
                   onChange={(event) =>
@@ -564,7 +625,7 @@ export function ActivityCard({
                       [row]: { ...rowData[row], actual: event.target.value },
                     })
                   }
-                  placeholder="What really happened?"
+                  placeholder={uiText(language, "What really happened?")}
                   value={stringValue(rowData[row]?.actual)}
                 />
               </label>
@@ -583,7 +644,7 @@ export function ActivityCard({
                     }}
                     type="button"
                   >
-                    {option}
+                    {uiText(language, option === "PASS" ? "Pass" : "Not yet")}
                   </button>
                 ))}
               </div>
@@ -592,7 +653,7 @@ export function ActivityCard({
         </div>
         {globalCriteria.length ? (
           <div className="interactive-checklist test-criteria">
-            <strong>FINAL CHECK</strong>
+            <strong>{uiText(language, "Final check").toUpperCase()}</strong>
             {globalCriteria.map((item) => {
               const checked = criteria.includes(item);
               return (
@@ -607,7 +668,7 @@ export function ActivityCard({
                     }}
                     type="checkbox"
                   />
-                  <span>{item}</span>
+                  <span>{interactiveText(language, item)}</span>
                 </label>
               );
             })}
@@ -615,8 +676,11 @@ export function ActivityCard({
         ) : null}
         <small className="activity-requirement">
           {complete
-            ? "Evidence recorded ✓"
-            : `${completedRows}/${minimum} required tests recorded`}
+            ? uiText(language, "Evidence recorded ✓")
+            : uiText(language, "{done}/{minimum} required tests recorded", {
+                done: completedRows,
+                minimum,
+              })}
         </small>
       </section>
     );
@@ -637,7 +701,7 @@ export function ActivityCard({
     return (
       <section className="activity-card">
         {header}
-        <p>{activity.instruction}</p>
+        <p>{interactiveText(language, activity.instruction)}</p>
         <div className="interactive-checklist">
           {items.map((item) => {
             const checked = checks.includes(item);
@@ -656,7 +720,9 @@ export function ActivityCard({
                   }}
                   type="checkbox"
                 />
-                <span>{item}</span>
+                <span>
+                  {uiText(language, interactiveText(language, item))}
+                </span>
               </label>
             );
           })}
@@ -672,12 +738,22 @@ export function ActivityCard({
               false,
             )
           }
-          placeholder={activity.placeholder ?? "Record one thing your partner observed…"}
+          placeholder={
+            activity.placeholder
+              ? interactiveText(language, activity.placeholder)
+              : uiText(language, "Record one thing your partner observed…")
+          }
           rows={2}
           value={observation}
         />
         <small className="activity-requirement">
-          Check at least {minimum} item{minimum === 1 ? "" : "s"} and record one observation.
+          {uiText(
+            language,
+            minimum === 1
+              ? "Check at least {minimum} item and record one observation."
+              : "Check at least {minimum} items and record one observation.",
+            { minimum },
+          )}
         </small>
       </section>
     );
@@ -687,18 +763,18 @@ export function ActivityCard({
   return (
     <section className="activity-card">
       {header}
-      <p>{activity.instruction}</p>
+      <p>{interactiveText(language, activity.instruction)}</p>
       {activity.content?.length ? (
         <div className="read-points">
           {activity.content.map((line) => (
-            <p key={line}>{line}</p>
+            <p key={line}>{interactiveText(language, line)}</p>
           ))}
         </div>
       ) : null}
       {activity.items?.length ? (
         <ul className="read-list">
           {activity.items.map((item) => (
-            <li key={item}>{item}</li>
+            <li key={item}>{interactiveText(language, item)}</li>
           ))}
         </ul>
       ) : null}
@@ -707,7 +783,7 @@ export function ActivityCard({
         onClick={() => onUpdate({ reviewed: !reviewed }, !reviewed)}
         type="button"
       >
-        {reviewed ? "Reviewed ✓" : "I reviewed this"}
+        {uiText(language, reviewed ? "Reviewed ✓" : "I reviewed this")}
       </button>
     </section>
   );

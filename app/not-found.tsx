@@ -1,13 +1,23 @@
+"use client";
+
 import Link from "next/link";
+import { LanguageToggle } from "@/components/LanguageToggle";
+import { uiText } from "@/content/translations/ui-ko";
+import { useLanguage } from "@/lib/language";
 
 export default function NotFound() {
+  const language = useLanguage();
+
   return (
     <main className="not-found">
-      <span className="eyebrow">NOT FOUND</span>
-      <h1>This lesson is not in the six-day course.</h1>
-      <p>Choose Day 1–6 from the course overview.</p>
+      <LanguageToggle />
+      <span className="eyebrow">
+        {uiText(language, "Not found").toUpperCase()}
+      </span>
+      <h1>{uiText(language, "This lesson is not in the six-day course.")}</h1>
+      <p>{uiText(language, "Choose Day 1–6 from the course overview.")}</p>
       <Link className="button button-primary" href="/overview">
-        Return to overview
+        {uiText(language, "Return to overview")}
       </Link>
     </main>
   );

@@ -1,9 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { DayInfo } from "@/content/course";
 import type { PresentationSlide } from "@/content/present";
+import {
+  interactiveText,
+  teacherCueText,
+} from "@/content/translations/interactive-ko";
+import { getLocalizedPresentationSlides } from "@/content/translations/presentations-ko";
+import { uiText } from "@/content/translations/ui-ko";
+import { useLanguage } from "@/lib/language";
+import { LanguageToggle } from "./LanguageToggle";
 
 function formatTime(totalSeconds: number): string {
   const safe = Math.max(0, totalSeconds);
@@ -31,21 +39,26 @@ export function Presenter({
   day: DayInfo;
   slides: PresentationSlide[];
 }) {
+  const language = useLanguage();
+  const localizedSlides = useMemo(
+    () => getLocalizedPresentationSlides(day.day, language, slides),
+    [day.day, language, slides],
+  );
   const [index, setIndex] = useState(0);
   const [running, setRunning] = useState(false);
   const [blank, setBlank] = useState(false);
   const [notes, setNotes] = useState(false);
   const [showcase, setShowcase] = useState(false);
   const [showcasePhase, setShowcasePhase] = useState(0);
-  const slide = slides[index];
-  const next = slides[index + 1];
+  const slide = localizedSlides[index];
+  const next = localizedSlides[index + 1];
   const slideSeconds = slide ? Math.max(60, (slide.endMinute - slide.startMinute) * 60) : 60;
   const activeDuration = showcase ? showcasePhases[showcasePhase].seconds : slideSeconds;
   const [seconds, setSeconds] = useState(slideSeconds);
 
   const resetTimer = useCallback(
     (nextIndex = index) => {
-      const nextSlide = slides[nextIndex];
+      const nextSlide = localizedSlides[nextIndex];
       setSeconds(
         showcase
           ? showcasePhases[showcasePhase].seconds
@@ -53,21 +66,29 @@ export function Presenter({
       );
       setRunning(false);
     },
-    [index, showcase, showcasePhase, slides],
+    [index, localizedSlides, showcase, showcasePhase],
   );
 
   const goTo = useCallback(
     (nextIndex: number) => {
-      const bounded = Math.max(0, Math.min(slides.length - 1, nextIndex));
+      const bounded = Math.max(
+        0,
+        Math.min(localizedSlides.length - 1, nextIndex),
+      );
       setIndex(bounded);
       setShowcase(false);
       setShowcasePhase(0);
       setSeconds(
-        Math.max(60, (slides[bounded].endMinute - slides[bounded].startMinute) * 60),
+        Math.max(
+          60,
+          (localizedSlides[bounded].endMinute -
+            localizedSlides[bounded].startMinute) *
+            60,
+        ),
       );
       setRunning(false);
     },
-    [slides],
+    [localizedSlides],
   );
 
   useEffect(() => {
@@ -111,18 +132,34 @@ export function Presenter({
   }, [goTo, index]);
 
   if (!slide) {
-    return <main className="presenter-empty">No presentation screens found.</main>;
+    return (
+      <main className="presenter-empty">
+        <LanguageToggle />
+        {uiText(language, "No presentation screens found.")}
+      </main>
+    );
   }
 
   const dense = slide.content.length > 380 || slide.content.split("\n").length > 10;
   const alert =
     running || seconds === 0
       ? seconds === 0
-        ? { tone: "over", text: "⏰ TIME — MOVE ON?" }
+        ? {
+            tone: "over",
+            text: `⏰ ${uiText(language, "Time — move on?").toUpperCase()}`,
+          }
         : seconds <= 10
-          ? { tone: "final", text: `⚠ ${seconds} SECONDS` }
+          ? {
+              tone: "final",
+              text: `⚠ ${uiText(language, "{seconds} seconds", {
+                seconds,
+              }).toUpperCase()}`,
+            }
           : seconds <= 60
-            ? { tone: "soon", text: "◔ 1 MINUTE LEFT" }
+            ? {
+                tone: "soon",
+                text: `◔ ${uiText(language, "1 minute left").toUpperCase()}`,
+              }
             : null
       : null;
 
@@ -130,16 +167,24 @@ export function Presenter({
     <main className={`presenter ${blank ? "is-blank" : ""}`}>
       <div className="presenter-topbar">
         <div>
-          <span>DAY {day.day}</span>
-          <strong>{day.phase}</strong>
+          <span>
+            {uiText(language, "Day {day}", { day: day.day }).toUpperCase()}
+          </span>
+          <strong>{interactiveText(language, day.phase)}</strong>
+          <LanguageToggle />
         </div>
         <div className="presenter-progress">
           <span>
-            SCREEN {index + 1} / {slides.length}
+            {uiText(language, "Screen {current} / {total}", {
+              current: index + 1,
+              total: localizedSlides.length,
+            }).toUpperCase()}
             {slide.timeLabel ? ` · ${slide.timeLabel}` : ""}
           </span>
           <div>
-            <i style={{ width: `${((index + 1) / slides.length) * 100}%` }} />
+            <i
+              style={{ width: `${((index + 1) / localizedSlides.length) * 100}%` }}
+            />
           </div>
         </div>
         <div className="presenter-clock">
@@ -148,7 +193,18 @@ export function Presenter({
               {alert.text}
             </em>
           ) : (
-            <span>{showcase ? showcasePhases[showcasePhase].label : slide.timeLabel}</span>
+            <span>
+              {showcase
+                ? uiText(
+                    language,
+                    showcasePhases[showcasePhase].label === "DEMO"
+                      ? "Demo"
+                      : showcasePhases[showcasePhase].label === "FEEDBACK"
+                        ? "Feedback"
+                        : "Switch",
+                  ).toUpperCase()
+                : slide.timeLabel}
+            </span>
           )}
           <strong className={seconds === 0 ? "is-elapsed" : ""}>{formatTime(seconds)}</strong>
         </div>
@@ -157,10 +213,21 @@ export function Presenter({
       <section className={`presenter-stage ${dense ? "is-dense" : ""}`}>
         <span className="presenter-kicker">
           {showcase
-            ? `SHOWCASE · ${showcasePhases[showcasePhase].label}`
-            : slide.section && !/[가-힣]/.test(slide.section)
-              ? slide.section
-              : day.title}
+            ? uiText(language, "Showcase · {phase}", {
+                phase: uiText(
+                  language,
+                  showcasePhases[showcasePhase].label === "DEMO"
+                    ? "Demo"
+                    : showcasePhases[showcasePhase].label === "FEEDBACK"
+                      ? "Feedback"
+                      : "Switch",
+                  ),
+              }).toUpperCase()
+            : language === "ko"
+              ? slide.section ?? interactiveText(language, day.title)
+              : slide.section && !/[가-힣]/.test(slide.section)
+                ? slide.section
+                : interactiveText(language, day.title)}
         </span>
         <h1>{slide.title}</h1>
         <div className="presenter-copy">{slide.content}</div>
@@ -168,40 +235,58 @@ export function Presenter({
 
       {next && !showcase ? (
         <button className="presenter-next" onClick={() => goTo(index + 1)} type="button">
-          <span>NEXT · {minuteLabel(next.startMinute)}</span>
+          <span>
+            {uiText(language, "Next · {time}", {
+              time: minuteLabel(next.startMinute),
+            }).toUpperCase()}
+          </span>
           <strong>{next.title}</strong>
         </button>
       ) : null}
 
       {notes ? (
-        <aside className="presenter-notes" aria-label="Instructor notes">
+        <aside
+          className="presenter-notes"
+          aria-label={uiText(language, "Instructor notes")}
+        >
           <header>
-            <span>강사 노트 — 학생 화면에 비추지 마세요</span>
+            <span>
+              {uiText(
+                language,
+                "Instructor notes — do not project this panel to students",
+              )}
+            </span>
             <button onClick={() => setNotes(false)} type="button">
-              닫기 (N)
+              {uiText(language, "Close (N)")}
             </button>
           </header>
           {slide.cues.length > 0 ? (
             <ul>
               {slide.cues.map((cue) => (
-                <li key={cue}>{cue}</li>
+                <li key={cue}>{teacherCueText(language, cue)}</li>
               ))}
             </ul>
           ) : (
-            <p className="notes-empty">이 화면에는 별도 강사 cue가 없습니다.</p>
+            <p className="notes-empty">
+              {uiText(language, "This screen has no separate instructor cue.")}
+            </p>
           )}
           {slide.completion ? (
             <p className="notes-completion">
-              <strong>완료 신호</strong> {slide.completion}
+              <strong>{uiText(language, "Completion signal")}</strong>{" "}
+              {slide.completion}
             </p>
           ) : null}
         </aside>
       ) : null}
 
-      <div className="presenter-controls" aria-label="Presentation controls">
-        <Link href={`/instructor/day/${day.day}`}>Exit</Link>
+      <div
+        className="presenter-controls"
+        aria-label={uiText(language, "Presentation controls")}
+      >
+        <Link href={`/instructor/day/${day.day}`}>{uiText(language, "Exit")}</Link>
         <button onClick={() => goTo(index - 1)} type="button">
-          ← Previous
+          ← {uiText(language, "Previous")}
         </button>
         <button
           className="control-primary"
@@ -215,16 +300,19 @@ export function Presenter({
           }}
           type="button"
         >
-          {running ? "Pause" : seconds === 0 ? "Start again" : "Start"}
+          {uiText(
+            language,
+            running ? "Pause" : seconds === 0 ? "Start again" : "Start",
+          )}
         </button>
         <button onClick={() => resetTimer()} type="button">
-          Reset
+          {uiText(language, "Reset")}
         </button>
         <button onClick={() => goTo(index + 1)} type="button">
-          Next →
+          {uiText(language, "Next →")}
         </button>
         <button className={notes ? "is-active" : ""} onClick={() => setNotes((value) => !value)} type="button">
-          Notes (N)
+          {uiText(language, "Notes (N)")}
         </button>
         {day.day === 6 ? (
           <button
@@ -238,7 +326,7 @@ export function Presenter({
             }}
             type="button"
           >
-            4-min showcase
+            {uiText(language, "4-min showcase")}
           </button>
         ) : null}
         {showcase ? (
@@ -251,20 +339,20 @@ export function Presenter({
             }}
             type="button"
           >
-            Next phase
+            {uiText(language, "Next phase")}
           </button>
         ) : null}
         <button onClick={() => void document.documentElement.requestFullscreen?.()} type="button">
-          Full screen
+          {uiText(language, "Full screen")}
         </button>
         <button onClick={() => setBlank((value) => !value)} type="button">
-          Blank
+          {uiText(language, "Blank")}
         </button>
       </div>
 
       {blank ? (
         <button className="blank-screen" onClick={() => setBlank(false)} type="button">
-          <span>Press B or click to return</span>
+          <span>{uiText(language, "Press B or click to return")}</span>
         </button>
       ) : null}
     </main>

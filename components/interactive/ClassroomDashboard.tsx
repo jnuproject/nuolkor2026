@@ -4,12 +4,19 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { interactiveDays } from "@/content/interactive";
 import {
+  interactiveText,
+  teacherCueText,
+} from "@/content/translations/interactive-ko";
+import { uiText } from "@/content/translations/ui-ko";
+import {
   clearClassroomAccessToken,
   consumeClassroomAccessToken,
   rememberClassroomAccessToken,
 } from "@/lib/classroom-access";
 import { classroomFetch } from "@/lib/classroom-api";
+import { useLanguage, type Language } from "@/lib/language";
 import { absoluteSiteUrl } from "@/lib/site-path";
+import { LanguageToggle } from "../LanguageToggle";
 import { StageTimer } from "./StageTimer";
 
 type SessionStatus = "open" | "paused" | "closed";
@@ -45,14 +52,23 @@ type TeacherSession = {
   teacherToken: string;
 };
 
-function relativeTime(timestamp: number, clock: number): string {
+function relativeTime(
+  timestamp: number,
+  clock: number,
+  language: Language,
+): string {
   const seconds = Math.max(0, Math.round((clock - timestamp) / 1000));
-  if (seconds < 10) return "now";
-  if (seconds < 60) return `${seconds}s`;
-  return `${Math.floor(seconds / 60)}m`;
+  if (seconds < 10) return uiText(language, "now");
+  if (seconds < 60) {
+    return uiText(language, "{seconds}s", { seconds });
+  }
+  return uiText(language, "{minutes}m", {
+    minutes: Math.floor(seconds / 60),
+  });
 }
 
 export function ClassroomDashboard() {
+  const language = useLanguage();
   const [selectedDay, setSelectedDay] = useState(1);
   const [launchPin, setLaunchPin] = useState("");
   const [teacherSession, setTeacherSession] = useState<TeacherSession | null>(null);
@@ -101,11 +117,11 @@ export function ClassroomDashboard() {
         clearClassroomAccessToken("teacher", "/instructor/live/");
         setTeacherSession(null);
         setDashboard(null);
-        setError("This saved classroom is no longer available.");
+        setError(uiText(language, "This saved classroom is no longer available."));
         return;
       }
       if (!response.ok) {
-        throw new Error("Dashboard is temporarily unavailable.");
+        throw new Error(uiText(language, "Dashboard is temporarily unavailable."));
       }
       setDashboard((await response.json()) as DashboardState);
       setClock(Date.now());
@@ -114,10 +130,10 @@ export function ClassroomDashboard() {
       setError(
         loadError instanceof Error
           ? loadError.message
-          : "Dashboard is temporarily unavailable.",
+          : uiText(language, "Dashboard is temporarily unavailable."),
       );
     }
-  }, [teacherSession]);
+  }, [language, teacherSession]);
 
   useEffect(() => {
     if (!teacherSession) {
@@ -145,7 +161,9 @@ export function ClassroomDashboard() {
       });
       const data = (await response.json()) as TeacherSession & { error?: string };
       if (!response.ok || !data.teacherToken) {
-        throw new Error(data.error ?? "Could not create a classroom.");
+        throw new Error(
+          data.error ?? uiText(language, "Could not create a classroom."),
+        );
       }
       const next = {
         code: data.code,
@@ -163,7 +181,7 @@ export function ClassroomDashboard() {
       setError(
         createError instanceof Error
           ? createError.message
-          : "Could not create a classroom.",
+          : uiText(language, "Could not create a classroom."),
       );
     } finally {
       setCreating(false);
@@ -190,14 +208,14 @@ export function ClassroomDashboard() {
         },
       );
       if (!response.ok) {
-        throw new Error("Could not update the classroom.");
+        throw new Error(uiText(language, "Could not update the classroom."));
       }
       await loadDashboard();
     } catch (updateError) {
       setError(
         updateError instanceof Error
           ? updateError.message
-          : "Could not update the classroom.",
+          : uiText(language, "Could not update the classroom."),
       );
     }
   }
@@ -228,19 +246,26 @@ export function ClassroomDashboard() {
             <span>BL</span>
             <strong>BUILD LOOP</strong>
           </Link>
-          <span>INSTRUCTOR CONSOLE</span>
+          <div>
+            <span>{uiText(language, "Instructor console").toUpperCase()}</span>
+            <LanguageToggle />
+          </div>
         </header>
         <section>
           <div className="dashboard-launch-copy">
-            <span className="eyebrow">RUN THE ROOM</span>
-            <h1>Start a live classroom.</h1>
+            <span className="eyebrow">
+              {uiText(language, "Run the room").toUpperCase()}
+            </span>
+            <h1>{uiText(language, "Start a live classroom.")}</h1>
             <p>
-              Students join with one code. You see completion, current stage,
-              help signals, and last activity without collecting accounts.
+              {uiText(
+                language,
+                "Students join with one code. You see completion, current stage, help signals, and last activity without collecting accounts.",
+              )}
             </p>
           </div>
           <div className="day-picker">
-            <span>CHOOSE TODAY</span>
+            <span>{uiText(language, "Choose today").toUpperCase()}</span>
             {interactiveDays.map((day) => (
               <button
                 aria-pressed={selectedDay === day.day}
@@ -249,37 +274,55 @@ export function ClassroomDashboard() {
                 onClick={() => setSelectedDay(day.day)}
                 type="button"
               >
-                <strong>DAY {day.day}</strong>
-                <span>{day.title}</span>
-                <small>{day.stages.length} stages · 180 min</small>
+                <strong>
+                  {uiText(language, "Day {day}", { day: day.day }).toUpperCase()}
+                </strong>
+                <span>{interactiveText(language, day.title)}</span>
+                <small>
+                  {uiText(language, "{count} stages · 180 min", {
+                    count: day.stages.length,
+                  })}
+                </small>
               </button>
             ))}
           </div>
           <label className="instructor-pin-field">
-            <span>INSTRUCTOR LAUNCH PIN</span>
+            <span>{uiText(language, "Instructor launch PIN").toUpperCase()}</span>
             <input
               autoComplete="off"
               onChange={(event) => setLaunchPin(event.target.value)}
-              placeholder="Enter the private instructor PIN"
+              placeholder={uiText(language, "Enter the private instructor PIN")}
               required
               type="password"
               value={launchPin}
             />
-            <small>The PIN creates a classroom and is never saved here.</small>
+            <small>
+              {uiText(
+                language,
+                "The PIN creates a classroom and is never saved here.",
+              )}
+            </small>
           </label>
-          {error ? <div className="dashboard-error">{error}</div> : null}
+          {error ? (
+            <div className="dashboard-error">{uiText(language, error)}</div>
+          ) : null}
           <button
             className="launch-class-button"
             disabled={creating || !launchPin.trim()}
             onClick={createClassroom}
             type="button"
           >
-            {creating ? "Creating classroom…" : `Start Day ${selectedDay} classroom →`}
+            {creating
+              ? uiText(language, "Creating classroom…")
+              : uiText(language, "Start Day {day} classroom →", {
+                  day: selectedDay,
+                })}
           </button>
           <p className="dashboard-privacy-note">
-            Ask students to use a seat code or short classroom name, never a
-            student ID or private contact information. Classroom data expires
-            after seven days.
+            {uiText(
+              language,
+              "Ask students to use a seat code or short classroom name, never a student ID or private contact information. Classroom data expires after seven days.",
+            )}
           </p>
         </section>
       </main>
@@ -299,12 +342,16 @@ export function ClassroomDashboard() {
             <strong>BUILD LOOP</strong>
           </Link>
           <div className="dashboard-day-title">
-            <span>DAY {plan?.day}</span>
-            <strong>{plan?.title}</strong>
+            <span>
+              {uiText(language, "Day {day}", { day: plan?.day ?? "" }).toUpperCase()}
+            </span>
+            <strong>
+              {plan ? interactiveText(language, plan.title) : ""}
+            </strong>
           </div>
         </div>
         <div className="dashboard-code">
-          <span>JOIN CODE</span>
+          <span>{uiText(language, "Join code").toUpperCase()}</span>
           <strong>{teacherSession.code}</strong>
           <button
             onClick={async () => {
@@ -314,12 +361,12 @@ export function ClassroomDashboard() {
             }}
             type="button"
           >
-            {copied ? "Copied ✓" : "Copy join link"}
+            {uiText(language, copied ? "Copied ✓" : "Copy join link")}
           </button>
         </div>
         <div className="dashboard-header-actions">
           <a href={joinUrl} rel="noreferrer" target="_blank">
-            Student view ↗
+            {uiText(language, "Student view ↗")}
           </a>
           <button
             onClick={() => {
@@ -329,35 +376,48 @@ export function ClassroomDashboard() {
             }}
             type="button"
           >
-            New class
+            {uiText(language, "New class")}
           </button>
+          <LanguageToggle />
         </div>
       </header>
 
-      {error ? <div className="dashboard-error dashboard-error-wide">{error}</div> : null}
+      {error ? (
+        <div className="dashboard-error dashboard-error-wide">
+          {uiText(language, error)}
+        </div>
+      ) : null}
 
       <section className="dashboard-summary">
         <article>
-          <span>JOINED</span>
+          <span>{uiText(language, "Joined").toUpperCase()}</span>
           <strong>{summary.total}</strong>
-          <small>{summary.online} active now</small>
+          <small>
+            {uiText(language, "{count} active now", { count: summary.online })}
+          </small>
         </article>
         <article>
-          <span>CURRENT STAGE DONE</span>
+          <span>{uiText(language, "Current stage done").toUpperCase()}</span>
           <strong>
             {summary.doneCurrent}/{summary.total}
           </strong>
-          <small>{currentStage?.title}</small>
+          <small>
+            {currentStage ? interactiveText(language, currentStage.title) : ""}
+          </small>
         </article>
         <article className={summary.needsHelp ? "has-alert" : ""}>
-          <span>NEED A CHECK</span>
+          <span>{uiText(language, "Need a check").toUpperCase()}</span>
           <strong>{summary.needsHelp}</strong>
-          <small>yellow or red signals</small>
+          <small>{uiText(language, "yellow or red signals")}</small>
         </article>
         <article>
-          <span>ROOM STATUS</span>
-          <strong className="status-word">{dashboard?.session.status ?? "…"}</strong>
-          <small>updates every 3 seconds</small>
+          <span>{uiText(language, "Room status").toUpperCase()}</span>
+          <strong className="status-word">
+            {dashboard?.session.status
+              ? uiText(language, dashboard.session.status)
+              : "…"}
+          </strong>
+          <small>{uiText(language, "updates every 3 seconds")}</small>
         </article>
       </section>
 
@@ -365,23 +425,32 @@ export function ClassroomDashboard() {
         <div className="current-stage-card">
           <div>
             <span className={`phase-chip phase-${currentStage?.phase.toLowerCase()}`}>
-              {currentStage?.phase}
+              {currentStage
+                ? interactiveText(language, currentStage.phase)
+                : ""}
             </span>
             <small>
-              STAGE {(dashboard?.session.currentStage ?? 0) + 1} / {plan?.stages.length}
+              {uiText(language, "Stage {current} / {total}", {
+                current: (dashboard?.session.currentStage ?? 0) + 1,
+                total: plan?.stages.length ?? 0,
+              })}
             </small>
-            <h1>{currentStage?.title}</h1>
-            <p>{currentStage?.goal}</p>
+            <h1>
+              {currentStage ? interactiveText(language, currentStage.title) : ""}
+            </h1>
+            <p>
+              {currentStage ? interactiveText(language, currentStage.goal) : ""}
+            </p>
           </div>
           {currentStage ? (
             <StageTimer key={currentStage.id} minutes={currentStage.minutes} />
           ) : null}
         </div>
         <div className="teacher-cues">
-          <span>TEACHER CUE</span>
+          <span>{uiText(language, "Teacher cue").toUpperCase()}</span>
           <ul>
             {currentStage?.teacherCue.map((cue) => (
-              <li key={cue}>{cue}</li>
+              <li key={cue}>{teacherCueText(language, cue)}</li>
             ))}
           </ul>
         </div>
@@ -395,7 +464,7 @@ export function ClassroomDashboard() {
             }
             type="button"
           >
-            ← Previous
+            ← {uiText(language, "Previous")}
           </button>
           <button
             className="control-main"
@@ -411,7 +480,7 @@ export function ClassroomDashboard() {
             }
             type="button"
           >
-            Advance everyone →
+            {uiText(language, "Advance everyone →")}
           </button>
           <button
             onClick={() =>
@@ -421,7 +490,12 @@ export function ClassroomDashboard() {
             }
             type="button"
           >
-            {dashboard?.session.status === "paused" ? "Resume class" : "Pause class"}
+            {uiText(
+              language,
+              dashboard?.session.status === "paused"
+                ? "Resume class"
+                : "Pause class",
+            )}
           </button>
           <button
             className="control-close"
@@ -432,12 +506,18 @@ export function ClassroomDashboard() {
             }
             type="button"
           >
-            {dashboard?.session.status === "closed" ? "Reopen" : "Close class"}
+            {uiText(
+              language,
+              dashboard?.session.status === "closed" ? "Reopen" : "Close class",
+            )}
           </button>
         </div>
       </section>
 
-      <section className="dashboard-stage-strip" aria-label="Class timeline">
+      <section
+        className="dashboard-stage-strip"
+        aria-label={uiText(language, "Class timeline")}
+      >
         {plan?.stages.map((stage, index) => {
           const active = index === dashboard?.session.currentStage;
           const count = Number(dashboard?.stageCounts[stage.id] ?? 0);
@@ -449,9 +529,12 @@ export function ClassroomDashboard() {
               type="button"
             >
               <span>{String(index + 1).padStart(2, "0")}</span>
-              <strong>{stage.title}</strong>
+              <strong>{interactiveText(language, stage.title)}</strong>
               <small>
-                {count}/{summary.total} done
+                {uiText(language, "{done}/{total} done", {
+                  done: count,
+                  total: summary.total,
+                })}
               </small>
             </button>
           );
@@ -461,13 +544,15 @@ export function ClassroomDashboard() {
       <section className="participant-section">
         <header>
           <div>
-            <span className="eyebrow">ROOM PULSE</span>
-            <h2>Who is moving, waiting, or blocked?</h2>
+            <span className="eyebrow">
+              {uiText(language, "Room pulse").toUpperCase()}
+            </span>
+            <h2>{uiText(language, "Who is moving, waiting, or blocked?")}</h2>
           </div>
           <div className="pulse-legend">
-            <span className="legend-green">✓ moving</span>
-            <span className="legend-yellow">? check</span>
-            <span className="legend-red">! blocked</span>
+            <span className="legend-green">{uiText(language, "✓ moving")}</span>
+            <span className="legend-yellow">{uiText(language, "? check")}</span>
+            <span className="legend-red">{uiText(language, "! blocked")}</span>
           </div>
         </header>
 
@@ -495,12 +580,12 @@ export function ClassroomDashboard() {
                     </div>
                     <span className={isOnline ? "is-online" : ""}>
                       {isOnline
-                        ? "LIVE"
-                        : relativeTime(participant.updatedAt, clock)}
+                        ? uiText(language, "Live").toUpperCase()
+                        : relativeTime(participant.updatedAt, clock, language)}
                     </span>
                   </header>
                   <div className="participant-progress">
-                    <span>DAY PROGRESS</span>
+                    <span>{uiText(language, "Day progress").toUpperCase()}</span>
                     <strong>
                       {participant.completedCount}/{plan?.stages.length}
                     </strong>
@@ -516,11 +601,15 @@ export function ClassroomDashboard() {
                   </div>
                   <footer>
                     <div>
-                      <span>NOW</span>
-                      <strong>{participantStage?.title ?? "Joining…"}</strong>
+                      <span>{uiText(language, "Now").toUpperCase()}</span>
+                      <strong>
+                        {participantStage
+                          ? interactiveText(language, participantStage.title)
+                          : uiText(language, "Joining…")}
+                      </strong>
                     </div>
                     <div>
-                      <span>ACTIVITIES</span>
+                      <span>{uiText(language, "Activities").toUpperCase()}</span>
                       <strong>
                         {participant.currentActivityCount}/
                         {participant.currentActivityTotal}
@@ -528,11 +617,14 @@ export function ClassroomDashboard() {
                     </div>
                     <small>
                       {participant.lastActivityAt
-                        ? `Last evidence ${relativeTime(
-                            participant.lastActivityAt,
-                            clock,
-                          )} ago`
-                        : "No activity evidence yet"}
+                        ? uiText(language, "Last evidence {time} ago", {
+                            time: relativeTime(
+                              participant.lastActivityAt,
+                              clock,
+                              language,
+                            ),
+                          })
+                        : uiText(language, "No activity evidence yet")}
                     </small>
                   </footer>
                 </article>
@@ -541,9 +633,11 @@ export function ClassroomDashboard() {
           </div>
         ) : (
           <div className="empty-room">
-            <strong>Waiting for students.</strong>
+            <strong>{uiText(language, "Waiting for students.")}</strong>
             <span>
-              Show code <b>{teacherSession.code}</b> or share the join link.
+              {uiText(language, "Show code {code} or share the join link.", {
+                code: teacherSession.code,
+              })}
             </span>
           </div>
         )}

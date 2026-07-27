@@ -2,7 +2,10 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { uiText } from "@/content/translations/ui-ko";
+import { useLanguage } from "@/lib/language";
 import { sitePath } from "@/lib/site-path";
+import { LanguageToggle } from "../LanguageToggle";
 
 type OperatingSystem = "mac" | "windows";
 
@@ -107,12 +110,17 @@ const openCommands: Record<OperatingSystem, string> = {
 
 const safeResponsePrompt =
   "Reply with only the word READY.\nDo not create, edit, rename, or delete any file.";
+const safeResponsePromptKo =
+  "READY라는 단어로만 답하세요.\n어떤 파일도 생성, 수정, 이름 변경 또는 삭제하지 마세요.";
 
 const filePrompt =
   "Create a file named setup-check.txt.\nWrite only this line in the file: READY\nDo not change any other file.";
+const filePromptKo =
+  "setup-check.txt라는 파일을 만드세요.\n파일에는 다음 한 줄만 작성하세요: READY\n다른 파일은 변경하지 마세요.";
 
 function CodeCopy({ code }: { code: string }) {
   const [copied, setCopied] = useState(false);
+  const language = useLanguage();
 
   return (
     <div className="setup-code">
@@ -125,13 +133,14 @@ function CodeCopy({ code }: { code: string }) {
         }}
         type="button"
       >
-        {copied ? "Copied ✓" : "Copy"}
+        {uiText(language, copied ? "Copied ✓" : "Copy")}
       </button>
     </div>
   );
 }
 
 export function SetupFlow() {
+  const language = useLanguage();
   const [active, setActive] = useState(0);
   const [os, setOs] = useState<OperatingSystem>("mac");
   const [checks, setChecks] = useState<Record<string, string[]>>({});
@@ -202,7 +211,7 @@ export function SetupFlow() {
     if (step.id === "prepare") {
       return (
         <div className="setup-os-choice">
-          <span>MY COMPUTER</span>
+          <span>{uiText(language, "My computer").toUpperCase()}</span>
           <div>
             {(["mac", "windows"] as const).map((value) => (
               <button
@@ -221,8 +230,8 @@ export function SetupFlow() {
           </div>
           <p>
             {os === "mac"
-              ? "Use Terminal.app or another terminal."
-              : "Windows Terminal with PowerShell is recommended."}
+              ? uiText(language, "Use Terminal.app or another terminal.")
+              : uiText(language, "Windows Terminal with PowerShell is recommended.")}
           </p>
         </div>
       );
@@ -232,15 +241,17 @@ export function SetupFlow() {
       return (
         <div className="setup-action-panel">
           <a href="https://build.nvidia.com" rel="noreferrer" target="_blank">
-            Open NVIDIA Build ↗
+            {uiText(language, "Open NVIDIA Build ↗")}
           </a>
           <ol>
-            <li>Sign in or create an account.</li>
-            <li>Open the model page chosen by your instructor.</li>
-            <li>Select Get API Key, then Generate API Key.</li>
-            <li>Keep the nvapi-… value private.</li>
+            <li>{uiText(language, "Sign in or create an account.")}</li>
+            <li>{uiText(language, "Open the model page chosen by your instructor.")}</li>
+            <li>{uiText(language, "Select Get API Key, then Generate API Key.")}</li>
+            <li>{uiText(language, "Keep the nvapi-… value private.")}</li>
           </ol>
-          <strong>Never enter your API key on this course website.</strong>
+          <strong>
+            {uiText(language, "Never enter your API key on this course website.")}
+          </strong>
         </div>
       );
     }
@@ -248,13 +259,15 @@ export function SetupFlow() {
     if (step.id === "install") {
       return (
         <div className="setup-command-stack">
-          <span>1 · INSTALL</span>
+          <span>{uiText(language, "1 · Install").toUpperCase()}</span>
           <CodeCopy code={installCommands[os]} />
-          <span>2 · VERIFY IN A NEW TERMINAL</span>
+          <span>{uiText(language, "2 · Verify in a new terminal").toUpperCase()}</span>
           <CodeCopy code="opencode --version" />
           <p>
-            If the command is not found, stop and use the detailed guide or ask
-            the instructor. Do not change unrelated computer settings.
+            {uiText(
+              language,
+              "If the command is not found, stop and use the detailed guide or ask the instructor. Do not change unrelated computer settings.",
+            )}
           </p>
         </div>
       );
@@ -263,22 +276,31 @@ export function SetupFlow() {
     if (step.id === "connect") {
       return (
         <div className="setup-command-stack">
-          <span>1 · OPEN YOUR PRACTICE FOLDER</span>
+          <span>{uiText(language, "1 · Open your practice folder").toUpperCase()}</span>
           <CodeCopy code={openCommands[os]} />
-          <span>2 · CONNECT THE PROVIDER</span>
+          <span>{uiText(language, "2 · Connect the provider").toUpperCase()}</span>
           <CodeCopy code="/connect" />
-          <p>Select NVIDIA. Paste your key only when OpenCode shows its API key box.</p>
-          <span>3 · CHOOSE THE CLASS MODEL</span>
+          <p>
+            {uiText(
+              language,
+              "Select NVIDIA. Paste your key only when OpenCode shows its API key box.",
+            )}
+          </p>
+          <span>{uiText(language, "3 · Choose the class model").toUpperCase()}</span>
           <CodeCopy code="/models" />
         </div>
       );
     }
 
     if (step.id === "response") {
-      return <CodeCopy code={safeResponsePrompt} />;
+      return (
+        <CodeCopy
+          code={language === "ko" ? safeResponsePromptKo : safeResponsePrompt}
+        />
+      );
     }
 
-    return <CodeCopy code={filePrompt} />;
+    return <CodeCopy code={language === "ko" ? filePromptKo : filePrompt} />;
   })();
 
   return (
@@ -289,16 +311,21 @@ export function SetupFlow() {
           <strong>BUILD LOOP</strong>
         </Link>
         <div>
-          <span>BEFORE DAY 1</span>
-          <strong>SETUP CHECK</strong>
+          <span>{uiText(language, "Before Day 1").toUpperCase()}</span>
+          <strong>{uiText(language, "Setup check").toUpperCase()}</strong>
         </div>
-        <Link href="/instructor/start">Instructor guide →</Link>
+        <div>
+          <Link href="/instructor/start">
+            {uiText(language, "Instructor guide →")}
+          </Link>
+          <LanguageToggle />
+        </div>
       </header>
 
       <div className="setup-flow-layout">
         <aside className="setup-flow-rail">
           <div>
-            <span>READY</span>
+            <span>{uiText(language, "Ready").toUpperCase()}</span>
             <strong>
               {completeCount}/{steps.length}
             </strong>
@@ -306,7 +333,7 @@ export function SetupFlow() {
               <b style={{ width: `${(completeCount / steps.length) * 100}%` }} />
             </i>
           </div>
-          <nav aria-label="Setup steps">
+          <nav aria-label={uiText(language, "Setup steps")}>
             {steps.map((item, index) => {
               const done = (checks[item.id] ?? []).length === item.checks.length;
               return (
@@ -319,8 +346,8 @@ export function SetupFlow() {
                 >
                   <span>{done ? "✓" : String(index + 1).padStart(2, "0")}</span>
                   <div>
-                    <small>{item.label}</small>
-                    <strong>{item.title}</strong>
+                    <small>{uiText(language, item.label)}</small>
+                    <strong>{uiText(language, item.title)}</strong>
                   </div>
                 </button>
               );
@@ -331,26 +358,33 @@ export function SetupFlow() {
             rel="noreferrer"
             target="_blank"
           >
-            Open full original setup guide ↗
+            {uiText(language, "Open full original setup guide ↗")}
           </a>
         </aside>
 
         <section className="setup-flow-main">
           <header>
             <div>
-              <span>{step.label}</span>
+              <span>{uiText(language, step.label)}</span>
               <small>
-                STEP {active + 1} / {steps.length} · {step.minutes}
+                {uiText(language, "Step {current} / {total} · {minutes}", {
+                  current: active + 1,
+                  total: steps.length,
+                  minutes:
+                    language === "ko"
+                      ? step.minutes.replace(" min", "분")
+                      : step.minutes,
+                })}
               </small>
             </div>
-            <h1>{step.title}</h1>
-            <p>{step.intro}</p>
+            <h1>{uiText(language, step.title)}</h1>
+            <p>{uiText(language, step.intro)}</p>
           </header>
 
           <div className="setup-tool">{stepTool}</div>
 
           <section className="setup-proof">
-            <span>CHECK THE RESULT YOURSELF</span>
+            <span>{uiText(language, "Check the result yourself").toUpperCase()}</span>
             <div>
               {step.checks.map((item) => (
                 <label key={item}>
@@ -359,7 +393,7 @@ export function SetupFlow() {
                     onChange={() => toggleCheck(item)}
                     type="checkbox"
                   />
-                  <span>{item}</span>
+                  <span>{uiText(language, item)}</span>
                 </label>
               ))}
             </div>
@@ -368,13 +402,13 @@ export function SetupFlow() {
           {active === steps.length - 1 && stepComplete ? (
             <section className={`setup-final-status status-${status}`}>
               <div>
-                <span>MY SETUP STATUS</span>
+                <span>{uiText(language, "My setup status").toUpperCase()}</span>
                 <strong>
                   {status === "green"
-                    ? "Everything works"
+                    ? uiText(language, "Everything works")
                     : status === "yellow"
-                      ? "OpenCode opens, but one check needs help"
-                      : "OpenCode does not open"}
+                      ? uiText(language, "OpenCode opens, but one check needs help")
+                      : uiText(language, "OpenCode does not open")}
                 </strong>
               </div>
               <div>
@@ -390,7 +424,7 @@ export function SetupFlow() {
                     type="button"
                   >
                     {value === "green" ? "✓" : value === "yellow" ? "?" : "!"}{" "}
-                    {value}
+                    {uiText(language, value)}
                   </button>
                 ))}
               </div>
@@ -399,9 +433,16 @@ export function SetupFlow() {
 
           <footer>
             <button disabled={active === 0} onClick={() => goTo(active - 1)} type="button">
-              ← Previous
+              ← {uiText(language, "Previous")}
             </button>
-            <span>{stepComplete ? "Step complete ✓" : "Complete every check to continue"}</span>
+            <span>
+              {uiText(
+                language,
+                stepComplete
+                  ? "Step complete ✓"
+                  : "Complete every check to continue",
+              )}
+            </span>
             {active < steps.length - 1 ? (
               <button
                 className="setup-next"
@@ -409,7 +450,7 @@ export function SetupFlow() {
                 onClick={() => goTo(active + 1)}
                 type="button"
               >
-                Next step →
+                {uiText(language, "Next step →")}
               </button>
             ) : (
               <Link
@@ -417,22 +458,22 @@ export function SetupFlow() {
                 className={`setup-next ${stepComplete ? "" : "is-disabled"}`}
                 href={stepComplete ? "/day/1" : "#"}
               >
-                Open Day 1 →
+                {uiText(language, "Open Day 1 →")}
               </Link>
             )}
           </footer>
         </section>
 
         <aside className="setup-safety">
-          <span>KEY SAFETY</span>
-          <strong>Your key is a password.</strong>
+          <span>{uiText(language, "Key safety").toUpperCase()}</span>
+          <strong>{uiText(language, "Your key is a password.")}</strong>
           <ul>
-            <li>Use only the provider key box.</li>
-            <li>Never paste it into an AI prompt.</li>
-            <li>Never put it in a project file.</li>
-            <li>Never show it in a screenshot.</li>
+            <li>{uiText(language, "Use only the provider key box.")}</li>
+            <li>{uiText(language, "Never paste it into an AI prompt.")}</li>
+            <li>{uiText(language, "Never put it in a project file.")}</li>
+            <li>{uiText(language, "Never show it in a screenshot.")}</li>
           </ul>
-          <p>If exposed, revoke it and make a new key.</p>
+          <p>{uiText(language, "If exposed, revoke it and make a new key.")}</p>
         </aside>
       </div>
     </main>
@@ -442,44 +483,85 @@ export function SetupFlow() {
 const instructorChecks = [
   {
     id: "room",
+    titleEn: "Devices and accounts",
     title: "장비·계정",
     checks: [
-      "학생 PC 운영체제와 수량을 확인했다.",
-      "관리자 권한 필요 여부를 확인했다.",
-      "NVIDIA 계정 생성·인증 절차를 확인했다.",
-      "공통 실습 폴더명과 백업 방식을 정했다.",
+      {
+        en: "I checked the operating systems and number of student computers.",
+        ko: "학생 PC 운영체제와 수량을 확인했다.",
+      },
+      {
+        en: "I checked whether administrator access is required.",
+        ko: "관리자 권한 필요 여부를 확인했다.",
+      },
+      {
+        en: "I checked the NVIDIA account creation and verification process.",
+        ko: "NVIDIA 계정 생성·인증 절차를 확인했다.",
+      },
+      {
+        en: "I chose a shared practice-folder name and backup method.",
+        ko: "공통 실습 폴더명과 백업 방식을 정했다.",
+      },
     ],
   },
   {
     id: "tool",
+    titleEn: "OpenCode and models",
     title: "OpenCode·모델",
     checks: [
-      "macOS와 Windows 설치를 각각 시험했다.",
-      "/connect에서 NVIDIA가 표시되는지 확인했다.",
-      "수업에 사용할 모델 하나와 대체 모델 하나를 정했다.",
-      "모델이 안전한 파일 생성 테스트를 통과했다.",
+      {
+        en: "I tested installation on both macOS and Windows.",
+        ko: "macOS와 Windows 설치를 각각 시험했다.",
+      },
+      {
+        en: "I confirmed that NVIDIA appears after /connect.",
+        ko: "/connect에서 NVIDIA가 표시되는지 확인했다.",
+      },
+      {
+        en: "I chose one class model and one backup model.",
+        ko: "수업에 사용할 모델 하나와 대체 모델 하나를 정했다.",
+      },
+      {
+        en: "The model passed the safe file-creation test.",
+        ko: "모델이 안전한 파일 생성 테스트를 통과했다.",
+      },
     ],
   },
   {
     id: "network",
+    titleEn: "Network and recovery",
     title: "네트워크·복구",
     checks: [
-      "강의실 Wi-Fi에서 실제 연결을 확인했다.",
-      "여러 기기에서 동시 요청을 시험했다.",
-      "401·429·timeout 대응 순서를 정했다.",
-      "오프라인 공통 파일을 준비했다.",
+      {
+        en: "I tested the real classroom Wi-Fi connection.",
+        ko: "강의실 Wi-Fi에서 실제 연결을 확인했다.",
+      },
+      {
+        en: "I tested simultaneous requests from multiple devices.",
+        ko: "여러 기기에서 동시 요청을 시험했다.",
+      },
+      {
+        en: "I set the response sequence for 401, 429, and timeout errors.",
+        ko: "401·429·timeout 대응 순서를 정했다.",
+      },
+      {
+        en: "I prepared the shared offline files.",
+        ko: "오프라인 공통 파일을 준비했다.",
+      },
     ],
   },
 ];
 
 export function InstructorSetupConsole() {
+  const language = useLanguage();
   const [checks, setChecks] = useState<string[]>([]);
   const [green, setGreen] = useState(0);
   const [yellow, setYellow] = useState(0);
   const [red, setRed] = useState(0);
   const total = green + yellow + red;
   const ratio = total ? Math.round((green / total) * 100) : 0;
-  const decision = total === 0 ? "WAITING" : ratio >= 90 ? "GREEN" : ratio >= 70 ? "YELLOW" : "RED";
+  const decision =
+    total === 0 ? "Waiting" : ratio >= 90 ? "Green" : ratio >= 70 ? "Yellow" : "Red";
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -523,8 +605,8 @@ export function InstructorSetupConsole() {
           <strong>BUILD LOOP</strong>
         </Link>
         <div>
-          <span>BEFORE DAY 1 · INSTRUCTOR</span>
-          <strong>세팅 운영 콘솔</strong>
+          <span>{uiText(language, "Before Day 1 · Instructor").toUpperCase()}</span>
+          <strong>{uiText(language, "Setup operations console")}</strong>
         </div>
         <div>
           <a
@@ -532,38 +614,55 @@ export function InstructorSetupConsole() {
             rel="noreferrer"
             target="_blank"
           >
-            원본 상세 가이드 ↗
+            {uiText(language, "Original detailed guide ↗")}
           </a>
           <Link className="start-live-link" href="/start">
-            학생 화면
+            {uiText(language, "Student screen")}
           </Link>
+          <LanguageToggle />
         </div>
       </header>
 
       <section className="instructor-setup-hero">
         <div>
-          <span className="eyebrow">PRE-FLIGHT CHECK</span>
-          <h1>정규 18시간 전에 기술 문제를 끝냅니다.</h1>
+          <span className="eyebrow">
+            {uiText(language, "Pre-flight check").toUpperCase()}
+          </span>
+          <h1>
+            {uiText(
+              language,
+              "Resolve technical issues before the regular 18-hour course.",
+            )}
+          </h1>
           <p>
-            기존 OpenCode + NVIDIA 세팅 순서는 그대로 사용합니다. 이 화면은
-            강사가 사전 점검과 수업 시작 판정을 놓치지 않도록 만든 운영판입니다.
+            {uiText(
+              language,
+              "The existing OpenCode + NVIDIA setup sequence stays the same. This console helps the instructor complete pre-class checks and make a clear start decision.",
+            )}
           </p>
         </div>
         <div className={`readiness-decision decision-${decision.toLowerCase()}`}>
-          <span>수업 시작 판정</span>
-          <strong>{decision}</strong>
-          <small>{total ? `Green ${ratio}% · 총 ${total}명` : "학생 현황을 입력하세요"}</small>
+          <span>{uiText(language, "Class start decision")}</span>
+          <strong>{uiText(language, decision).toUpperCase()}</strong>
+          <small>
+            {total
+              ? uiText(language, "Green {ratio}% · {total} students", {
+                  ratio,
+                  total,
+                })
+              : uiText(language, "Enter student status counts")}
+          </small>
         </div>
       </section>
 
       <section className="setup-roster-counts">
         {[
-          { label: "GREEN · 전체 테스트 완료", value: green, setter: setGreen },
-          { label: "YELLOW · 일부 도움 필요", value: yellow, setter: setYellow },
-          { label: "RED · OpenCode 실행 불가", value: red, setter: setRed },
+          { label: "GREEN · All tests complete", value: green, setter: setGreen },
+          { label: "YELLOW · Some help needed", value: yellow, setter: setYellow },
+          { label: "RED · OpenCode cannot run", value: red, setter: setRed },
         ].map((item) => (
           <label key={item.label}>
-            <span>{item.label}</span>
+            <span>{uiText(language, item.label)}</span>
             <input
               inputMode="numeric"
               min={0}
@@ -590,23 +689,25 @@ export function InstructorSetupConsole() {
           <article key={group.id}>
             <header>
               <span>{String(instructorChecks.indexOf(group) + 1).padStart(2, "0")}</span>
-              <h2>{group.title}</h2>
+              <h2>
+                {language === "ko" ? group.title : group.titleEn}
+              </h2>
             </header>
             <div>
               {group.checks.map((item) => (
-                <label key={item}>
+                <label key={item.ko}>
                   <input
-                    checked={checks.includes(item)}
+                    checked={checks.includes(item.ko)}
                     onChange={() => {
-                      const next = checks.includes(item)
-                        ? checks.filter((value) => value !== item)
-                        : [...checks, item];
+                      const next = checks.includes(item.ko)
+                        ? checks.filter((value) => value !== item.ko)
+                        : [...checks, item.ko];
                       setChecks(next);
                       save(next);
                     }}
                     type="checkbox"
                   />
-                  <span>{item}</span>
+                  <span>{uiText(language, item.en)}</span>
                 </label>
               ))}
             </div>
@@ -616,28 +717,45 @@ export function InstructorSetupConsole() {
 
       <section className="setup-decision-guide">
         <article>
-          <strong>GREEN · 90% 이상</strong>
-          <p>정상 진행. Day 1에서는 연결과 파일 생성만 짧게 재확인합니다.</p>
+          <strong>{uiText(language, "GREEN · 90% or more")}</strong>
+          <p>
+            {uiText(
+              language,
+              "Proceed normally. On Day 1, briefly recheck the connection and file creation.",
+            )}
+          </p>
         </article>
         <article>
-          <strong>YELLOW · 70–89%</strong>
-          <p>미완료 학생을 보조강사·페어로 지원하며 공통 활동을 시작합니다.</p>
+          <strong>{uiText(language, "YELLOW · 70–89%")}</strong>
+          <p>
+            {uiText(
+              language,
+              "Start the shared activity while assistants or partners support unfinished students.",
+            )}
+          </p>
         </article>
         <article>
-          <strong>RED · 70% 미만</strong>
-          <p>오프라인 공통 파일로 시작하고 AI 호출은 강사 시연으로 대체합니다.</p>
+          <strong>{uiText(language, "RED · Below 70%")}</strong>
+          <p>
+            {uiText(
+              language,
+              "Start with shared offline files and replace AI calls with an instructor demonstration.",
+            )}
+          </p>
         </article>
       </section>
 
       <footer className="instructor-setup-footer">
         <p>
-          API 키는 학생 개인이 직접 입력합니다. 강사는 키 값을 수집하거나 화면에
-          노출하지 않습니다.
+          {uiText(
+            language,
+            "Students enter their own API keys. Instructors do not collect or expose key values.",
+          )}
         </p>
         <div>
-          <Link href="/instructor/day/1">Day 1 운영안</Link>
+          <Link href="/instructor/day/1">{uiText(language, "Day 1 plan")}</Link>
           <Link className="start-live-link" href="/instructor/live">
-            라이브 수업 시작 →
+            {uiText(language, "Start live classroom →")}
           </Link>
         </div>
       </footer>

@@ -3,15 +3,19 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getInteractiveDay } from "@/content/interactive";
+import { uiText } from "@/content/translations/ui-ko";
 import { consumeClassroomAccessToken } from "@/lib/classroom-access";
 import {
   ClassroomApiConfigurationError,
   classroomFetch,
 } from "@/lib/classroom-api";
 import { sitePath } from "@/lib/site-path";
+import { useLanguage } from "@/lib/language";
+import { LanguageToggle } from "../LanguageToggle";
 import { LessonRunner } from "./LessonRunner";
 
 export function ClassroomLesson({ code }: { code: string }) {
+  const language = useLanguage();
   const storageKey = `build-loop:class:${code}`;
   const [classroom, setClassroom] = useState<{
     day: number;
@@ -59,12 +63,12 @@ export function ClassroomLesson({ code }: { code: string }) {
         setError(
           connectError instanceof ClassroomApiConfigurationError
             ? connectError.message
-            : "Could not connect to the classroom.",
+            : uiText(language, "Could not connect to the classroom."),
         );
       }
     });
     return () => window.cancelAnimationFrame(frame);
-  }, [code, storageKey]);
+  }, [code, language, storageKey]);
 
   const plan = classroom ? getInteractiveDay(classroom.day) : undefined;
   if (plan && classroom) {
@@ -79,15 +83,20 @@ export function ClassroomLesson({ code }: { code: string }) {
 
   return (
     <main className="classroom-loading">
+      <LanguageToggle />
       <span className="runner-brand">
         <span>BL</span>
         <strong>BUILD LOOP</strong>
       </span>
       <div className="classroom-loading-pulse" />
-      <h1>{error || "Connecting to your classroom…"}</h1>
+      <h1>
+        {error
+          ? uiText(language, error)
+          : uiText(language, "Connecting to your classroom…")}
+      </h1>
       {error ? (
         <Link href={`/join/?code=${encodeURIComponent(code)}`}>
-          Return to join →
+          {uiText(language, "Return to join →")}
         </Link>
       ) : null}
     </main>

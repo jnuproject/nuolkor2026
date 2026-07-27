@@ -1,5 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import type { DayNumber } from "@/content/course";
+import { uiText } from "@/content/translations/ui-ko";
+import { useLanguage } from "@/lib/language";
+import { LanguageToggle } from "./LanguageToggle";
 
 type Mode = "overview" | "start" | "student" | "instructor" | "present" | "cards";
 
@@ -20,34 +25,47 @@ const modeLinks = [
 ] as const;
 
 export function SiteHeader({ day, mode }: SiteHeaderProps) {
+  const language = useLanguage();
+
   return (
     <header className="site-header">
       <div className="header-primary">
-        <Link className="brand" href="/" aria-label="Build Loop home">
+        <Link
+          className="brand"
+          href="/"
+          aria-label={uiText(language, "Build Loop home")}
+        >
           <span className="brand-mark" aria-hidden="true">
             BL
           </span>
           <span className="brand-copy">
             <strong>BUILD LOOP</strong>
-            <small>Vibe Coding Bootcamp</small>
+            <small>{uiText(language, "Vibe Coding Bootcamp")}</small>
           </span>
         </Link>
 
-        <nav className="global-nav" aria-label="Course navigation">
+        <nav
+          className="global-nav"
+          aria-label={uiText(language, "Course navigation")}
+        >
           <Link className={mode === "overview" ? "is-active" : ""} href="/overview">
-            Overview
+            {uiText(language, "Overview")}
           </Link>
           <Link className={mode === "start" ? "is-active" : ""} href="/start">
-            Setup
+            {uiText(language, "Setup")}
           </Link>
-          <Link href="/join">Join</Link>
-          <Link href="/instructor/live">Teach</Link>
+          <Link href="/join">{uiText(language, "Join")}</Link>
+          <Link href="/instructor/live">{uiText(language, "Teach")}</Link>
         </nav>
+        <LanguageToggle />
       </div>
 
       {day ? (
         <div className="header-context">
-          <nav className="day-switcher" aria-label="Choose a day">
+          <nav
+            className="day-switcher"
+            aria-label={uiText(language, "Choose a day")}
+          >
             {[1, 2, 3, 4, 5, 6].map((item) => (
               <Link
                 aria-current={item === day ? "page" : undefined}
@@ -68,14 +86,17 @@ export function SiteHeader({ day, mode }: SiteHeaderProps) {
             ))}
           </nav>
 
-          <nav className="mode-switcher" aria-label="Choose a view">
+          <nav
+            className="mode-switcher"
+            aria-label={uiText(language, "Choose a view")}
+          >
             {modeLinks.map((item) => (
               <Link
                 className={mode === item.id ? "is-active" : ""}
                 href={item.path(day)}
                 key={item.id}
               >
-                {item.label}
+                {uiText(language, item.label)}
               </Link>
             ))}
           </nav>

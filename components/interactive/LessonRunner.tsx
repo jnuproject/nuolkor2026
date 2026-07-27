@@ -5,11 +5,15 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { interactiveDays, type InteractiveDayPlan } from "@/content/interactive";
+import { interactiveText } from "@/content/translations/interactive-ko";
+import { getLocalizedReadings } from "@/content/translations/readings-ko";
+import { uiText } from "@/content/translations/ui-ko";
 import { clearClassroomAccessToken } from "@/lib/classroom-access";
 import {
   ClassroomApiConfigurationError,
   classroomFetch,
 } from "@/lib/classroom-api";
+import { useLanguage } from "@/lib/language";
 import { sitePath } from "@/lib/site-path";
 import { BookHeader } from "../BookHeader";
 import { ActivityCard, type ActivityState } from "./ActivityCard";
@@ -67,12 +71,17 @@ export function LessonRunner({
   classroomToken?: string;
   readings?: LessonReading[];
 }) {
+  const language = useLanguage();
+  const localizedReadings = useMemo(
+    () => getLocalizedReadings(plan.day, language, readings),
+    [language, plan.day, readings],
+  );
   const storageKey = classroomCode
     ? `build-loop:class:${classroomCode.toUpperCase()}`
     : `build-loop:solo:day:${plan.day}`;
   const [activeStage, setActiveStage] = useState(0);
   const [activeReading, setActiveReading] = useState<number | null>(
-    readings.length > 0 && !classroomCode ? 0 : null,
+    localizedReadings.length > 0 && !classroomCode ? 0 : null,
   );
   const [teacherStage, setTeacherStage] = useState(0);
   const [activityStates, setActivityStates] = useState<Record<string, ActivityState>>({});
@@ -418,23 +427,26 @@ export function LessonRunner({
 
   const connectionLabel = useMemo(() => {
     if (!classroomCode) {
-      return "SELF-PACED";
+      return uiText(language, "Self-paced").toUpperCase();
     }
     if (connection === "connecting") {
-      return "CONNECTING";
+      return uiText(language, "Connecting").toUpperCase();
     }
     if (connection === "offline") {
-      return "RECONNECTING";
+      return uiText(language, "Reconnecting").toUpperCase();
     }
-    return `LIVE · ${classroomCode.toUpperCase()}`;
-  }, [classroomCode, connection]);
+    return uiText(language, "Live · {code}", {
+      code: classroomCode.toUpperCase(),
+    }).toUpperCase();
+  }, [classroomCode, connection, language]);
 
   return (
     <div className="book-page">
       <BookHeader
         crumb={
           <span className="book-crumb-top">
-            Day {plan.day} · {plan.title}
+            {uiText(language, "Day {day}", { day: plan.day })} ·{" "}
+            {interactiveText(language, plan.title)}
           </span>
         }
         right={
@@ -447,32 +459,44 @@ export function LessonRunner({
       />
 
       {classroomError ? (
-        <div className="classroom-banner is-closed">{classroomError}</div>
+        <div className="classroom-banner is-closed">
+          {uiText(language, classroomError)}
+        </div>
       ) : classStatus !== "open" ? (
         <div className={`classroom-banner is-${classStatus}`}>
           {classStatus === "paused"
-            ? "The instructor paused the class. Keep this screen open."
-            : "This class is closed. Your saved work remains on the dashboard."}
+            ? uiText(
+                language,
+                "The instructor paused the class. Keep this screen open.",
+              )
+            : uiText(
+                language,
+                "This class is closed. Your saved work remains on the dashboard.",
+              )}
         </div>
       ) : null}
 
       <div
         className={`book-shell ${classStatus === "open" ? "" : "is-classroom-frozen"}`}
       >
-        <aside aria-label="Course contents" className="book-toc">
-          <p className="toc-title">Contents</p>
+        <aside
+          aria-label={uiText(language, "Course contents")}
+          className="book-toc"
+        >
+          <p className="toc-title">{uiText(language, "Contents")}</p>
           <nav>
             {interactiveDays.map((other) =>
               other.day === plan.day ? (
                 <section className="toc-open" key={other.day}>
                   <p className="toc-day is-active">
-                    <span>Day {plan.day}</span> {plan.title}
+                    <span>{uiText(language, "Day {day}", { day: plan.day })}</span>{" "}
+                    {interactiveText(language, plan.title)}
                   </p>
-                  {readings.length > 0 ? (
+                  {localizedReadings.length > 0 ? (
                     <>
-                      <p className="toc-group-label">Reading</p>
+                      <p className="toc-group-label">{uiText(language, "Reading")}</p>
                       <ul>
-                        {readings.map((reading, index) => (
+                        {localizedReadings.map((reading, index) => (
                           <li key={reading.id}>
                             <button
                               aria-current={
@@ -490,7 +514,7 @@ export function LessonRunner({
                           </li>
                         ))}
                       </ul>
-                      <p className="toc-group-label">In class</p>
+                      <p className="toc-group-label">{uiText(language, "In class")}</p>
                     </>
                   ) : null}
                   <ul>
@@ -519,9 +543,11 @@ export function LessonRunner({
                             type="button"
                           >
                             <span>
-                              {done ? "✓" : `${plan.day}.${readings.length + index + 1}`}
+                              {done
+                                ? "✓"
+                                : `${plan.day}.${localizedReadings.length + index + 1}`}
                             </span>
-                            <em>{item.title}</em>
+                            <em>{interactiveText(language, item.title)}</em>
                             <small>{item.start}</small>
                           </button>
                         </li>
@@ -532,7 +558,10 @@ export function LessonRunner({
               ) : (
                 <p className="toc-day" key={other.day}>
                   <Link href={`/day/${other.day}`}>
-                    <span>Day {other.day}</span> {other.title}
+                    <span>
+                      {uiText(language, "Day {day}", { day: other.day })}
+                    </span>{" "}
+                    {interactiveText(language, other.title)}
                   </Link>
                 </p>
               ),
@@ -543,45 +572,60 @@ export function LessonRunner({
               <i style={{ width: `${overallPercent}%` }} />
             </div>
             <span>
-              {totalCompleted} of {plan.stages.length} stages done
+              {uiText(language, "{done} of {total} stages done", {
+                done: totalCompleted,
+                total: plan.stages.length,
+              })}
             </span>
           </div>
         </aside>
 
         <main className="book-content">
-          {activeReading !== null && readings[activeReading] ? (
+          {activeReading !== null && localizedReadings[activeReading] ? (
             <>
-              <nav aria-label="Breadcrumb" className="book-crumb">
-                Day {plan.day} · Reading {activeReading + 1} of {readings.length}
+              <nav
+                aria-label={uiText(language, "Breadcrumb")}
+                className="book-crumb"
+              >
+                {uiText(language, "Day {day} · Reading {current} of {total}", {
+                  day: plan.day,
+                  current: activeReading + 1,
+                  total: localizedReadings.length,
+                })}
               </nav>
 
               <div className="book-section-head">
                 <h1>
-                  {plan.day}.{activeReading + 1} {readings[activeReading].title}
+                  {plan.day}.{activeReading + 1}{" "}
+                  {localizedReadings[activeReading].title}
                 </h1>
                 <div className="book-section-meta">
                   <span className="book-section-time">
-                    Reading · about{" "}
-                    {Math.max(
+                    {uiText(language, "Reading · about {minutes} min", {
+                      minutes: Math.max(
                       1,
                       Math.round(
-                        readings[activeReading].body.split(/\s+/).length / 150,
+                          localizedReadings[activeReading].body.split(/\s+/).length /
+                            150,
                       ),
-                    )}{" "}
-                    min
+                      ),
+                    })}
                   </span>
                 </div>
               </div>
 
               <article className="book-read">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {readings[activeReading].body}
+                  {localizedReadings[activeReading].body}
                 </ReactMarkdown>
               </article>
 
-              <nav aria-label="Reading pagination" className="book-pagenav">
+              <nav
+                aria-label={uiText(language, "Reading pagination")}
+                className="book-pagenav"
+              >
                 <button
-                  aria-label="Previous reading"
+                  aria-label={uiText(language, "Previous reading")}
                   className="page-round"
                   disabled={activeReading === 0}
                   onClick={() => setActiveReading(activeReading - 1)}
@@ -590,13 +634,16 @@ export function LessonRunner({
                   ←
                 </button>
                 <span>
-                  Reading {activeReading + 1} / {readings.length}
+                  {uiText(language, "Reading {current} / {total}", {
+                    current: activeReading + 1,
+                    total: localizedReadings.length,
+                  })}
                 </span>
                 <button
-                  aria-label="Next"
+                  aria-label={uiText(language, "Next")}
                   className="page-round"
                   onClick={() => {
-                    if (activeReading < readings.length - 1) {
+                    if (activeReading < localizedReadings.length - 1) {
                       setActiveReading(activeReading + 1);
                     } else {
                       setActiveReading(null);
@@ -610,30 +657,42 @@ export function LessonRunner({
             </>
           ) : (
             <>
-          <nav aria-label="Breadcrumb" className="book-crumb">
-            Day {plan.day} · Stage {activeStage + 1} of {plan.stages.length}
+          <nav
+            aria-label={uiText(language, "Breadcrumb")}
+            className="book-crumb"
+          >
+            {uiText(language, "Day {day} · Stage {current} of {total}", {
+              day: plan.day,
+              current: activeStage + 1,
+              total: plan.stages.length,
+            })}
           </nav>
 
           <div className="book-section-head">
             <h1>
-              {plan.day}.{readings.length + activeStage + 1} {stage.title}
+              {plan.day}.{localizedReadings.length + activeStage + 1}{" "}
+              {interactiveText(language, stage.title)}
             </h1>
             <div className="book-section-meta">
               <span className={`phase-chip phase-${stage.phase.toLowerCase()}`}>
-                {stage.phase}
+                {interactiveText(language, stage.phase)}
               </span>
               <span className="book-section-time">
-                {stage.start}–{stage.end} · {stage.minutes} min
+                {uiText(language, "{start}–{end} · {minutes} min", {
+                  start: stage.start,
+                  end: stage.end,
+                  minutes: stage.minutes,
+                })}
               </span>
               <StageTimer compact key={stage.id} minutes={stage.minutes} />
             </div>
           </div>
 
-          <p className="book-lede">{stage.goal}</p>
+          <p className="book-lede">{interactiveText(language, stage.goal)}</p>
 
           <ol className="book-brief">
             {stage.studentBrief.map((line) => (
-              <li key={line}>{line}</li>
+              <li key={line}>{interactiveText(language, line)}</li>
             ))}
           </ol>
 
@@ -653,11 +712,15 @@ export function LessonRunner({
 
           <section className={`book-finish ${stageReady ? "is-ready" : ""}`}>
             <p>
-              <strong>Before you move on:</strong> {stage.completion}
+              <strong>{uiText(language, "Before you move on:")}</strong>{" "}
+              {interactiveText(language, stage.completion)}
             </p>
             <div className="book-finish-row">
               <small>
-                {completedActivityCount} / {requiredActivities.length} activities done
+                {uiText(language, "{done} / {total} activities done", {
+                  done: completedActivityCount,
+                  total: requiredActivities.length,
+                })}
               </small>
               <button
                 disabled={
@@ -669,22 +732,25 @@ export function LessonRunner({
                 type="button"
               >
                 {completedStages.has(stage.id)
-                  ? "Stage complete ✓"
+                  ? uiText(language, "Stage complete ✓")
                   : stageReady
-                    ? "Complete this stage"
-                    : "Finish every activity first"}
+                    ? uiText(language, "Complete this stage")
+                    : uiText(language, "Finish every activity first")}
               </button>
             </div>
           </section>
 
-          <nav aria-label="Stage pagination" className="book-pagenav">
+          <nav
+            aria-label={uiText(language, "Stage pagination")}
+            className="book-pagenav"
+          >
             <button
-              aria-label="Previous stage"
+              aria-label={uiText(language, "Previous stage")}
               className="page-round"
-              disabled={activeStage === 0 && readings.length === 0}
+              disabled={activeStage === 0 && localizedReadings.length === 0}
               onClick={() => {
-                if (activeStage === 0 && readings.length > 0) {
-                  setActiveReading(readings.length - 1);
+                if (activeStage === 0 && localizedReadings.length > 0) {
+                  setActiveReading(localizedReadings.length - 1);
                 } else {
                   goToStage(activeStage - 1);
                 }
@@ -695,13 +761,16 @@ export function LessonRunner({
             </button>
             <span>
               {saveState === "saving"
-                ? "Saving…"
+                ? uiText(language, "Saving…")
                 : saveState === "error"
-                  ? "Will retry when connected"
-                  : `${activeStage + 1} / ${plan.stages.length} · saved`}
+                  ? uiText(language, "Will retry when connected")
+                  : uiText(language, "{current} / {total} · saved", {
+                      current: activeStage + 1,
+                      total: plan.stages.length,
+                    })}
             </span>
             <button
-              aria-label="Next stage"
+              aria-label={uiText(language, "Next stage")}
               className="page-round"
               disabled={
                 activeStage === plan.stages.length - 1 ||
@@ -718,8 +787,11 @@ export function LessonRunner({
         </main>
       </div>
 
-      <aside className={`book-status help-${helpStatus}`} aria-label="Help signal">
-        <strong>{helpLabels[helpStatus]}</strong>
+      <aside
+        className={`book-status help-${helpStatus}`}
+        aria-label={uiText(language, "Help signal")}
+      >
+        <strong>{uiText(language, helpLabels[helpStatus])}</strong>
         <div>
           {(["green", "yellow", "red"] as const).map((status) => (
             <button

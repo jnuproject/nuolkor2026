@@ -3,8 +3,16 @@
 import Link from "next/link";
 import { useState } from "react";
 import type { InteractiveDayPlan } from "@/content/interactive";
+import {
+  interactiveText,
+  teacherCueText,
+} from "@/content/translations/interactive-ko";
+import { uiText } from "@/content/translations/ui-ko";
+import { useLanguage } from "@/lib/language";
+import { LanguageToggle } from "../LanguageToggle";
 
 export function InstructorPlanView({ plan }: { plan: InteractiveDayPlan }) {
+  const language = useLanguage();
   const [selected, setSelected] = useState(0);
   const stage = plan.stages[selected];
 
@@ -16,36 +24,48 @@ export function InstructorPlanView({ plan }: { plan: InteractiveDayPlan }) {
           <strong>BUILD LOOP</strong>
         </Link>
         <div>
-          <span>DAY {plan.day} · INSTRUCTOR PLAN</span>
-          <strong>{plan.title}</strong>
+          <span>
+            {uiText(language, "Day {day} · Instructor plan", {
+              day: plan.day,
+            }).toUpperCase()}
+          </span>
+          <strong>{interactiveText(language, plan.title)}</strong>
         </div>
         <div>
           <Link href={`/day/${plan.day}/present`} target="_blank">
-            Present ↗
+            {uiText(language, "Presentation ↗")}
           </Link>
           <Link className="start-live-link" href="/instructor/live">
-            Start live class
+            {uiText(language, "Start live class")}
           </Link>
+          <LanguageToggle />
         </div>
       </header>
 
       <section className="instructor-plan-intro">
         <div>
-          <span className="eyebrow">180-MINUTE RUN OF SHOW</span>
-          <h1>{plan.question}</h1>
+          <span className="eyebrow">
+            {uiText(language, "180-minute run of show").toUpperCase()}
+          </span>
+          <h1>{interactiveText(language, plan.question)}</h1>
           <p>
-            한 번에 한 단계만 진행합니다. 학생 활동의 완료 기준을 확인한 뒤
-            다음 단계로 이동하세요.
+            {uiText(
+              language,
+              "Proceed one stage at a time. Check the completion criteria for student activities before moving on.",
+            )}
           </p>
         </div>
         <div>
-          <span>TODAY&apos;S ARTIFACT</span>
-          <strong>{plan.artifact}</strong>
+          <span>{uiText(language, "Today's artifact").toUpperCase()}</span>
+          <strong>{interactiveText(language, plan.artifact)}</strong>
         </div>
       </section>
 
       <div className="instructor-plan-layout">
-        <nav className="instructor-stage-list" aria-label="Lesson timeline">
+        <nav
+          className="instructor-stage-list"
+          aria-label={uiText(language, "Lesson timeline")}
+        >
           {plan.stages.map((item, index) => (
             <button
               aria-current={selected === index ? "step" : undefined}
@@ -57,11 +77,14 @@ export function InstructorPlanView({ plan }: { plan: InteractiveDayPlan }) {
               <span>{String(index + 1).padStart(2, "0")}</span>
               <div>
                 <small>
-                  {item.start}–{item.end} · {item.minutes}분
+                  {item.start}–{item.end} ·{" "}
+                  {uiText(language, "{minutes} min", {
+                    minutes: item.minutes,
+                  })}
                 </small>
-                <strong>{item.title}</strong>
+                <strong>{interactiveText(language, item.title)}</strong>
               </div>
-              <i>{item.phase}</i>
+              <i>{interactiveText(language, item.phase)}</i>
             </button>
           ))}
         </nav>
@@ -70,52 +93,57 @@ export function InstructorPlanView({ plan }: { plan: InteractiveDayPlan }) {
           <header>
             <div>
               <span className={`phase-chip phase-${stage.phase.toLowerCase()}`}>
-                {stage.phase}
+                {interactiveText(language, stage.phase)}
               </span>
               <small>
-                STAGE {selected + 1} · {stage.minutes} MIN
+                {uiText(language, "Stage {current} · {minutes} min", {
+                  current: selected + 1,
+                  minutes: stage.minutes,
+                }).toUpperCase()}
               </small>
             </div>
-            <h2>{stage.title}</h2>
-            <p>{stage.goal}</p>
+            <h2>{interactiveText(language, stage.title)}</h2>
+            <p>{interactiveText(language, stage.goal)}</p>
           </header>
 
           <div className="instructor-cue-panel">
-            <span>강사 진행 큐</span>
+            <span>{uiText(language, "Instructor cue")}</span>
             <ol>
               {stage.teacherCue.map((cue) => (
-                <li key={cue}>{cue}</li>
+                <li key={cue}>{teacherCueText(language, cue)}</li>
               ))}
             </ol>
           </div>
 
           <div className="student-screen-preview">
-            <span>STUDENT SCREEN</span>
-            <h3>What students see now</h3>
+            <span>{uiText(language, "Student screen").toUpperCase()}</span>
+            <h3>{uiText(language, "What students see now")}</h3>
             <ol>
               {stage.studentBrief.map((line) => (
-                <li key={line}>{line}</li>
+                <li key={line}>{interactiveText(language, line)}</li>
               ))}
             </ol>
           </div>
 
           <div className="instructor-activity-preview">
-            <span>INTERACTIVE ACTIVITIES</span>
+            <span>{uiText(language, "Interactive activities").toUpperCase()}</span>
             {stage.activities.map((activity, index) => (
               <article key={activity.id}>
                 <i>{String(index + 1).padStart(2, "0")}</i>
                 <div>
-                  <small>{activity.kind}</small>
-                  <strong>{activity.title}</strong>
-                  <p>{activity.instruction}</p>
+                  <small>
+                    {uiText(language, activity.kind.replace("-", " "))}
+                  </small>
+                  <strong>{interactiveText(language, activity.title)}</strong>
+                  <p>{interactiveText(language, activity.instruction)}</p>
                 </div>
               </article>
             ))}
           </div>
 
           <div className="instructor-completion">
-            <span>다음 단계로 넘어가는 기준</span>
-            <strong>{stage.completion}</strong>
+            <span>{uiText(language, "Criteria for moving to the next stage")}</span>
+            <strong>{interactiveText(language, stage.completion)}</strong>
           </div>
 
           <footer>
@@ -124,7 +152,7 @@ export function InstructorPlanView({ plan }: { plan: InteractiveDayPlan }) {
               onClick={() => setSelected((value) => Math.max(0, value - 1))}
               type="button"
             >
-              ← 이전
+              ← {uiText(language, "Previous")}
             </button>
             <button
               disabled={selected === plan.stages.length - 1}
@@ -133,7 +161,7 @@ export function InstructorPlanView({ plan }: { plan: InteractiveDayPlan }) {
               }
               type="button"
             >
-              다음 단계 →
+              {uiText(language, "Next step")} →
             </button>
           </footer>
         </section>

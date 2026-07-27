@@ -2,10 +2,14 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { uiText } from "@/content/translations/ui-ko";
 import { classroomPathWithAccess } from "@/lib/classroom-access";
 import { classroomFetch } from "@/lib/classroom-api";
+import { useLanguage } from "@/lib/language";
+import { LanguageToggle } from "../LanguageToggle";
 
 export function JoinClass({ initialCode = "" }: { initialCode?: string }) {
+  const language = useLanguage();
   const [code, setCode] = useState(initialCode.toUpperCase());
   const [displayName, setDisplayName] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -46,7 +50,9 @@ export function JoinClass({ initialCode = "" }: { initialCode?: string }) {
         participantToken?: string;
       };
       if (!response.ok || !data.participantToken) {
-        throw new Error(data.error ?? "Could not join this class.");
+        throw new Error(
+          data.error ?? uiText(language, "Could not join this class."),
+        );
       }
 
       localStorage.setItem(`${storageKey}:display-name`, displayName.trim());
@@ -61,7 +67,9 @@ export function JoinClass({ initialCode = "" }: { initialCode?: string }) {
       );
     } catch (joinError) {
       setError(
-        joinError instanceof Error ? joinError.message : "Could not join this class.",
+        joinError instanceof Error
+          ? joinError.message
+          : uiText(language, "Could not join this class."),
       );
       setSubmitting(false);
     }
@@ -74,22 +82,29 @@ export function JoinClass({ initialCode = "" }: { initialCode?: string }) {
           <span>BL</span>
           <strong>BUILD LOOP</strong>
         </Link>
-        <Link href="/overview">Course overview</Link>
+        <div>
+          <Link href="/overview">{uiText(language, "Course overview")}</Link>
+          <LanguageToggle />
+        </div>
       </header>
 
       <section className="join-card">
         <div className="join-intro">
-          <span className="eyebrow">LIVE CLASSROOM</span>
-          <h1>Join the lesson.</h1>
+          <span className="eyebrow">
+            {uiText(language, "Live classroom").toUpperCase()}
+          </span>
+          <h1>{uiText(language, "Join the lesson.")}</h1>
           <p>
-            Enter the six-character code on the classroom screen. Use only a
-            short name or seat code your instructor can recognize.
+            {uiText(
+              language,
+              "Enter the six-character code on the classroom screen. Use only a short name or seat code your instructor can recognize.",
+            )}
           </p>
         </div>
 
         <form onSubmit={join}>
           <label>
-            <span>CLASS CODE</span>
+            <span>{uiText(language, "Class code").toUpperCase()}</span>
             <input
               autoCapitalize="characters"
               autoComplete="off"
@@ -105,26 +120,33 @@ export function JoinClass({ initialCode = "" }: { initialCode?: string }) {
             />
           </label>
           <label>
-            <span>NAME OR SEAT CODE</span>
+            <span>{uiText(language, "Name or seat code").toUpperCase()}</span>
             <input
               autoComplete="nickname"
               maxLength={20}
               minLength={2}
               onChange={(event) => setDisplayName(event.target.value)}
-              placeholder="Seat 12"
+              placeholder={uiText(language, "Seat 12")}
               required
               value={displayName}
             />
           </label>
-          {error ? <div className="join-error">{error}</div> : null}
+          {error ? (
+            <div className="join-error">{uiText(language, error)}</div>
+          ) : null}
           <button disabled={submitting || code.length !== 6} type="submit">
-            {submitting ? "Joining…" : "Join classroom →"}
+            {uiText(language, submitting ? "Joining…" : "Join classroom →")}
           </button>
         </form>
 
         <div className="join-privacy">
-          <strong>Keep it classroom-safe.</strong>
-          <span>No email, phone number, student ID, password, or API key.</span>
+          <strong>{uiText(language, "Keep it classroom-safe.")}</strong>
+          <span>
+            {uiText(
+              language,
+              "No email, phone number, student ID, password, or API key.",
+            )}
+          </span>
         </div>
       </section>
     </main>

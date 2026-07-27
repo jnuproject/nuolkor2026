@@ -6,7 +6,7 @@ import { LanguageToggle } from "./LanguageToggle";
 export function BookHeader({
   crumb,
   right,
-  showLanguageToggle = false,
+  showLanguageToggle = true,
 }: {
   crumb?: ReactNode;
   right?: ReactNode;

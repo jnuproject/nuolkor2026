@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { uiText } from "@/content/translations/ui-ko";
+import { useLanguage } from "@/lib/language";
 
 function format(seconds: number): string {
   const safe = Math.max(0, seconds);
@@ -14,6 +16,7 @@ export function StageTimer({
   minutes: number;
   compact?: boolean;
 }) {
+  const language = useLanguage();
   const duration = Math.max(1, Math.round(minutes * 60));
   const [seconds, setSeconds] = useState(duration);
   const [running, setRunning] = useState(false);
@@ -37,7 +40,12 @@ export function StageTimer({
   return (
     <div className={`stage-timer ${compact ? "is-compact" : ""}`}>
       <div>
-        <span>{seconds === 0 ? "TIME" : running ? "RUNNING" : "TIMER"}</span>
+        <span>
+          {uiText(
+            language,
+            seconds === 0 ? "Time" : running ? "Running" : "Timer",
+          ).toUpperCase()}
+        </span>
         <strong>{format(seconds)}</strong>
       </div>
       <div className="stage-timer-actions">
@@ -50,7 +58,10 @@ export function StageTimer({
           }}
           type="button"
         >
-          {running ? "Pause" : seconds === 0 ? "Restart" : "Start"}
+          {uiText(
+            language,
+            running ? "Pause" : seconds === 0 ? "Restart" : "Start",
+          )}
         </button>
         <button
           onClick={() => {
@@ -59,7 +70,7 @@ export function StageTimer({
           }}
           type="button"
         >
-          Reset
+          {uiText(language, "Reset")}
         </button>
       </div>
     </div>
