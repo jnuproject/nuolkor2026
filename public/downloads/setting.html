@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>opencode + NVIDIA 무료 LLM API 설정 가이드</title>
+<style>
+  :root {
+    --bg: #1e1e1e;
+    --fg: #d4d4d4;
+    --accent: #76b900;
+    --accent-2: #76b900;
+    --code-bg: #2d2d2d;
+    --border: #3c3c3c;
+    --muted: #9b9b9b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Pretendard", "Apple SD Gothic Neo", sans-serif;
+    line-height: 1.6;
+    padding: 2rem 1rem;
+  }
+  .container { max-width: 880px; margin: 0 auto; }
+  h1, h2, h3 { color: #fff; }
+  h1 { border-bottom: 2px solid var(--accent); padding-bottom: .5rem; }
+  h2 { margin-top: 2.5rem; border-left: 4px solid var(--accent); padding-left: .75rem; }
+  h3 { color: var(--accent); }
+  code {
+    background: var(--code-bg);
+    padding: .15rem .4rem;
+    border-radius: 4px;
+    font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+    font-size: .9em;
+    color: #e8e8e8;
+  }
+  pre {
+    background: var(--code-bg);
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+  }
+  pre code { background: none; padding: 0; color: #e8e8e8; }
+  .step {
+    background: #252525;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+  }
+  .step-num {
+    display: inline-block;
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+    width: 1.75rem; height: 1.75rem;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 1.75rem;
+    margin-right: .5rem;
+  }
+  .note {
+    background: #2a2515;
+    border-left: 4px solid #d4a000;
+    padding: .75rem 1rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+  }
+  .tip {
+    background: #14201a;
+    border-left: 4px solid var(--accent);
+    padding: .75rem 1rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+  }
+  .muted { color: var(--muted); }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  th, td { border: 1px solid var(--border); padding: .5rem .75rem; text-align: left; }
+  th { background: #2d2d2d; color: #fff; }
+  a { color: var(--accent); }
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+  .footer { color: var(--muted); font-size: .85rem; margin-top: 3rem; text-align: center; }
+  ul { padding-left: 1.25rem; }
+  li { margin: .25rem 0; }
+
+  /* OS 탭 */
+  .os-tabs {
+    display: flex;
+    gap: .5rem;
+    margin: 1.5rem 0 .5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .os-tab {
+    background: none;
+    border: 1px solid var(--border);
+    border-bottom: none;
+    color: var(--muted);
+    font: inherit;
+    font-weight: 600;
+    padding: .55rem 1.4rem;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    margin-bottom: -1px;
+  }
+  .os-tab:hover { color: #fff; }
+  .os-tab[aria-selected="true"] {
+    background: #252525;
+    color: #fff;
+    border-color: var(--accent);
+    border-bottom: 1px solid #252525;
+  }
+  .os-sticky {
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    padding-top: .5rem;
+    z-index: 10;
+  }
+  body[data-os="mac"] .os-win { display: none; }
+  body[data-os="win"] .os-mac { display: none; }
+  .badge-optional {
+    font-size: .75em;
+    font-weight: 700;
+    color: #d4a000;
+    border: 1px solid #d4a000;
+    border-radius: 4px;
+    padding: .1rem .4rem;
+    margin-left: .5rem;
+    vertical-align: middle;
+  }
+</style>
+</head>
+<body data-os="mac">
+<div class="container">
+
+<h1>opencode + NVIDIA 무료 LLM API 설정 가이드</h1>
+<p class="muted">
+  새 노트북에서 opencode를 설치하고 NVIDIA(build.nvidia.com)의 무료 LLM API 키를 연결해 코딩 작업을 하는 방법을 순서대로 안내합니다.
+</p>
+
+<div class="os-sticky">
+  <div class="os-tabs" role="tablist" aria-label="운영체제 선택">
+    <button class="os-tab" role="tab" data-target="mac" aria-selected="true">macOS</button>
+    <button class="os-tab" role="tab" data-target="win" aria-selected="false">Windows</button>
+  </div>
+</div>
+<p class="muted">위 탭으로 운영체제를 선택하면 해당 OS에 맞는 명령과 경로만 표시됩니다.</p>
+
+<h2>1. 사전 준비</h2>
+<div class="step os-mac">
+  <ol>
+    <li>터미널. 기본 Terminal.app으로 충분하며, WezTerm·Ghostty·Kitty 등을 써도 됩니다.</li>
+    <li>Node.js 18+ (npm으로 설치할 경우에만 필요).</li>
+    <li>NVIDIA 계정. 없으면 <a href="https://build.nvidia.com" target="_blank">build.nvidia.com</a>에서 가입.</li>
+  </ol>
+</div>
+<div class="step os-win">
+  <ol>
+    <li>Windows Terminal + PowerShell 7 권장. 기본 PowerShell도 동작합니다.</li>
+    <li>Node.js 18+ (npm으로 설치할 경우에만 필요).</li>
+    <li>NVIDIA 계정. 없으면 <a href="https://build.nvidia.com" target="_blank">build.nvidia.com</a>에서 가입.</li>
+  </ol>
+</div>
+
+<h2>2. NVIDIA API 키 발급 (무료)</h2>
+<p class="muted">이 단계는 운영체제와 무관하게 동일합니다.</p>
+<div class="step">
+  <span class="step-num">1</span> <a href="https://build.nvidia.com" target="_blank">build.nvidia.com</a>에 접속합니다.
+</div>
+<div class="step">
+  <span class="step-num">2</span> 우측 상단 <code>Sign in</code> → 계정 생성 또는 로그인.
+</div>
+<div class="step">
+  <span class="step-num">3</span> 사용하려는 모델 페이지로 이동 (예. <code>nemotron-3-super-120b-a12b</code>, Llama, Qwen, GLM 계열 등).
+</div>
+<div class="step">
+  <span class="step-num">4</span> 페이지의 <code>Get API Key</code> 버튼 클릭 → <code>Generate API Key</code>.
+</div>
+<div class="step">
+  <span class="step-num">5</span> 발급된 키(<code>nvapi-...</code> 형태)를 안전한 곳에 보관합니다. 키는 여러 모델에 공용으로 사용 가능합니다.
+</div>
+<div class="note">
+  무료 tier에는 호출 수/속도 제한이 있습니다. build.nvidia.com의 각 모델 페이지에서 사용량 한도를 확인하세요.
+</div>
+
+<h2>3. opencode 설치</h2>
+
+<!-- ===== macOS ===== -->
+<div class="os-mac">
+  <h3>3-1. 설치 스크립트 (권장)</h3>
+  <pre><code>curl -fsSL https://opencode.ai/install | bash</code></pre>
+
+  <h3>3-2. Homebrew</h3>
+  <pre><code>brew install anomalyco/tap/opencode</code></pre>
+
+  <h3>3-3. npm</h3>
+  <pre><code>npm install -g opencode-ai</code></pre>
+
+  <div class="tip">
+    설치 후 <code>opencode --version</code>으로 확인합니다. <code>command not found</code>가 나오면 설치 스크립트가 안내한 PATH 줄을 <code>~/.zshrc</code>에 추가하고 <code>source ~/.zshrc</code>를 실행하세요.
+  </div>
+</div>
+
+<!-- ===== Windows ===== -->
+<div class="os-win">
+  <h3>3-1. 네이티브 — npm</h3>
+  <pre><code>npm install -g opencode-ai</code></pre>
+
+  <div class="tip">
+    설치 후 <code>opencode --version</code>으로 확인합니다. <code>opencode : 용어가 ... 인식되지 않습니다</code> 오류가 나오면 터미널을 새로 열어 PATH를 다시 읽게 하세요.
+  </div>
+</div>
+
+<h2>4. NVIDIA API 키 연결</h2>
+<p>두 가지 방법 중 하나를 선택합니다. (A) 인터랙티브 <code>/connect</code>, (B) 환경 변수.</p>
+
+<h3>방법 A. /connect 명령 사용 (권장)</h3>
+<div class="step">
+  <span class="step-num">1</span> 작업할 프로젝트 디렉토리로 이동 후 opencode 실행.
+  <div class="os-mac"><pre><code>cd /path/to/project
+opencode</code></pre></div>
+  <div class="os-win"><pre><code>cd C:\path\to\project
+opencode</code></pre></div>
+</div>
+<div class="step">
+  <span class="step-num">2</span> opencode 안에서 <code>/connect</code> 입력.
+  <pre><code>/connect</code></pre>
+</div>
+<div class="step">
+  <span class="step-num">3</span> 목록에서 <strong>NVIDIA</strong> 선택.
+</div>
+<div class="step">
+  <span class="step-num">4</span> 발급받은 NVIDIA API 키 입력 후 Enter.
+  <pre><code>┌ API key
+│
+└ enter</code></pre>
+</div>
+<div class="step">
+  <span class="step-num">5</span> <code>/models</code> 로 사용 가능한 NVIDIA 모델 목록 확인 후 사용할 모델 선택.
+  <pre><code>/models</code></pre>
+</div>
+<div class="note os-mac">
+  키는 <code>~/.local/share/opencode/auth.json</code>에 저장됩니다. 노트북 분실 시 build.nvidia.com에서 키를 revoke하세요.
+</div>
+<div class="note os-win">
+  키는 사용자 프로필 아래 opencode 데이터 폴더(<code>%LOCALAPPDATA%\opencode\</code>)의 <code>auth.json</code>에 저장됩니다. 정확한 위치는 opencode 실행 시 표시되는 경로를 확인하세요. 노트북 분실 시 build.nvidia.com에서 키를 revoke하세요.
+</div>
+
+<h3>방법 B. 환경 변수 사용</h3>
+
+<div class="os-mac">
+  <p>셸 프로파일(<code>~/.zshrc</code>, bash를 쓰면 <code>~/.bashrc</code>)에 다음을 추가합니다.</p>
+  <pre><code>export NVIDIA_NIM_API_KEY=nvapi-여기에-본인-키</code></pre>
+  <p>변경 사항을 적용한 뒤 opencode를 실행합니다.</p>
+  <pre><code>source ~/.zshrc
+opencode</code></pre>
+  <p>확인은 <code>echo $NVIDIA_NIM_API_KEY</code>로 합니다.</p>
+</div>
+
+<div class="os-win">
+  <p>PowerShell에서 사용자 환경 변수로 영구 등록합니다.</p>
+  <pre><code>[System.Environment]::SetEnvironmentVariable(
+  'NVIDIA_NIM_API_KEY', 'nvapi-여기에-본인-키', 'User')</code></pre>
+  <p>또는 명령 프롬프트(cmd)에서.</p>
+  <pre><code>setx NVIDIA_NIM_API_KEY "nvapi-여기에-본인-키"</code></pre>
+  <p>등록 후 <strong>터미널을 완전히 닫았다가 새로 열어야</strong> 값이 반영됩니다. 확인은 다음과 같이 합니다.</p>
+  <pre><code>echo $env:NVIDIA_NIM_API_KEY   # PowerShell
+echo %NVIDIA_NIM_API_KEY%      # cmd</code></pre>
+  <div class="note">
+    <code>$env:NVIDIA_NIM_API_KEY = "..."</code> 형태는 <strong>현재 세션에서만</strong> 유효합니다. 터미널을 닫으면 사라지므로 영구 설정에는 위의 <code>SetEnvironmentVariable</code> 또는 <code>setx</code>를 쓰세요.
+  </div>
+</div>
+
+<div class="note">
+  환경 변수 이름은 6번에서 작성하는 <code>provider.nvidia.env</code> 값과 <strong>반드시 일치</strong>해야 합니다. 이 가이드는 <code>NVIDIA_NIM_API_KEY</code>로 통일합니다.
+</div>
+
+<h2>5. 프로젝트 초기화 <span class="badge-optional">필수 X</span></h2>
+<p>처음 작업하는 프로젝트라면 AGENTS.md를 생성해 opencode가 코드베이스를 파악하도록 합니다. 건너뛰어도 opencode는 정상 동작하며, 코드베이스 이해도를 높이기 위한 선택 단계입니다.</p>
+<div class="os-mac"><pre><code>cd /path/to/project
+opencode
+/init</code></pre></div>
+<div class="os-win"><pre><code>cd C:\path\to\project
+opencode
+/init</code></pre></div>
+<p>생성된 <code>AGENTS.md</code>는 git에 커밋하는 것을 권장합니다.</p>
+
+<h2>6. 기본 모델 지정 (전역 설정 권장)</h2>
+<p>매번 <code>/models</code>로 선택하지 않도록 기본 모델을 고정할 수 있습니다. 설정 파일은 두 곳에 둘 수 있습니다.</p>
+
+<table class="os-mac">
+  <tr><th>위치</th><th>적용 범위</th><th>용도</th></tr>
+  <tr><td><code>~/.config/opencode/opencode.json</code></td><td>모든 프로젝트</td><td><strong>권장.</strong> 한 번만 설정</td></tr>
+  <tr><td><code>&lt;프로젝트&gt;/opencode.json</code></td><td>해당 프로젝트만</td><td>특정 프로젝트만 다른 모델을 쓸 때</td></tr>
+</table>
+<table class="os-win">
+  <tr><th>위치</th><th>적용 범위</th><th>용도</th></tr>
+  <tr><td><code>%APPDATA%\opencode\opencode.json</code></td><td>모든 프로젝트</td><td><strong>권장.</strong> 한 번만 설정</td></tr>
+  <tr><td><code>&lt;프로젝트&gt;\opencode.json</code></td><td>해당 프로젝트만</td><td>특정 프로젝트만 다른 모델을 쓸 때</td></tr>
+</table>
+
+<p>둘 다 있으면 <strong>프로젝트 설정이 전역 설정을 덮어씁니다.</strong> 새 폴더를 만들 때마다 다시 설정하고 싶지 않다면 전역에만 작성하세요.</p>
+
+<h3>6-1. 전역 설정 파일 작성</h3>
+<div class="os-mac"><pre><code>mkdir -p ~/.config/opencode
+$EDITOR ~/.config/opencode/opencode.json</code></pre></div>
+<div class="os-win"><pre><code># PowerShell
+New-Item -ItemType Directory -Force "$env:APPDATA\opencode"
+notepad "$env:APPDATA\opencode\opencode.json"</code></pre></div>
+
+<pre><code>{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "nvidia/z-ai/glm-5.2",
+  "small_model": "nvidia/z-ai/glm-5.2",
+  "provider": {
+    "nvidia": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "NVIDIA NIM",
+      "env": ["NVIDIA_NIM_API_KEY"],
+      "options": {
+        "baseURL": "https://integrate.api.nvidia.com/v1"
+      },
+      "whitelist": [
+        "z-ai/glm-5.2",
+        "deepseek-ai/deepseek-v4-pro",
+        "deepseek-ai/deepseek-v4-flash"
+      ],
+      "models": {
+        "z-ai/glm-5.2": {
+          "name": "GLM 5.2 (NIM)",
+          "tool_call": true,
+          "reasoning": true,
+          "limit": { "context": 202752, "output": 32768 }
+        },
+        "deepseek-ai/deepseek-v4-pro": {
+          "name": "DeepSeek V4 Pro (NIM)",
+          "tool_call": true,
+          "reasoning": true,
+          "limit": { "context": 262144, "output": 32768 }
+        }
+      }
+    }
+  }
+}</code></pre>
+
+<div class="note os-win">
+  메모장으로 저장할 때 <strong>인코딩을 UTF-8</strong>로 지정하세요. 기본값인 "UTF-8(BOM 포함)"이나 ANSI로 저장하면 JSON 파싱에 실패할 수 있습니다. 또 "다른 이름으로 저장" 시 파일 형식을 "모든 파일"로 바꾸지 않으면 <code>opencode.json.txt</code>로 저장됩니다.
+</div>
+
+<h3>6-2. 각 필드 설명</h3>
+<ul>
+  <li><code>model</code> — 메인 대화에 쓰는 기본 모델. <code>&lt;provider&gt;/&lt;model-id&gt;</code> 형식.</li>
+  <li><code>small_model</code> — 대화 제목 생성, 요약 등 가벼운 작업용. 토큰을 아끼려면 <code>nvidia/deepseek-ai/deepseek-v4-flash</code> 같은 저렴한 모델로 분리하세요.</li>
+  <li><code>provider.nvidia</code> — NIM은 OpenAI 호환 API이므로 <code>@ai-sdk/openai-compatible</code>로 직접 정의합니다.</li>
+  <li><code>env</code> — 4-B에서 설정한 환경 변수 이름과 일치해야 합니다.</li>
+  <li><code>whitelist</code> — <code>/models</code> 목록에 노출할 모델만 추립니다. 생략하면 전체가 뜹니다.</li>
+  <li><code>models</code> — 커스텀 provider는 opencode가 모델 스펙을 모르므로 context/output 한도와 tool_call, reasoning 지원 여부를 직접 알려줘야 합니다.</li>
+</ul>
+
+<div class="note">
+  모델 ID는 <code>z-ai/glm-5.2</code>처럼 슬래시를 포함합니다. 따라서 provider 접두사까지 붙인 최종 값은 <code>nvidia/z-ai/glm-5.2</code>로 슬래시가 두 개입니다. 정확한 ID는 build.nvidia.com의 모델 페이지 우측 코드 예제에서 확인하세요.
+</div>
+
+<h2>7. 주요 명령 요약</h2>
+<p class="muted">이 단계는 운영체제와 무관하게 동일합니다.</p>
+<table>
+  <tr><th>명령</th><th>설명</th></tr>
+  <tr><td><code>/connect</code></td><td>provider/API 키 연결</td></tr>
+  <tr><td><code>/models</code></td><td>사용 가능한 모델 목록 / 선택</td></tr>
+  <tr><td><code>/init</code></td><td>프로젝트 AGENTS.md 생성</td></tr>
+  <tr><td><code>/share</code></td><td>현재 대화 링크 공유</td></tr>
+  <tr><td><code>/undo</code> <code>/redo</code></td><td>변경사항 되돌리기 / 다시 적용</td></tr>
+  <tr><td><code>TAB</code></td><td>Plan 모드 ↔ Build 모드 전환</td></tr>
+  <tr><td><code>@</code></td><td>파일 fuzzy 검색 후 프롬프트에 삽입</td></tr>
+</table>
+
+<h2>8. 문제 해결</h2>
+
+<ul class="os-mac">
+  <li><strong>모델 목록에 NVIDIA가 안 보임</strong>: <code>echo $NVIDIA_NIM_API_KEY</code>로 환경 변수를 확인. 비어 있으면 <code>source ~/.zshrc</code> 후 재실행. 또는 <code>/connect</code>로 NVIDIA를 다시 연결.</li>
+  <li><strong>opencode: command not found</strong>: 설치 경로가 PATH에 없습니다. <code>~/.zshrc</code>에 <code>export PATH="$HOME/.opencode/bin:$PATH"</code>를 추가하고 <code>source ~/.zshrc</code>.</li>
+  <li><strong>모델을 못 찾음 (model not found)</strong>: <code>opencode.json</code>의 <code>model</code> 값과 <code>provider.nvidia.models</code>의 키가 일치하는지 확인. <code>nvidia/glm-5-2</code>처럼 임의로 줄인 ID는 동작하지 않습니다.</li>
+  <li><strong>전역 설정이 적용되지 않음</strong>: 프로젝트 루트에 <code>opencode.json</code>이 있으면 전역 설정을 덮어씁니다. <code>ls opencode.json</code>으로 확인 후 불필요하면 삭제하세요.</li>
+  <li><strong>401 / 인증 오류</strong>: build.nvidia.com에서 키가 유효한지 확인. 만료/삭제된 키는 새로 발급.</li>
+  <li><strong>429 / Rate limit</strong>: 무료 tier 제한. 호출 간격을 늘리거나 다른 모델로 전환.</li>
+  <li><strong>에이전트 응답이 멈춤</strong>: provider 타임아웃을 늘립니다.
+    <pre><code>{
+  "provider": { "nvidia": { "options": { "timeout": 600000 } } }
+}</code></pre>
+  </li>
+</ul>
+
+<ul class="os-win">
+  <li><strong>모델 목록에 NVIDIA가 안 보임</strong>: <code>echo $env:NVIDIA_NIM_API_KEY</code>로 환경 변수를 확인. 비어 있으면 <strong>터미널을 새로 열어</strong> 재실행(<code>setx</code>는 기존 세션에 반영되지 않습니다). 또는 <code>/connect</code>로 NVIDIA를 다시 연결.</li>
+  <li><strong>opencode 명령을 인식하지 못함</strong>: 터미널을 새로 열어 PATH를 다시 읽게 하세요. 그래도 안 되면 <code>where.exe opencode</code>로 설치 위치를 확인하고 해당 폴더를 사용자 Path 환경 변수에 추가.</li>
+  <li><strong>설정 파일이 안 읽힘</strong>: 탐색기에서 <strong>파일 확장명 표시</strong>를 켠 뒤 <code>opencode.json.txt</code>로 저장되지 않았는지 확인. 인코딩은 UTF-8(BOM 없음)이어야 합니다.</li>
+  <li><strong>모델을 못 찾음 (model not found)</strong>: <code>opencode.json</code>의 <code>model</code> 값과 <code>provider.nvidia.models</code>의 키가 일치하는지 확인. <code>nvidia/glm-5-2</code>처럼 임의로 줄인 ID는 동작하지 않습니다.</li>
+  <li><strong>전역 설정이 적용되지 않음</strong>: 프로젝트 루트에 <code>opencode.json</code>이 있으면 전역 설정을 덮어씁니다. <code>dir opencode.json</code>으로 확인 후 불필요하면 삭제하세요.</li>
+  <li><strong>401 / 인증 오류</strong>: build.nvidia.com에서 키가 유효한지 확인. 만료/삭제된 키는 새로 발급.</li>
+  <li><strong>429 / Rate limit</strong>: 무료 tier 제한. 호출 간격을 늘리거나 다른 모델로 전환.</li>
+  <li><strong>에이전트 응답이 멈춤</strong>: provider 타임아웃을 늘립니다.
+    <pre><code>{
+  "provider": { "nvidia": { "options": { "timeout": 600000 } } }
+}</code></pre>
+  </li>
+</ul>
+
+<h2>9. 참고 링크</h2>
+<ul>
+  <li><a href="https://opencode.ai/docs" target="_blank">opencode 공식 문서</a></li>
+  <li><a href="https://opencode.ai/docs/providers/" target="_blank">provider 설정 가이드</a></li>
+  <li><a href="https://opencode.ai/docs/config/" target="_blank">opencode.json 설정 스키마</a></li>
+  <li><a href="https://build.nvidia.com" target="_blank">NVIDIA build.nvidia.com</a></li>
+  <li><a href="https://github.com/anomalyco/opencode" target="_blank">opencode GitHub</a></li>
+</ul>
+
+<div class="footer">
+  opencode + NVIDIA 무료 LLM API · 마지막 업데이트: 2026-07-19
+</div>
+
+</div>
+
+<script>
+  // OS 탭 전환. 선택값은 localStorage에 저장해 새로고침 후에도 유지한다.
+  (function () {
+    var tabs = document.querySelectorAll('.os-tab');
+    function select(os) {
+      document.body.dataset.os = os;
+      tabs.forEach(function (t) {
+        t.setAttribute('aria-selected', String(t.dataset.target === os));
+      });
+      try { localStorage.setItem('opencode-guide-os', os); } catch (e) {}
+    }
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () { select(t.dataset.target); });
+    });
+
+    var saved;
+    try { saved = localStorage.getItem('opencode-guide-os'); } catch (e) {}
+    if (saved !== 'mac' && saved !== 'win') {
+      saved = /Win/i.test(navigator.platform || navigator.userAgent) ? 'win' : 'mac';
+    }
+    select(saved);
+  })();
+</script>
+</body>
+</html>

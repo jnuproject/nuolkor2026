@@ -1,0 +1,4 @@
+project_id = "ehqvxjpzqqhqfifjrfrz"
+
+[functions.classrooms]
+verify_jwt = false
