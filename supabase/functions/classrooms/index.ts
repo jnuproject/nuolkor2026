@@ -36,6 +36,13 @@ type ActivityUpdate = {
   completed: boolean;
 };
 
+const REMOVED_STATUS_ACTIVITY_STAGES = new Map<string, string>([
+  ["day1-readiness-signal", "day1-welcome-readiness"],
+  ["day4-start-status", "day4-project-status"],
+  ["day4-final-status", "day4-final-checkpoint"],
+  ["day6-readiness-status", "day6-final-readiness"],
+]);
+
 class RestFailure extends Error {
   readonly status: number;
   readonly code: string;
@@ -820,6 +827,20 @@ function validateActivityUpdates(
 
     const expectedStage = activityStage.get(rawActivity.activityId);
     const activityStageIndex = stageIndex.get(rawActivity.stageId);
+    const removedStatusStage = REMOVED_STATUS_ACTIVITY_STAGES.get(
+      rawActivity.activityId,
+    );
+    if (removedStatusStage) {
+      if (
+        removedStatusStage !== rawActivity.stageId ||
+        activityStageIndex === undefined ||
+        activityStageIndex > releasedStage
+      ) {
+        return { error: "Activity not found." };
+      }
+      continue;
+    }
+
     if (
       !expectedStage ||
       expectedStage !== rawActivity.stageId ||

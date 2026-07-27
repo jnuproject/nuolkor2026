@@ -86,6 +86,60 @@ test("exports all classroom-facing routes without a runtime Next server", async 
   }
 });
 
+test("uses the persistent side signal as the only learner status control", async () => {
+  const [day12, day34, day56, manifest, classroomFunction, runner] =
+    await Promise.all([
+    readFile(path.join(projectRoot, "content", "interactive", "day1-2.ts"), "utf8"),
+    readFile(path.join(projectRoot, "content", "interactive", "day3-4.ts"), "utf8"),
+    readFile(path.join(projectRoot, "content", "interactive", "day5-6.ts"), "utf8"),
+    readFile(
+      path.join(
+        projectRoot,
+        "supabase",
+        "functions",
+        "classrooms",
+        "course_manifest.ts",
+      ),
+      "utf8",
+    ),
+    readFile(
+      path.join(
+        projectRoot,
+        "supabase",
+        "functions",
+        "classrooms",
+        "index.ts",
+      ),
+      "utf8",
+    ),
+    readFile(
+      path.join(
+        projectRoot,
+        "components",
+        "interactive",
+        "LessonRunner.tsx",
+      ),
+      "utf8",
+    ),
+  ]);
+
+  for (const removedActivityId of [
+    "day1-readiness-signal",
+    "day4-start-status",
+    "day4-final-status",
+    "day6-readiness-status",
+  ]) {
+    for (const source of [day12, day34, day56, manifest]) {
+      assert.equal(source.includes(removedActivityId), false);
+    }
+    assert.equal(classroomFunction.includes(removedActivityId), true);
+  }
+
+  assert.match(classroomFunction, /REMOVED_STATUS_ACTIVITY_STAGES/);
+  assert.match(runner, /className={`book-status help-\${helpStatus}`}/);
+  assert.match(runner, /onClick=\{\(\) => chooseHelp\(status\)\}/);
+});
+
 test("copies offline teaching files and a base-path-aware service worker", async () => {
   const [setting, serviceWorker] = await Promise.all([
     readFile(path.join(outputRoot, "downloads", "setting.html"), "utf8"),

@@ -545,7 +545,7 @@ export const day6Plan: InteractiveDayPlan = {
         "GREEN은 대본 작성, YELLOW는 한 개의 승인된 blocker, RED는 마지막 작동본 복구로 보낸다.",
       ],
       completion:
-        "The learner records the exact version, runs the full demo path twice, and selects GREEN, YELLOW, or RED with evidence.",
+        "The learner records the exact version, runs the full demo path twice, and updates the side signal with evidence.",
       activities: [
         {
           id: "day6-version-choice",
@@ -577,29 +577,6 @@ export const day6Plan: InteractiveDayPlan = {
             "The exact version is known.",
           ],
           minimum: 5,
-        },
-        {
-          id: "day6-readiness-status",
-          kind: "choice",
-          title: "Show your status",
-          instruction: "Choose the status supported by your test.",
-          options: [
-            {
-              label: "✓ GREEN — ready to freeze",
-              value: "green",
-              feedback: "Do not add a feature. Prepare the demo.",
-            },
-            {
-              label: "! YELLOW — one demo blocker",
-              value: "yellow",
-              feedback: "Ask for approval before one small fix.",
-            },
-            {
-              label: "✕ RED — project or main path fails",
-              value: "red",
-              feedback: "Stop new work and restore the last working version.",
-            },
-          ],
         },
       ],
     },

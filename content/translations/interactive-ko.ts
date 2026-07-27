@@ -11,10 +11,10 @@ const day1Ko: Record<string, string> = {
     "도구와 폴더를 준비하고 안전 상태를 알리는 것부터 시작합니다.",
   "Get your computer and coding tool ready.":
     "컴퓨터와 코딩 도구를 준비하세요.",
-  "Use Green, Yellow, or Red to show your status.":
-    "초록색, 노란색, 빨간색으로 현재 상태를 알려 주세요.",
-  "Every learner checks each readiness item and records one status signal.":
-    "모든 학습자가 준비 항목을 하나씩 확인하고 현재 상태를 표시합니다.",
+  "Use the side signal to show Green, Yellow, or Red.":
+    "옆의 상태 신호에서 초록색, 노란색, 빨간색으로 현재 상태를 알려 주세요.",
+  "Every learner checks each readiness item and shows their current status with the side signal.":
+    "모든 학습자가 준비 항목을 하나씩 확인하고 옆의 상태 신호로 현재 상태를 알립니다.",
   "Ready to begin": "시작 준비",
   "Check each item you can confirm now.":
     "지금 확인할 수 있는 항목을 모두 체크하세요.",
@@ -809,8 +809,8 @@ const day4Ko: Record<string, string> = {
   "Do not change a file yet.": "아직 파일을 변경하지 마세요.",
   "Run one old action and record the result.":
     "기존 동작 하나를 실행하고 결과를 기록하세요.",
-  "The learner opens my-app, runs one Day 3 action, records the actual result, and shows a Green, Yellow, or Red status.":
-    "학습자가 my-app을 열고 3일차 동작 하나를 실행해 실제 결과를 기록한 뒤 초록색, 노란색, 빨간색 상태를 표시합니다.",
+  "The learner opens my-app, runs one Day 3 action, records the actual result, and updates the side signal.":
+    "학습자가 my-app을 열고 3일차 동작 하나를 실행해 실제 결과를 기록한 뒤 옆의 상태 신호를 갱신합니다.",
   "Test before editing": "편집하기 전에 테스트하기",
   "Run one Day 3 action. Write Action, Expected, Actual, and Result.":
     "3일차 동작 하나를 실행하고 동작, 예상 결과, 실제 결과, 판정을 쓰세요.",
@@ -1067,9 +1067,9 @@ const day4Ko: Record<string, string> = {
     "관찰 가능한 증거를 보여 주고 프로젝트를 안전한 상태로 남기세요.",
   "Show the new result, old result, Save Point, and handoff.":
     "새 결과, 기존 결과, 저장 지점, 인계문을 보여 주세요.",
-  "Record your final status.": "최종 상태를 기록하세요.",
-  "A partner verifies five pieces of evidence, and the learner records a final Green, Yellow, or Red status plus the first Day 5 action.":
-    "짝이 증거 다섯 가지를 확인하고 학습자가 최종 상태와 5일차에 먼저 할 일을 기록합니다.",
+  "Update the side signal.": "옆의 상태 신호를 갱신하세요.",
+  "A partner verifies five pieces of evidence, the learner updates the side signal, and records the first Day 5 action.":
+    "짝이 증거 다섯 가지를 확인하고 학습자는 옆의 상태 신호를 갱신한 뒤 5일차에 먼저 할 일을 기록합니다.",
   "Show the evidence": "증거 보여 주기",
   "Your partner watches. Do not only point to a file name.":
     "짝이 직접 지켜봅니다. 파일 이름만 가리키지 마세요.",
@@ -1372,8 +1372,8 @@ const day6Ko: Record<string, string> = {
   "Choose the version that works, not only the newest one.":
     "가장 최신 버전이 아니라 실제로 작동하는 버전을 고르세요.",
   "Run the full path twice.": "전체 경로를 두 번 실행하세요.",
-  "The learner records the exact version, runs the full demo path twice, and selects GREEN, YELLOW, or RED with evidence.":
-    "학습자가 정확한 버전을 기록하고 전체 데모 경로를 두 번 실행한 뒤 증거에 따라 초록색, 노란색, 빨간색을 선택합니다.",
+  "The learner records the exact version, runs the full demo path twice, and updates the side signal with evidence.":
+    "학습자가 정확한 버전을 기록하고 전체 데모 경로를 두 번 실행한 뒤 증거에 맞게 옆의 상태 신호를 갱신합니다.",
   "Choose the working version": "작동하는 버전 고르기",
   "Open the Day 5 release candidate and the current project. Record the version you will test first.":
     "5일차 출시 후보본과 현재 프로젝트를 열고 먼저 테스트할 버전을 기록하세요.",

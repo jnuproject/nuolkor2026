@@ -16,13 +16,14 @@ export const day1Plan: InteractiveDayPlan = {
       goal: "Start with a ready tool, folder, and safety signal.",
       studentBrief: [
         "Get your computer and coding tool ready.",
-        "Use Green, Yellow, or Red to show your status.",
+        "Use the side signal to show Green, Yellow, or Red.",
       ],
       teacherCue: [
         "오늘의 결과물과 5단계 루프를 짧게 소개한다.",
         "학생이 막힌 이유를 설명하게 하지 말고 Green, Yellow, Red 신호부터 받는다.",
       ],
-      completion: "Every learner checks each readiness item and records one status signal.",
+      completion:
+        "Every learner checks each readiness item and shows their current status with the side signal.",
       activities: [
         {
           id: "day1-readiness-check",
@@ -36,17 +37,6 @@ export const day1Plan: InteractiveDayPlan = {
             "I will not enter a secret key or private information on this page.",
           ],
           minimum: 4,
-        },
-        {
-          id: "day1-readiness-signal",
-          kind: "choice",
-          title: "Show your status",
-          instruction: "Choose the signal that is true now.",
-          options: [
-            { label: "Green — I am ready.", value: "green" },
-            { label: "Yellow — I can continue with help.", value: "yellow" },
-            { label: "Red — I cannot start yet.", value: "red" },
-          ],
         },
       ],
     },

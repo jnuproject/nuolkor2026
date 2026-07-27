@@ -31,10 +31,6 @@ export const COURSE_MANIFEST = {
           {
             "id": "day1-readiness-check",
             "required": true
-          },
-          {
-            "id": "day1-readiness-signal",
-            "required": true
           }
         ]
       },
@@ -447,10 +443,6 @@ export const COURSE_MANIFEST = {
           {
             "id": "day4-old-path-test",
             "required": true
-          },
-          {
-            "id": "day4-start-status",
-            "required": true
           }
         ]
       },
@@ -570,10 +562,6 @@ export const COURSE_MANIFEST = {
         "activities": [
           {
             "id": "day4-final-peer-check",
-            "required": true
-          },
-          {
-            "id": "day4-final-status",
             "required": true
           },
           {
@@ -736,10 +724,6 @@ export const COURSE_MANIFEST = {
           },
           {
             "id": "day6-readiness-test",
-            "required": true
-          },
-          {
-            "id": "day6-readiness-status",
             "required": true
           }
         ]

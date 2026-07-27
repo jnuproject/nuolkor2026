@@ -1,7 +1,7 @@
 const SCRIPT_PATH = new URL(self.location.href).pathname;
 const BASE_PATH = SCRIPT_PATH.replace(/\/sw\.js$/, "");
 const CACHE_NAMESPACE = `build-loop:${BASE_PATH || "/"}:`;
-const CACHE_NAME = `${CACHE_NAMESPACE}v5`;
+const CACHE_NAME = `${CACHE_NAMESPACE}v6`;
 const withBasePath = (path) => `${BASE_PATH}${path}`;
 const isWithinBasePath = (pathname) =>
   BASE_PATH === "" ||

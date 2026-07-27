@@ -495,7 +495,7 @@ export const day4Plan: InteractiveDayPlan = {
         "Red 학생은 새 기능을 시작하지 말고 마지막 작동본 복구로 보낸다.",
       ],
       completion:
-        "The learner opens my-app, runs one Day 3 action, records the actual result, and shows a Green, Yellow, or Red status.",
+        "The learner opens my-app, runs one Day 3 action, records the actual result, and updates the side signal.",
       activities: [
         {
           id: "day4-old-path-test",
@@ -505,26 +505,6 @@ export const day4Plan: InteractiveDayPlan = {
             "Run one Day 3 action. Write Action, Expected, Actual, and Result.",
           content: ["Action", "Expected", "Actual", "Pass / Not yet"],
           expected: ["my-app opens", "One old action can be repeated"],
-        },
-        {
-          id: "day4-start-status",
-          kind: "choice",
-          title: "Show your status",
-          instruction: "Choose the status that matches your real test.",
-          options: [
-            {
-              label: "GREEN — page and old action work",
-              value: "green",
-            },
-            {
-              label: "YELLOW — page opens, but one check is unclear",
-              value: "yellow",
-            },
-            {
-              label: "RED — missing, broken, or blocked",
-              value: "red",
-            },
-          ],
         },
       ],
     },
@@ -960,7 +940,7 @@ export const day4Plan: InteractiveDayPlan = {
       studentBrief: [
         "Stop editing.",
         "Show the new result, old result, Save Point, and handoff.",
-        "Record your final status.",
+        "Update the side signal.",
       ],
       teacherCue: [
         "앞 5분에는 짝이 실제 증거를 확인하고, 뒤 5분에는 최종 상태를 기록한다.",
@@ -968,7 +948,7 @@ export const day4Plan: InteractiveDayPlan = {
         "마지막 1분에는 새 AI 요청을 보내지 않게 한다.",
       ],
       completion:
-        "A partner verifies five pieces of evidence, and the learner records a final Green, Yellow, or Red status plus the first Day 5 action.",
+        "A partner verifies five pieces of evidence, the learner updates the side signal, and records the first Day 5 action.",
       activities: [
         {
           id: "day4-final-peer-check",
@@ -983,26 +963,6 @@ export const day4Plan: InteractiveDayPlan = {
             "The Context Handoff is complete.",
           ],
           minimum: 5,
-        },
-        {
-          id: "day4-final-status",
-          kind: "choice",
-          title: "Final status",
-          instruction: "Choose the status that matches the evidence.",
-          options: [
-            {
-              label: "GREEN — all five pieces of evidence are ready",
-              value: "green",
-            },
-            {
-              label: "YELLOW — the safe version works, but one record is incomplete",
-              value: "yellow",
-            },
-            {
-              label: "RED — the project or safe copy does not work",
-              value: "red",
-            },
-          ],
         },
         {
           id: "day4-day5-first-action",
