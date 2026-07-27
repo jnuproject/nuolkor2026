@@ -5524,7 +5524,7 @@ html[data-home-language="ko"] .lang-ko {
   gap: 0.6rem;
 }
 
-.book-logo span {
+.book-logo-mark {
   display: grid;
   width: 32px;
   height: 32px;

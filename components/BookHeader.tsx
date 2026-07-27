@@ -21,7 +21,9 @@ export function BookHeader({
         className="book-logo"
         href="/"
       >
-        <span aria-hidden="true">BL</span>
+        <span aria-hidden="true" className="book-logo-mark">
+          BL
+        </span>
         <strong>
           <BilingualText en="Build Loop" ko="빌드 루프" />
         </strong>
