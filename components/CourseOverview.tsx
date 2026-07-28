@@ -19,7 +19,10 @@ export function CourseOverview() {
     <>
       <BookHeader showLanguageToggle />
       <div className="book-shell">
-        <aside aria-label="Course contents / 강의 목차" className="book-toc">
+        <aside
+          aria-label="Course contents / 강의 목차"
+          className="book-toc overview-toc"
+        >
           <p className="toc-title">
             <Copy>Vibe Coding Bootcamp</Copy>
           </p>
@@ -91,39 +94,25 @@ export function CourseOverview() {
             <Copy>Vibe Coding Bootcamp</Copy>
           </h1>
 
-          <div className="book-cover-wrap">
-            <div aria-hidden="true" className="book-cover-art">
-              <em>BUILD LOOP</em>
-              <strong>
-                <span className="lang-en" lang="en">
-                  Vibe
-                  <br />
-                  Coding
-                  <br />
-                  Bootcamp
-                </span>
-                <span className="lang-ko" lang="ko">
-                  바이브
-                  <br />
-                  코딩
-                  <br />
-                  부트캠프
-                </span>
-              </strong>
-              <span className="book-cover-tagline">
-                <BilingualText
-                  en="From an idea to a working prototype, in six days."
-                  ko="아이디어에서 작동하는 프로토타입까지, 6일 만에."
-                />
-              </span>
-              <i>
+          <section className="book-page-intro">
+            <p>
+              <BilingualText
+                en="From an idea to a working prototype, in six days."
+                ko="아이디어에서 작동하는 프로토타입까지, 6일 동안 완성합니다."
+              />
+            </p>
+            <div>
+              <span>
                 <BilingualText
                   en="National University of Laos"
                   ko="라오스국립대학교"
                 />
-              </i>
+              </span>
+              <span>
+                <BilingualText en="6 days · 18 hours" ko="6일 · 18시간" />
+              </span>
             </div>
-          </div>
+          </section>
 
           <div className="book-start">
             <Link className="book-start-primary" href="/day/1">

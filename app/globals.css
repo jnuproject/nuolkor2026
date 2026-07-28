@@ -9454,3 +9454,1844 @@ html[data-language="ko"]
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ==========================================================================
+   Notion-inspired readability pass
+   The page is an editor first: quiet chrome, a 708px writing column, and
+   consistent text blocks. Classroom signals keep their semantic colors.
+   ========================================================================== */
+
+:root {
+  --paper: #fff;
+  --paper-deep: #f7f7f5;
+  --surface: #fff;
+  --ink: #37352f;
+  --muted: #787774;
+  --line: rgb(55 53 47 / 9%);
+  --line-dark: rgb(55 53 47 / 16%);
+  --blue: #2383e2;
+  --blue-deep: #0b6e99;
+  --blue-soft: rgb(35 131 226 / 10%);
+  --code: #f7f6f3;
+  --code-ink: #37352f;
+  --editorial-accent: #2383e2;
+  --editorial-paper: #fff;
+  --editorial-surface: #fff;
+  --editorial-rule: rgb(55 53 47 / 12%);
+  --notion-hover: rgb(55 53 47 / 8%);
+  --notion-callout: #f7f6f3;
+}
+
+html,
+body {
+  color: var(--ink);
+  background: #fff;
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Thin application chrome */
+
+.book-header {
+  min-height: 48px;
+  grid-template-columns: 220px minmax(0, 1fr) auto;
+  gap: 8px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+  backdrop-filter: none;
+}
+
+.book-logo {
+  gap: 8px;
+}
+
+.book-logo-mark {
+  width: 26px;
+  height: 26px;
+  border-radius: 3px;
+  background: var(--ink);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.book-logo strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.book-header-crumb {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 400;
+  text-align: left;
+}
+
+.book-header-nav {
+  gap: 2px;
+}
+
+.book-header-nav a {
+  min-height: 30px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.language-toggle {
+  gap: 1px;
+  padding: 2px;
+  border: 0;
+  border-radius: 5px;
+  background: #f1f1ef;
+}
+
+.language-toggle button {
+  min-height: 26px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.language-toggle button[data-language-option="en"],
+html[data-language="ko"]
+  .language-toggle
+  button[data-language-option="ko"] {
+  color: var(--ink);
+  background: #fff;
+  box-shadow:
+    0 0 0 1px rgb(55 53 47 / 6%),
+    0 1px 2px rgb(55 53 47 / 10%);
+}
+
+html[data-language="ko"]
+  .language-toggle
+  button[data-language-option="en"] {
+  color: var(--muted);
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Sidebar and editor */
+
+.book-shell {
+  width: 100%;
+  max-width: none;
+  min-height: calc(100vh - 48px);
+  grid-template-columns: 240px minmax(0, 1fr);
+  margin: 0;
+  background: #fff;
+}
+
+.book-toc {
+  top: 48px;
+  max-height: calc(100dvh - 48px);
+  padding: 12px 8px 72px;
+  border-right: 1px solid var(--line);
+  background: #f7f7f5;
+}
+
+.toc-title {
+  margin: 0 0 8px;
+  padding: 4px 8px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.toc-group-label {
+  margin: 10px 0 2px;
+  padding: 0 8px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.book-toc summary,
+.toc-day a,
+.toc-day.is-active {
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.book-toc details li a {
+  padding: 5px 8px 5px 26px;
+  border-radius: 4px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.toc-open li button {
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  gap: 4px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.toc-open li button.is-active,
+.instructor-stage-list button.is-active {
+  color: var(--ink);
+  background: var(--notion-hover);
+  box-shadow: none;
+}
+
+.book-toc summary > .toc-day-label,
+.toc-day span,
+.toc-open li button > span {
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.toc-open li button small {
+  font-size: 11px;
+}
+
+.toc-progress {
+  padding: 16px 8px 0;
+}
+
+.toc-progress > div {
+  height: 3px;
+}
+
+.toc-progress span,
+.toc-footer {
+  font-size: 12px;
+}
+
+.book-content,
+.book-main {
+  width: 100%;
+  max-width: 804px;
+  margin: 0 auto;
+  padding: 52px 48px 96px;
+  background: #fff;
+}
+
+.book-crumb {
+  margin-bottom: 24px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.book-section-head h1,
+.book-title {
+  max-width: none;
+  color: var(--ink);
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  text-wrap: pretty;
+}
+
+.book-section-head h1 {
+  margin-bottom: 12px;
+}
+
+.book-title {
+  margin-bottom: 8px;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+html[data-language="ko"] .book-section-head h1,
+html[data-language="ko"] .book-title {
+  font-size: 38px;
+  letter-spacing: -0.035em;
+}
+
+.book-section-meta {
+  gap: 8px;
+  margin-bottom: 24px;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.book-section-time {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.phase-chip,
+.phase-fix,
+.phase-share,
+.phase-save,
+.phase-check,
+.phase-break {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.book-content .stage-timer,
+.book-main .stage-timer,
+.instructor-plan .stage-timer {
+  padding: 3px;
+  border: 1px solid var(--line-dark);
+  border-radius: 4px;
+  color: var(--ink);
+  background: #fff;
+}
+
+.book-content .stage-timer strong,
+.book-main .stage-timer strong {
+  font-size: 14px;
+}
+
+.book-content .stage-timer button,
+.book-main .stage-timer button,
+.instructor-plan .stage-timer button {
+  min-height: 28px;
+  padding: 3px 7px;
+  border: 0;
+  border-radius: 3px;
+  color: var(--ink);
+  background: #f7f7f5;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Long-form reading blocks */
+
+.book-lede,
+.book-read,
+.course-article-markdown,
+.lesson-reading,
+.lesson-reading > .course-article {
+  max-width: none;
+}
+
+.book-lede,
+.book-read,
+.course-article-markdown {
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.book-read > h1:first-child {
+  display: none;
+}
+
+.book-read > p:first-child {
+  margin-top: 20px;
+}
+
+.book-read p {
+  margin: 3px 0 12px;
+  color: var(--ink);
+  line-height: 1.65;
+}
+
+.book-read strong,
+.course-article-markdown strong {
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.book-read h2,
+.book-read h3,
+.book-read h4 {
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+
+.book-read h2 {
+  margin: 32px 0 8px;
+  font-size: 24px;
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+.book-read h3 {
+  margin: 24px 0 6px;
+  font-size: 20px;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.book-read h4 {
+  margin: 20px 0 4px;
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.book-read ul,
+.book-read ol {
+  margin: 6px 0 14px;
+  padding-left: 1.5em;
+}
+
+.book-read li {
+  margin: 2px 0;
+  color: var(--ink);
+  line-height: 1.65;
+}
+
+.book-read a,
+.course-article-markdown a,
+.instructor-full-guide a {
+  color: #0b6e99;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.book-read blockquote,
+.course-article-markdown blockquote,
+.instructor-full-guide > div blockquote {
+  margin: 16px 0;
+  padding: 2px 0 2px 14px;
+  border-left: 3px solid var(--ink);
+  border-radius: 0;
+  color: var(--ink);
+  background: transparent;
+}
+
+.book-read pre,
+.course-article-markdown pre,
+.instructor-full-guide > div pre,
+.course-code-example {
+  overflow-x: auto;
+  margin: 12px 0;
+  padding: 16px;
+  border: 0;
+  border-radius: 3px;
+  color: var(--code-ink);
+  background: var(--code);
+  font-size: 14px;
+  line-height: 1.5;
+  box-shadow: none;
+}
+
+.book-read pre code,
+.course-article-markdown pre code,
+.instructor-full-guide > div pre code {
+  padding: 0;
+  color: inherit;
+  background: transparent;
+}
+
+.book-read :not(pre) > code,
+.course-article-markdown :not(pre) > code,
+.instructor-full-guide :not(pre) > code {
+  padding: 2px 4px;
+  border-radius: 3px;
+  color: #eb5757;
+  background: rgb(135 131 120 / 15%);
+  font-size: 0.88em;
+}
+
+.book-read table,
+.course-article-markdown table,
+.instructor-full-guide > div table {
+  font-size: 14px;
+}
+
+.book-read th,
+.course-article-markdown th,
+.instructor-full-guide > div th {
+  color: var(--ink);
+  background: #f7f7f5;
+  font-weight: 600;
+}
+
+/* Class sections read as one document, not a deck. */
+
+.lesson-reading {
+  margin: 0 0 32px;
+}
+
+.lesson-reading > .course-article {
+  padding: 24px 0 32px;
+  border: 0;
+}
+
+.lesson-reading > .course-article + .course-article {
+  padding-top: 32px;
+  border-top: 0;
+}
+
+.course-article-heading h1,
+.course-article-heading h2,
+.course-article.layout-opening .course-article-heading h2 {
+  max-width: none;
+  color: var(--ink);
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+}
+
+.course-article-heading > span,
+.course-article-section > small,
+.course-article-section > div > small,
+.course-question > span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.course-article-heading > p,
+.course-article-section p,
+.course-question-answer p {
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.course-article-sections,
+.course-article-markdown {
+  margin-top: 20px;
+}
+
+.course-article-section h3 {
+  margin-bottom: 4px;
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 650;
+}
+
+.course-article-section + .course-article-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 0;
+}
+
+.course-article-markdown h2,
+.course-article-markdown h3,
+.course-article-markdown h4 {
+  max-width: none;
+  padding-top: 0;
+  border-top: 0;
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.course-article-markdown h2 {
+  margin: 32px 0 8px;
+  font-size: 24px;
+  line-height: 1.3;
+}
+
+.course-article-markdown h3 {
+  margin: 24px 0 6px;
+  font-size: 20px;
+  line-height: 1.35;
+}
+
+.course-article-markdown h4 {
+  margin: 20px 0 4px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.course-article-markdown p,
+.course-article-markdown li {
+  line-height: 1.65;
+}
+
+.course-question.is-focus,
+.answer-prompt,
+.read-points p,
+.instructor-cue-panel {
+  padding: 14px 16px;
+  border: 0;
+  border-radius: 4px;
+  color: var(--ink);
+  background: var(--notion-callout);
+}
+
+.course-article-conclusion {
+  display: grid;
+  max-width: none;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 12px;
+  margin-top: 24px;
+  padding: 14px 16px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--notion-callout);
+}
+
+.course-article-conclusion span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.course-article-conclusion strong {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+/* Evidence areas use document rows and familiar form controls. */
+
+.stage-practice {
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+}
+
+.stage-practice-heading h2 {
+  margin: 4px 0 6px;
+  font-size: 24px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+.stage-practice-heading p {
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.activity-stack {
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+
+.activity-card {
+  padding: 20px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+}
+
+.activity-card-header {
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  margin: 0 0 12px;
+  padding: 0;
+  border: 0;
+}
+
+.activity-card-header > span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.activity-card-header strong {
+  font-size: 16px;
+  font-weight: 650;
+}
+
+.activity-card textarea,
+.activity-card input:not([type="checkbox"]),
+.activity-card select,
+.choice-grid button,
+.test-result-buttons button,
+.activity-done-button {
+  border: 1px solid var(--line-dark);
+  border-radius: 3px;
+  color: var(--ink);
+  background: #fff;
+  font-size: 15px;
+  box-shadow: none;
+}
+
+.interactive-checklist label,
+.prompt-confirmation {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  font-size: 15px;
+}
+
+.interactive-checklist label:has(input:checked),
+.prompt-confirmation:has(input:checked) {
+  background: transparent;
+}
+
+.book-finish,
+.stage-finish {
+  margin-top: 28px;
+  padding: 14px 16px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--notion-callout);
+}
+
+.book-finish.is-ready,
+.stage-finish.is-ready {
+  background: var(--green-soft);
+}
+
+.book-finish-row button,
+.stage-finish button {
+  min-height: 32px;
+  padding: 5px 10px;
+  border-radius: 3px;
+  font-size: 13px;
+}
+
+.book-pagenav {
+  margin-top: 48px;
+}
+
+.page-round {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  font-size: 16px;
+}
+
+.page-round:hover:not(:disabled) {
+  color: var(--ink);
+  background: var(--notion-hover);
+}
+
+.book-status {
+  gap: 6px;
+  padding: 4px 5px 4px 10px;
+  border-width: 1px;
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgb(15 15 15 / 10%);
+}
+
+.book-status button {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 4px;
+}
+
+/* Home page: one ordinary document, with its complete contents below. */
+
+.book-page-intro {
+  margin: 0 0 16px;
+  padding: 0 0 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.book-page-intro p {
+  margin: 0;
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.book-page-intro div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.book-start {
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 8px 0 24px;
+}
+
+.book-start-primary,
+.book-start-ghost {
+  min-height: 32px;
+  padding: 5px 10px;
+  border-radius: 3px;
+  font-size: 13px;
+  font-weight: 550;
+}
+
+.course-material-map {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.course-material-map article {
+  padding: 14px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.course-material-map span {
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.course-material-map h2 {
+  margin: 3px 0;
+  font-size: 18px;
+  font-weight: 650;
+}
+
+.course-material-map p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.book-index {
+  margin-top: 48px;
+}
+
+.book-index h2,
+.course-references header h2 {
+  font-size: 24px;
+  font-weight: 650;
+}
+
+.index-day {
+  padding: 18px 0;
+}
+
+.index-day h3 {
+  font-size: 17px;
+  font-weight: 650;
+}
+
+.index-question,
+.index-day ol a {
+  font-size: 14px;
+}
+
+.index-teacher a {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.course-references > div {
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.course-references a {
+  padding: 12px 0;
+}
+
+/* Instructor pages follow the same document scale. */
+
+.instructor-plan,
+.instructor-setup-console,
+.setup-flow {
+  color: var(--ink);
+  background: #fff;
+}
+
+.instructor-plan-header,
+.dashboard-simple-header,
+.join-header,
+.setup-flow-header {
+  min-height: 48px;
+  padding: 0 12px;
+  background: #fff;
+  backdrop-filter: none;
+}
+
+.instructor-plan-header > div:last-child a.start-live-link {
+  color: #fff;
+  border-color: var(--blue);
+  background: var(--blue);
+}
+
+.instructor-plan-intro,
+.instructor-setup-hero {
+  padding-top: 52px;
+}
+
+.instructor-plan-intro h1,
+.instructor-setup-hero h1 {
+  max-width: none;
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.instructor-plan-layout {
+  grid-template-columns: 240px minmax(0, 708px);
+}
+
+.instructor-stage-list button {
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.instructor-stage-detail h2 {
+  max-width: none;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+}
+
+.instructor-teaching-sequence,
+.student-screen-preview,
+.instructor-activity-preview,
+.instructor-completion {
+  padding: 20px 0;
+}
+
+.instructor-teaching-sequence > ol > li {
+  padding: 12px 0;
+}
+
+.instructor-full-guide {
+  width: min(804px, calc(100% - 40px));
+  padding: 52px 48px 96px;
+  border-top: 1px solid var(--line);
+}
+
+.instructor-full-guide > header {
+  margin-bottom: 32px;
+}
+
+.instructor-full-guide > header h2,
+.instructor-full-guide > div > h1 {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+}
+
+.instructor-full-guide > header p,
+.instructor-full-guide > div {
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.instructor-full-guide > div h2 {
+  margin: 36px 0 8px;
+  padding-top: 0;
+  border-top: 0;
+  font-size: 24px;
+  font-weight: 650;
+}
+
+.instructor-full-guide > div h3 {
+  margin: 24px 0 6px;
+  font-size: 20px;
+  font-weight: 650;
+}
+
+/* Join and room launch are plain pages, not floating product cards. */
+
+.join-page,
+.dashboard-launch {
+  background: #fff;
+}
+
+.join-card {
+  width: min(584px, calc(100% - 40px));
+  margin: 64px auto 0;
+  padding: 48px;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.join-intro h1,
+.dashboard-launch-copy h1 {
+  margin: 8px 0 12px;
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.join-card form input,
+.join-card form > button,
+.instructor-pin-field input,
+.launch-class-button {
+  min-height: 42px;
+  border-radius: 3px;
+}
+
+.dashboard-launch > section {
+  display: block;
+  width: min(804px, calc(100% - 40px));
+  padding: 52px 48px 96px;
+}
+
+.day-picker {
+  grid-column: auto;
+  gap: 0;
+  margin-top: 32px;
+  border-top: 1px solid var(--line);
+}
+
+.day-picker > span {
+  margin: 0;
+  padding: 12px 0 6px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.day-picker button {
+  min-height: 52px;
+  padding: 10px 8px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: #fff;
+}
+
+.day-picker button.is-selected {
+  border-color: var(--line);
+  background: var(--notion-hover);
+  box-shadow: inset 3px 0 0 var(--blue);
+}
+
+.day-picker button strong,
+.day-picker button small {
+  font-size: 12px;
+}
+
+.day-picker button span {
+  font-size: 14px;
+  font-weight: 550;
+}
+
+.instructor-pin-field,
+.launch-class-button,
+.dashboard-launch .dashboard-error,
+.dashboard-privacy-note {
+  grid-column: auto;
+  margin-top: 20px;
+}
+
+/* The live dashboard becomes a compact document/database view. */
+
+.classroom-dashboard {
+  background: #fff;
+}
+
+.dashboard-header {
+  min-height: 64px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+  backdrop-filter: none;
+}
+
+.dashboard-code {
+  border: 0;
+  border-radius: 4px;
+  background: #f7f7f5;
+}
+
+.dashboard-code strong {
+  font-size: 18px;
+}
+
+.dashboard-code button,
+.dashboard-header-actions a,
+.dashboard-header-actions button {
+  min-height: 30px;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  font-size: 12px;
+}
+
+.dashboard-summary {
+  width: min(1200px, calc(100% - 32px));
+  margin: 20px auto;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: #fff;
+}
+
+.dashboard-summary article {
+  padding: 12px 16px;
+}
+
+.dashboard-summary span,
+.dashboard-summary small {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: 0;
+}
+
+.dashboard-summary strong {
+  margin: 3px 0;
+  font-family: var(--font-sans);
+  font-size: 24px;
+  font-weight: 650;
+}
+
+.dashboard-summary .status-word {
+  font-size: 18px;
+}
+
+.dashboard-control {
+  width: min(1200px, calc(100% - 32px));
+  border: 1px solid var(--line-dark);
+  border-radius: 4px;
+  color: var(--ink);
+  background: #fff;
+  box-shadow: none;
+}
+
+.current-stage-card {
+  padding: 20px;
+}
+
+.current-stage-card > div:first-child > small {
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 12px;
+}
+
+.current-stage-card h1 {
+  margin: 12px 0 6px;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+}
+
+.current-stage-card p {
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.dashboard-control .phase-chip {
+  display: inline-flex;
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: #0b6e99;
+  background: var(--blue-soft);
+}
+
+.dashboard-control .stage-timer {
+  border: 1px solid var(--line-dark);
+  border-radius: 4px;
+  color: var(--ink);
+  background: #fff;
+}
+
+.dashboard-control .stage-timer button {
+  color: var(--ink);
+  border-color: var(--line);
+  background: #f7f7f5;
+}
+
+.teacher-cues {
+  padding: 20px;
+  border-left: 1px solid var(--line);
+  background: #f7f7f5;
+}
+
+.teacher-cues > span {
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.teacher-cues ul {
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.dashboard-control-buttons {
+  border-top: 1px solid var(--line);
+  background: #fff;
+}
+
+.dashboard-control-buttons button {
+  min-height: 34px;
+  border: 1px solid var(--line-dark);
+  border-radius: 3px;
+  color: var(--ink);
+  background: #fff;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.dashboard-control-buttons button.control-main {
+  border-color: var(--blue);
+  background: var(--blue);
+}
+
+.dashboard-control-buttons button.control-close {
+  color: var(--red);
+}
+
+.dashboard-stage-strip,
+.participant-section {
+  width: min(1200px, calc(100% - 32px));
+}
+
+.dashboard-stage-strip {
+  gap: 4px;
+}
+
+.dashboard-stage-strip button {
+  min-height: 76px;
+  padding: 9px;
+  border-radius: 3px;
+  background: #fff;
+}
+
+.dashboard-stage-strip button.is-active {
+  color: var(--ink);
+  border-color: var(--line-dark);
+  background: var(--notion-hover);
+  box-shadow: inset 3px 0 0 var(--blue);
+}
+
+.dashboard-stage-strip button > span,
+.dashboard-stage-strip button > small,
+.dashboard-stage-strip button.is-active > span,
+.dashboard-stage-strip button.is-active > small {
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 12px;
+}
+
+.dashboard-stage-strip button > strong {
+  font-size: 13px;
+}
+
+.participant-section {
+  margin-top: 40px;
+}
+
+.participant-section h2 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.pulse-legend span {
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.participant-grid {
+  grid-template-columns: 1fr;
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+
+.participant-card {
+  display: grid;
+  overflow: visible;
+  grid-template-columns: minmax(180px, 0.8fr) minmax(160px, 0.5fr) minmax(0, 1.5fr);
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-left: 4px solid var(--green);
+  border-radius: 0;
+  background: #fff;
+}
+
+.participant-card.signal-yellow {
+  border-color: var(--line);
+  border-left-color: #c48218;
+}
+
+.participant-card.signal-red {
+  border-color: var(--line);
+  border-left-color: var(--red);
+}
+
+.participant-card > header,
+.participant-progress,
+.participant-card > footer {
+  padding: 12px 14px;
+}
+
+.participant-card > header {
+  border-bottom: 0;
+}
+
+.participant-card > header i {
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+}
+
+.participant-card > header strong {
+  font-size: 15px;
+}
+
+.participant-card > header > span,
+.participant-progress > span,
+.participant-progress > strong,
+.participant-card > footer span,
+.participant-card > footer > small {
+  font-family: var(--font-sans);
+  font-size: 12px;
+}
+
+.participant-progress {
+  border-left: 1px solid var(--line);
+}
+
+.participant-card > footer {
+  border-top: 0;
+  border-left: 1px solid var(--line);
+  background: #fff;
+}
+
+.participant-card > footer strong {
+  font-size: 14px;
+}
+
+.empty-room {
+  border-radius: 4px;
+  background: #fff;
+}
+
+/* Projector stays large, while sharing the white page grammar. */
+
+.presenter {
+  background: #fff;
+}
+
+.presenter-topbar {
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  background: #fff;
+}
+
+.presenter-topbar > div:first-child span,
+.presenter-progress span,
+.presenter-clock span,
+.presenter-stage-clock b {
+  color: var(--muted);
+}
+
+.presenter-progress > div {
+  background: var(--line);
+}
+
+.presenter-progress i {
+  background: var(--blue);
+}
+
+.presenter-stage {
+  background: #fff;
+}
+
+.course-article.is-presenter .course-code-example {
+  border: 1px solid var(--line);
+  background: var(--code);
+}
+
+/* Responsive editor behavior */
+
+@media (max-width: 900px) {
+  .dashboard-header {
+    min-height: 58px;
+  }
+
+  .dashboard-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-summary article:nth-child(3) {
+    border-left: 0;
+  }
+
+  .dashboard-summary article:nth-child(n + 3) {
+    border-top: 1px solid var(--line);
+  }
+
+  .dashboard-control {
+    grid-template-columns: 1fr;
+  }
+
+  .teacher-cues {
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+}
+
+@media (max-width: 860px) {
+  .book-header {
+    grid-template-columns: auto 1fr;
+  }
+
+  .book-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .overview-toc {
+    display: none;
+  }
+
+  .book-toc:not(.overview-toc) {
+    top: 48px;
+    padding: 7px 12px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    background: rgb(255 255 255 / 96%);
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .book-content,
+  .book-main {
+    max-width: none;
+    padding: 32px 20px 88px;
+  }
+
+  .book-section-head h1,
+  .book-title,
+  html[data-language="ko"] .book-section-head h1,
+  html[data-language="ko"] .book-title {
+    font-size: 32px;
+  }
+
+  .course-article-heading h1,
+  .course-article-heading h2,
+  .course-article.layout-opening .course-article-heading h2 {
+    font-size: 26px;
+  }
+
+  .book-read table,
+  .course-article-markdown table,
+  .instructor-full-guide > div table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .instructor-plan-intro h1,
+  .instructor-setup-hero h1 {
+    font-size: 32px;
+  }
+
+  .instructor-plan-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .instructor-full-guide {
+    width: 100%;
+    padding: 40px 20px 88px;
+  }
+
+  .dashboard-launch > section {
+    width: 100%;
+    padding: 40px 20px 88px;
+  }
+}
+
+@media (max-width: 760px) {
+  .participant-grid {
+    gap: 8px;
+    border-top: 0;
+  }
+
+  .participant-card {
+    display: block;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--green);
+    border-radius: 4px;
+  }
+
+  .participant-card.signal-yellow {
+    border-left-color: #c48218;
+  }
+
+  .participant-card.signal-red {
+    border-left-color: var(--red);
+  }
+
+  .participant-progress,
+  .participant-card > footer {
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .book-header.has-language-toggle {
+    min-height: 48px;
+    padding: 0 10px;
+  }
+
+  .book-header.has-language-toggle .language-toggle button {
+    min-height: 26px;
+  }
+
+  .book-content,
+  .book-main {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+
+  .book-section-head h1,
+  .book-title,
+  html[data-language="ko"] .book-section-head h1,
+  html[data-language="ko"] .book-title {
+    font-size: 30px;
+  }
+
+  .book-section-meta .stage-timer {
+    width: auto;
+  }
+
+  .course-article-conclusion {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .activity-card {
+    padding: 18px 0;
+  }
+
+  .activity-card-header {
+    margin: 0 0 12px;
+    padding: 0;
+  }
+
+  .book-status {
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    max-width: calc(100vw - 20px);
+  }
+
+  .index-day header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .index-teacher {
+    flex-wrap: wrap;
+  }
+
+  .join-card {
+    width: 100%;
+    margin-top: 24px;
+    padding: 32px 20px 72px;
+  }
+
+  .join-intro h1,
+  .dashboard-launch-copy h1 {
+    font-size: 32px;
+  }
+
+  .day-picker button {
+    grid-template-columns: 56px minmax(0, 1fr);
+  }
+
+  .day-picker button small {
+    grid-column: 2;
+  }
+
+  .dashboard-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-summary article + article {
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+
+  .current-stage-card {
+    grid-template-columns: 1fr;
+  }
+
+  .current-stage-card h1 {
+    font-size: 26px;
+  }
+
+  .dashboard-control-buttons button {
+    flex: 1 1 100%;
+  }
+
+  .dashboard-control-buttons button.control-close {
+    margin-left: 0;
+  }
+
+  .participant-section > header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .presenter-controls {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  .presenter-controls button,
+  .presenter-controls a {
+    flex: 0 0 auto;
+  }
+}
+
+/* Setup keeps its operational controls, but follows the same editor rhythm. */
+
+.setup-flow-layout {
+  width: min(1220px, 100%);
+  grid-template-columns: 220px minmax(0, 708px) 240px;
+  gap: 36px;
+  margin: 0 auto;
+  padding: 24px 16px 88px;
+  background: #fff;
+}
+
+.setup-flow-rail {
+  top: 72px;
+}
+
+.setup-flow-rail > div {
+  padding: 12px 8px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+}
+
+.setup-flow-rail > div > span,
+.setup-flow-rail nav small,
+.setup-flow-rail nav strong,
+.setup-flow-rail > a {
+  font-size: 12px;
+}
+
+.setup-flow-rail nav {
+  gap: 2px;
+  margin-top: 12px;
+}
+
+.setup-flow-rail nav button {
+  min-height: 46px;
+  grid-template-columns: 26px minmax(0, 1fr);
+  gap: 8px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+}
+
+.setup-flow-rail nav button.is-active {
+  border: 0;
+  color: var(--ink);
+  background: var(--notion-hover);
+}
+
+.setup-flow-rail nav button > span {
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 3px;
+  color: var(--muted);
+  background: #eeedea;
+  font-size: 11px;
+}
+
+.setup-flow-main > header {
+  align-items: start;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.setup-flow-main > header > div {
+  min-width: 0;
+}
+
+.setup-flow-main h1 {
+  max-width: none;
+  margin: 8px 0;
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.setup-flow-main > header p {
+  max-width: 62ch;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.setup-tool,
+.setup-proof,
+.setup-final-status {
+  margin-top: 20px;
+  padding: 18px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: #fff;
+}
+
+.setup-os-choice > span,
+.setup-command-stack > span,
+.setup-proof > span,
+.setup-final-status span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.setup-os-choice > div {
+  gap: 6px;
+}
+
+.setup-os-choice button {
+  min-height: 48px;
+  border: 1px solid var(--line-dark);
+  border-radius: 3px;
+  background: #fff;
+  font-size: 15px;
+}
+
+.setup-os-choice button.is-selected {
+  border-color: var(--line-dark);
+  background: var(--notion-hover);
+  box-shadow: inset 3px 0 0 var(--blue);
+}
+
+.setup-os-choice p,
+.setup-command-stack p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.setup-proof > div {
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+
+.setup-proof label {
+  padding: 12px 8px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: #fff;
+  font-size: 15px;
+}
+
+.setup-proof label:has(input:checked) {
+  background: var(--notion-hover);
+}
+
+.setup-flow-main > footer {
+  padding-top: 20px;
+  border-top: 0;
+}
+
+.setup-flow-main > footer button,
+.setup-flow-main > footer a,
+.setup-final-status button {
+  min-height: 34px;
+  border-radius: 3px;
+  font-size: 13px;
+}
+
+.setup-safety {
+  top: 72px;
+  padding: 14px 16px;
+  border: 0;
+  border-radius: 4px;
+  background: #f7f1e8;
+}
+
+.setup-safety > span,
+.setup-safety > strong,
+.setup-safety li,
+.setup-safety p {
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+@media (max-width: 1000px) {
+  .setup-flow-layout {
+    display: block;
+    padding: 20px 20px 88px;
+  }
+
+  .setup-flow-rail {
+    position: static;
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .setup-flow-rail nav {
+    display: grid;
+    grid-auto-columns: 180px;
+    grid-auto-flow: column;
+    overflow-x: auto;
+    margin: 0;
+  }
+
+  .setup-flow-rail > a {
+    grid-column: 1 / -1;
+  }
+
+  .setup-safety {
+    position: static;
+    margin-top: 24px;
+  }
+}
+
+@media (max-width: 620px) {
+  .setup-flow-layout {
+    padding: 16px 16px 80px;
+  }
+
+  .setup-flow-rail {
+    display: block;
+  }
+
+  .setup-flow-rail > div {
+    margin-bottom: 8px;
+  }
+
+  .setup-flow-main h1 {
+    font-size: 32px;
+  }
+
+  .setup-os-choice > div {
+    grid-template-columns: 1fr;
+  }
+}
