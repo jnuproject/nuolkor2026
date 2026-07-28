@@ -43,7 +43,6 @@ export function Presenter({
   const [showcase, setShowcase] = useState(false);
   const [showcasePhase, setShowcasePhase] = useState(0);
   const slide = localizedSlides[index];
-  const next = localizedSlides[index + 1];
   const plan = getInteractiveDay(day.day);
   const stage = plan?.stages.find((item) => item.id === slide?.stageId);
   const stageNumber = stage
@@ -274,13 +273,6 @@ export function Presenter({
       <section className="presenter-stage">
         <TeachingSlide key={slide.id} slide={slide} variant="presenter" />
       </section>
-
-      {next && !showcase ? (
-        <button className="presenter-next" onClick={() => goTo(index + 1)} type="button">
-          <span>{uiText(language, "Next").toUpperCase()}</span>
-          <strong>{localized(next.title, language)}</strong>
-        </button>
-      ) : null}
 
       {notes ? (
         <aside

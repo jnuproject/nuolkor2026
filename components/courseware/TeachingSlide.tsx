@@ -22,75 +22,101 @@ export function TeachingSlide({
   const language = useLanguage();
   const [revealed, setRevealed] = useState(false);
   const isQuestion = Boolean(slide.question);
-  const isDense =
-    Boolean(slide.code) ||
-    Boolean(slide.question && slide.items?.length) ||
-    (slide.items?.length ?? 0) >= 4;
+  const isSequential = ["flow", "demo", "studio", "run"].includes(
+    slide.layout,
+  );
+  const isFocusedQuestion = slide.layout === "question";
+  const SlideTitle = variant === "presenter" ? "h1" : "h2";
+  const titleId = `${slide.id}-title`;
+  const answerId = `${slide.id}-answer`;
 
   return (
     <article
       className={[
-        "teaching-slide",
+        "course-article",
         `layout-${slide.layout}`,
         `is-${variant}`,
-        isDense ? "is-dense" : "",
       ].join(" ")}
+      id={slide.id}
+      aria-labelledby={titleId}
       data-slide-id={slide.id}
     >
-      <div className="teaching-slide-layout-mark" aria-hidden="true">
-        <span>{slide.layout.replace("-", " ")}</span>
-        <i />
-      </div>
-
-      <header className="teaching-slide-heading">
+      <header className="course-article-heading">
         <span>{localized(slide.kicker, language)}</span>
-        <h2>{localized(slide.title, language)}</h2>
+        <SlideTitle id={titleId}>{localized(slide.title, language)}</SlideTitle>
         {slide.lead ? <p>{localized(slide.lead, language)}</p> : null}
       </header>
 
       {slide.items?.length ? (
-        <div className="teaching-slide-items">
-          {slide.items.map((item, index) => (
-            <section
-              className={`teaching-slide-item tone-${item.tone ?? "neutral"}`}
-              key={`${slide.id}-item-${index}`}
-            >
-              <span className="teaching-slide-item-index" aria-hidden="true">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              {item.label ? <small>{localized(item.label, language)}</small> : null}
-              <h3>{localized(item.title, language)}</h3>
-              <p>{localized(item.body, language)}</p>
-            </section>
-          ))}
-        </div>
+        isSequential ? (
+          <ol className="course-article-sections is-sequential">
+            {slide.items.map((item, index) => (
+              <li
+                className={`course-article-section tone-${item.tone ?? "neutral"}`}
+                key={`${slide.id}-item-${index}`}
+              >
+                <div>
+                  {item.label ? (
+                    <small>{localized(item.label, language)}</small>
+                  ) : null}
+                  <h3>{localized(item.title, language)}</h3>
+                  <p>{localized(item.body, language)}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <div className="course-article-sections">
+            {slide.items.map((item, index) => (
+              <section
+                className={`course-article-section tone-${item.tone ?? "neutral"}`}
+                key={`${slide.id}-item-${index}`}
+              >
+                {item.label ? (
+                  <small>{localized(item.label, language)}</small>
+                ) : null}
+                <h3>{localized(item.title, language)}</h3>
+                <p>{localized(item.body, language)}</p>
+              </section>
+            ))}
+          </div>
+        )
       ) : null}
 
       {slide.code ? (
-        <div className="teaching-slide-code-shell">
-          <span>
+        <figure className="course-code-example">
+          <figcaption>
             {language === "ko"
               ? slide.layout === "demo"
-                ? "실시간 시연 입력"
-                : "함께 읽는 예시"
+                ? "시연에 사용할 입력"
+                : "예시"
               : slide.layout === "demo"
-                ? "LIVE DEMO INPUT"
-                : "WORKED EXAMPLE"}
-          </span>
-          <i aria-hidden="true">
-            <b />
-            <b />
-            <b />
-          </i>
-          <pre className="teaching-slide-code">
+                ? "Demo input"
+                : "Example"}
+          </figcaption>
+          <pre>
             <code>{localized(slide.code, language)}</code>
           </pre>
-        </div>
+        </figure>
       ) : null}
 
       {slide.question ? (
-        <section className="teaching-slide-question">
-          <strong>{localized(slide.question.prompt, language)}</strong>
+        <section
+          className={[
+            "course-question",
+            isFocusedQuestion ? "is-focus" : "is-inline",
+          ].join(" ")}
+        >
+          <span>
+            {language === "ko"
+              ? isFocusedQuestion
+                ? "함께 판단해 보기"
+                : "생각해 보기"
+              : isFocusedQuestion
+                ? "Decide together"
+                : "Pause and think"}
+          </span>
+          <h3>{localized(slide.question.prompt, language)}</h3>
           {slide.question.options?.length ? (
             <ol>
               {slide.question.options.map((option, index) => (
@@ -104,12 +130,21 @@ export function TeachingSlide({
             </ol>
           ) : null}
           {revealed ? (
-            <div className="teaching-slide-answer" aria-live="polite">
+            <div
+              className="course-question-answer"
+              id={answerId}
+              aria-live="polite"
+            >
               <b>{localized(slide.question.answer, language)}</b>
               <p>{localized(slide.question.explanation, language)}</p>
             </div>
           ) : (
-            <button onClick={() => setRevealed(true)} type="button">
+            <button
+              aria-controls={answerId}
+              aria-expanded="false"
+              onClick={() => setRevealed(true)}
+              type="button"
+            >
               {language === "ko" ? "답과 해설 보기" : "Reveal answer"}
             </button>
           )}
@@ -117,14 +152,14 @@ export function TeachingSlide({
       ) : null}
 
       {slide.takeaway ? (
-        <footer className="teaching-slide-takeaway">
-          <span>{language === "ko" ? "핵심" : "TAKEAWAY"}</span>
+        <footer className="course-article-conclusion">
+          <span>{language === "ko" ? "기억할 문장" : "Remember"}</span>
           <strong>{localized(slide.takeaway, language)}</strong>
         </footer>
       ) : null}
 
       {isQuestion && variant === "presenter" ? (
-        <small className="teaching-slide-presenter-hint">
+        <small className="course-article-presenter-hint">
           {language === "ko"
             ? "먼저 답을 받은 뒤 해설을 공개하세요."
             : "Collect answers before revealing the explanation."}

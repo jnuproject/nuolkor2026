@@ -161,6 +161,50 @@ test("ships six days of authored teaching slides instead of generated stage chec
   });
 });
 
+test("renders lesson courseware as one continuous reading instead of nested slide cards", async () => {
+  const [lesson, deck, slide, presenter, styles] = await Promise.all([
+    readRoute(path.join("day", "1")),
+    readFile(
+      path.join(
+        projectRoot,
+        "components",
+        "courseware",
+        "StageLessonDeck.tsx",
+      ),
+      "utf8",
+    ),
+    readFile(
+      path.join(
+        projectRoot,
+        "components",
+        "courseware",
+        "TeachingSlide.tsx",
+      ),
+      "utf8",
+    ),
+    readFile(path.join(projectRoot, "components", "Presenter.tsx"), "utf8"),
+    readFile(path.join(projectRoot, "app", "globals.css"), "utf8"),
+  ]);
+
+  assert.doesNotMatch(deck, /useState|stage-courseware-nav|aria-pressed/);
+  assert.match(deck, /slides\.map\(\(slide\)/);
+  assert.match(slide, /course-article-sections is-sequential/);
+  assert.doesNotMatch(
+    slide,
+    /teaching-slide-layout-mark|teaching-slide-code-shell/,
+  );
+  assert.doesNotMatch(presenter, /className="presenter-next"/);
+  assert.match(styles, /\.lesson-reading > \.course-article \+ \.course-article/);
+  assert.match(styles, /\.course-article-section \+ \.course-article-section/);
+
+  assert.match(lesson, /data-slide-id="day1-00-outcome"/);
+  assert.match(lesson, /data-slide-id="day1-00-preflight"/);
+  assert.doesNotMatch(
+    lesson,
+    /teaching-slide-layout-mark|stage-courseware-nav/,
+  );
+});
+
 test("keeps the public cards and readings aligned with the live course", async () => {
   const generatedModule = await loadTypeScriptData(
     path.join(projectRoot, "content", "generated.ts"),
