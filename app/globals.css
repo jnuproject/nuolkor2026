@@ -2807,6 +2807,165 @@ a {
   }
 }
 
+.toc-resources {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--editorial-rule);
+}
+
+.toc-resources strong {
+  color: var(--muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.toc-resources a {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.45rem 0;
+  color: var(--blue-deep);
+  font-size: 0.84rem;
+  text-decoration: none;
+}
+
+.legacy-workbook-link {
+  width: min(70ch, calc(100% - 2.4rem));
+  margin: 0 auto;
+  padding: clamp(4rem, 10vw, 8rem) 0;
+}
+
+.legacy-workbook-link > span {
+  color: var(--editorial-accent);
+  font-size: 0.78rem;
+  font-weight: 720;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.legacy-workbook-link h1 {
+  max-width: 20ch;
+  margin: 1rem 0;
+  font-size: clamp(2.3rem, 6vw, 4.5rem);
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+}
+
+.legacy-workbook-link p {
+  max-width: 55ch;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.legacy-workbook-link a {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.7rem 0;
+  border-bottom: 2px solid var(--editorial-accent);
+  color: var(--blue-deep);
+  font-weight: 720;
+  text-decoration: none;
+}
+
+.instructor-full-guide {
+  width: min(74ch, calc(100% - 2.4rem));
+  margin: 2rem auto 0;
+  padding: 4rem 0 7rem;
+  border-top: 2px solid var(--editorial-accent);
+}
+
+.instructor-full-guide > header {
+  margin-bottom: 3rem;
+}
+
+.instructor-full-guide > header > span {
+  color: var(--editorial-accent);
+  font-size: 0.75rem;
+  font-weight: 720;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.instructor-full-guide > header h2 {
+  margin: 0.7rem 0;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+}
+
+.instructor-full-guide > header p,
+.instructor-full-guide > div {
+  color: #303530;
+  line-height: 1.8;
+}
+
+.instructor-full-guide > div > h1 {
+  margin: 0 0 2.5rem;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+}
+
+.instructor-full-guide > div h2 {
+  margin: 3.5rem 0 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--editorial-rule);
+  font-size: 1.75rem;
+  letter-spacing: -0.025em;
+}
+
+.instructor-full-guide > div h3 {
+  margin: 2.2rem 0 0.7rem;
+  font-size: 1.25rem;
+}
+
+.instructor-full-guide > div li + li {
+  margin-top: 0.35rem;
+}
+
+.instructor-full-guide > div blockquote {
+  margin: 1.5rem 0;
+  padding: 0.5rem 0 0.5rem 1rem;
+  border-left: 3px solid var(--editorial-accent);
+}
+
+.instructor-full-guide > div table {
+  width: 100%;
+  margin: 1.5rem 0;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.instructor-full-guide > div th,
+.instructor-full-guide > div td {
+  padding: 0.65rem 0.7rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.instructor-full-guide > div th {
+  border-bottom-color: var(--editorial-rule);
+  background: #f2f3ee;
+}
+
+.instructor-full-guide > div pre {
+  overflow-x: auto;
+  padding: 1rem 1.1rem;
+  border-radius: 4px;
+  color: var(--code-ink);
+  background: var(--code);
+}
+
+.instructor-guide-language-note {
+  padding: 1rem 1.2rem;
+  border-left: 3px solid var(--editorial-accent);
+  background: #f0f3ef;
+}
+
 /* Interactive classroom */
 
 .button-tertiary {
@@ -8113,5 +8272,1185 @@ html[data-language="ko"]
   .course-article.is-presenter .course-article-heading h1 {
     max-width: none;
     font-size: clamp(2.2rem, 10vw, 3.5rem);
+  }
+}
+
+/* ==========================================================================
+   Editorial textbook override
+   A restrained, top-to-bottom reading system shared by the student book,
+   course overview, instructor guide, setup flow, and presenter.
+   ========================================================================== */
+
+:root {
+  --paper: #fbfaf6;
+  --paper-deep: #f2f1eb;
+  --surface: #fffefb;
+  --ink: #171a18;
+  --muted: #60655f;
+  --line: #dedfd8;
+  --line-dark: #c8cbc3;
+  --blue: #245846;
+  --blue-deep: #183e31;
+  --blue-soft: #eaf1ed;
+  --orange: #875134;
+  --orange-soft: #f5ece5;
+  --green: #276c4f;
+  --green-soft: #e8f1ec;
+  --yellow: #7a5b13;
+  --yellow-soft: #f6f0dc;
+  --red: #a3413e;
+  --red-soft: #f5e9e7;
+  --code: #18201c;
+  --code-ink: #f4f6f2;
+  --shadow: none;
+  --editorial-accent: #245846;
+  --editorial-paper: #fbfaf6;
+  --editorial-surface: #fffefb;
+  --editorial-rule: #c8cbc3;
+  --editorial-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --font-sans:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Lao",
+    "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+}
+
+html {
+  background: var(--editorial-paper);
+}
+
+body {
+  color: var(--ink);
+  background: var(--editorial-paper);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  font-optical-sizing: auto;
+}
+
+:focus-visible {
+  outline-color: var(--editorial-accent);
+}
+
+::selection {
+  color: var(--ink);
+  background: #cbded4;
+}
+
+/* Motion is feedback, not decoration. */
+
+:is(.book-header, .book-shell, .instructor-plan, .instructor-setup-console, .setup-flow, .presenter)
+  :is(button, a) {
+  transition:
+    color 140ms var(--editorial-ease),
+    background-color 140ms var(--editorial-ease),
+    border-color 140ms var(--editorial-ease),
+    opacity 140ms var(--editorial-ease),
+    transform 140ms var(--editorial-ease);
+}
+
+:is(.book-header, .book-shell, .instructor-plan, .instructor-setup-console, .setup-flow, .presenter)
+  :is(button, a):active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+:is(.book-header, .book-shell, .instructor-plan, .instructor-setup-console, .setup-flow, .presenter)
+  :is(button, a)[aria-disabled="true"] {
+  transform: none;
+}
+
+.presenter-alert.is-final,
+.presenter-alert.is-over {
+  animation: none;
+}
+
+/* Shared book frame */
+
+.book-page,
+.book-shell,
+.book-content,
+.book-main {
+  background: var(--editorial-paper);
+  background-image: none;
+}
+
+.book-header {
+  min-height: 62px;
+  border-bottom-color: var(--editorial-rule);
+  background: rgb(251 250 246 / 0.96);
+  box-shadow: none;
+  backdrop-filter: blur(10px);
+}
+
+.book-logo-mark {
+  border-radius: 4px;
+  background: var(--editorial-accent);
+  box-shadow: none;
+}
+
+.book-header-nav a {
+  border-radius: 4px;
+}
+
+.language-toggle {
+  padding: 2px;
+  border-color: var(--editorial-rule);
+  border-radius: 6px;
+  background: transparent;
+}
+
+.language-toggle button {
+  border-radius: 4px;
+}
+
+.language-toggle button[data-language-option="en"],
+html[data-language="ko"]
+  .language-toggle
+  button[data-language-option="ko"] {
+  background: var(--editorial-accent);
+  box-shadow: none;
+}
+
+.book-shell {
+  grid-template-columns: 260px minmax(0, 1fr);
+}
+
+.book-toc {
+  border-right-color: var(--editorial-rule);
+  background: #f6f5f0;
+  box-shadow: none;
+}
+
+.book-toc summary,
+.book-toc details li a,
+.toc-day a,
+.toc-day.is-active,
+.toc-open li button {
+  border-radius: 4px;
+}
+
+.toc-open li button.is-active {
+  color: var(--blue-deep);
+  background: var(--blue-soft);
+  box-shadow: inset 3px 0 0 var(--editorial-accent);
+}
+
+.toc-progress > div {
+  border-radius: 2px;
+  background: var(--line);
+}
+
+.toc-progress i {
+  border-radius: inherit;
+  background: var(--editorial-accent);
+}
+
+.book-content,
+.book-main {
+  max-width: 76ch;
+  padding-top: clamp(2.25rem, 4vw, 3.6rem);
+}
+
+.book-crumb,
+.book-crumb-top {
+  color: var(--muted);
+  font-weight: 650;
+}
+
+.book-section-head h1,
+.book-title {
+  color: var(--ink);
+  font-weight: 760;
+  letter-spacing: -0.035em;
+  line-height: 1.16;
+  text-wrap: balance;
+}
+
+.book-section-head h1 {
+  max-width: 24ch;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+}
+
+.book-title {
+  padding-bottom: 1.25rem;
+  border-bottom-color: var(--editorial-rule);
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+}
+
+.book-section-meta {
+  border-bottom-color: var(--editorial-rule);
+}
+
+.book-section-meta .stage-timer,
+.stage-timer {
+  border-color: var(--editorial-rule);
+  border-radius: 6px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.stage-timer button {
+  border-color: var(--editorial-rule);
+  border-radius: 4px;
+  background: var(--editorial-surface);
+}
+
+.phase-chip,
+.phase-fix,
+.phase-share,
+.phase-save,
+.phase-check,
+.phase-break {
+  min-height: 0;
+  padding: 0;
+  border-radius: 0;
+  color: var(--editorial-accent);
+  background: transparent;
+}
+
+.book-lede,
+.book-brief,
+.book-read,
+.book-read p,
+.book-read li {
+  color: #303530;
+}
+
+.book-lede,
+.book-read,
+.course-article-markdown {
+  max-width: 70ch;
+  line-height: 1.8;
+}
+
+.book-read blockquote {
+  border-left-color: var(--editorial-accent);
+  border-radius: 0 4px 4px 0;
+  background: #f2f3ee;
+}
+
+.book-read th {
+  background: #f2f3ee;
+}
+
+.book-read code {
+  border-radius: 3px;
+}
+
+/* Home reads like a book cover and contents page, not a product dashboard. */
+
+.book-cover-wrap {
+  justify-content: flex-start;
+  padding: 1.5rem 0 0.5rem;
+}
+
+.book-cover-art {
+  width: min(340px, 82vw);
+  min-height: 430px;
+  padding: 2rem 1.8rem;
+  border: 1px solid var(--editorial-rule);
+  border-top: 6px solid var(--editorial-accent);
+  border-radius: 4px;
+  color: var(--ink);
+  background: var(--editorial-surface);
+  background-image: none;
+  box-shadow: none;
+}
+
+.book-cover-art em {
+  color: var(--editorial-accent);
+  opacity: 1;
+}
+
+.book-cover-art strong {
+  max-width: 11ch;
+  font-size: clamp(2rem, 6vw, 2.8rem);
+  font-weight: 760;
+  letter-spacing: -0.04em;
+}
+
+.book-cover-tagline,
+.book-cover-art i {
+  color: var(--muted);
+  opacity: 1;
+}
+
+.book-start {
+  justify-content: flex-start;
+}
+
+.book-start-primary,
+.book-start-ghost {
+  min-height: 44px;
+  border-radius: 4px;
+}
+
+.course-material-map {
+  gap: 1.25rem;
+}
+
+.course-material-map article {
+  padding: 1rem 0 0;
+  border: 0;
+  border-top: 1px solid var(--editorial-rule);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.course-references {
+  border-top-color: var(--editorial-rule);
+}
+
+.course-references > div {
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+
+.course-references a {
+  padding: 1rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+}
+
+.index-day,
+.book-index h2 {
+  border-bottom-color: var(--editorial-rule);
+}
+
+.index-day ol a {
+  border-radius: 4px;
+}
+
+/* Student chapters: one continuous editorial column. */
+
+.lesson-reading {
+  max-width: 70ch;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.lesson-reading > .course-article {
+  max-width: 70ch;
+  padding: 3rem 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  background-image: none;
+  box-shadow: none;
+}
+
+.lesson-reading > .course-article + .course-article {
+  border-top: 1px solid var(--editorial-rule);
+}
+
+.course-article,
+.course-article.layout-demo,
+.course-article.layout-question,
+.course-article.layout-summary,
+.lesson-reading.role-preflight > .course-article,
+.lesson-reading.role-break > .course-article {
+  --article-accent: var(--editorial-accent);
+}
+
+.course-article-heading h1,
+.course-article-heading h2,
+.course-article.layout-opening .course-article-heading h2 {
+  max-width: 25ch;
+  color: var(--ink);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 760;
+  letter-spacing: -0.04em;
+  line-height: 1.16;
+}
+
+.course-article-heading > span,
+.course-article-section > small,
+.course-article-section > div > small,
+.course-question > span {
+  color: var(--editorial-accent);
+  font-family: var(--font-sans);
+  font-weight: 720;
+  letter-spacing: 0.035em;
+}
+
+.course-article-heading > p,
+.course-article-section p,
+.course-question-answer p {
+  color: #343a35;
+  line-height: 1.82;
+}
+
+.course-article-sections,
+.course-article-markdown {
+  margin-top: 2.25rem;
+}
+
+.course-article-section {
+  max-width: 70ch;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.course-article-section + .course-article-section {
+  border-top-color: var(--line);
+}
+
+.course-article-section h3 {
+  color: var(--ink);
+  font-size: 1.2rem;
+  font-weight: 720;
+}
+
+.course-article-section.tone-good,
+.course-article-section.tone-warning,
+.course-article-section.tone-danger {
+  padding-left: 1rem;
+  border-left: 2px solid var(--editorial-rule);
+}
+
+.course-article-sections.is-sequential > li {
+  max-width: 70ch;
+}
+
+.course-article-sections.is-sequential > li::before {
+  color: var(--editorial-accent);
+}
+
+.course-article-markdown {
+  color: #303530;
+  font-size: 1rem;
+}
+
+.course-article-markdown > :first-child {
+  margin-top: 0;
+}
+
+.course-article-markdown > :last-child {
+  margin-bottom: 0;
+}
+
+.course-article-markdown h2,
+.course-article-markdown h3,
+.course-article-markdown h4 {
+  max-width: 34ch;
+  margin: 2.25rem 0 0.7rem;
+  color: var(--ink);
+  font-weight: 720;
+  letter-spacing: -0.025em;
+  line-height: 1.3;
+}
+
+.course-article-markdown h2 {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+  font-size: 1.45rem;
+}
+
+.course-article-markdown h3 {
+  font-size: 1.2rem;
+}
+
+.course-article-markdown p,
+.course-article-markdown li {
+  line-height: 1.82;
+}
+
+.course-article-markdown p {
+  margin: 0.85rem 0;
+}
+
+.course-article-markdown ul,
+.course-article-markdown ol {
+  margin: 0.9rem 0 1.2rem;
+  padding-left: 1.35rem;
+}
+
+.course-article-markdown li + li {
+  margin-top: 0.42rem;
+}
+
+.course-article-markdown blockquote {
+  margin: 1.5rem 0;
+  padding: 0.65rem 0 0.65rem 1rem;
+  border-left: 3px solid var(--editorial-accent);
+  color: #424943;
+  background: transparent;
+}
+
+.course-article-markdown table {
+  width: 100%;
+  margin: 1.5rem 0;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.course-article-markdown th,
+.course-article-markdown td {
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.course-article-markdown th {
+  border-bottom-color: var(--editorial-rule);
+  background: #f2f3ee;
+}
+
+.course-article-markdown :not(pre) > code {
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  background: var(--paper-deep);
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+
+.course-article-markdown pre,
+.course-code-example,
+.prompt-box,
+.setup-code {
+  border-radius: 4px;
+  background: var(--code);
+  background-image: none;
+  box-shadow: none;
+}
+
+.course-article-markdown pre {
+  overflow-x: auto;
+  padding: 1rem 1.1rem;
+  color: var(--code-ink);
+  font-family: var(--font-mono);
+  font-size: 0.84rem;
+  line-height: 1.65;
+}
+
+.course-article-markdown a {
+  color: var(--blue-deep);
+  text-decoration: underline;
+  text-decoration-color: #92ad9f;
+  text-underline-offset: 0.16em;
+}
+
+.course-article-markdown hr {
+  margin: 2.4rem 0;
+  border: 0;
+  border-top: 1px solid var(--editorial-rule);
+}
+
+.course-code-example {
+  border-color: #303b35;
+}
+
+.course-question.is-focus {
+  padding: 1.25rem 1.35rem;
+  border-left: 3px solid var(--editorial-accent);
+  border-radius: 0 4px 4px 0;
+  background: #f0f3ef;
+  box-shadow: none;
+}
+
+.course-question.is-inline {
+  border-top-color: var(--editorial-rule);
+}
+
+.course-question > button {
+  border-radius: 4px;
+  background: var(--editorial-accent);
+}
+
+.course-article-conclusion {
+  max-width: 70ch;
+  border-top: 2px solid var(--editorial-accent);
+}
+
+/* Practice areas stay visibly interactive, but no longer imitate a card deck. */
+
+.stage-brief {
+  grid-template-columns: minmax(90px, 110px) 1fr;
+  padding: 1rem 1.1rem;
+  border-left: 3px solid var(--editorial-accent);
+  border-radius: 0 4px 4px 0;
+  background: #f0f3ef;
+  box-shadow: none;
+}
+
+.stage-practice {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top-color: var(--editorial-rule);
+}
+
+.stage-practice-heading h2 {
+  font-weight: 740;
+  letter-spacing: -0.02em;
+}
+
+.activity-stack {
+  gap: 1.25rem;
+}
+
+.activity-card {
+  padding: 1.25rem;
+  border: 1px solid var(--editorial-rule);
+  border-radius: 6px;
+  background: var(--editorial-surface);
+  background-image: none;
+  box-shadow: none;
+}
+
+.activity-card-header {
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  margin: -1.25rem -1.25rem 1.15rem;
+  padding: 0.9rem 1.25rem;
+  border-bottom-color: var(--line);
+  background: transparent;
+}
+
+.activity-card-header > span {
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  color: var(--editorial-accent);
+  background: transparent;
+}
+
+.activity-card-header > i {
+  border-radius: 4px;
+  background: transparent;
+}
+
+.activity-card textarea,
+.activity-card input:not([type="checkbox"]),
+.activity-card select,
+.choice-grid button,
+.test-result-buttons button,
+.activity-done-button {
+  border-color: var(--editorial-rule);
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.interactive-checklist label,
+.prompt-confirmation {
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+}
+
+.interactive-checklist label:has(input:checked),
+.prompt-confirmation:has(input:checked) {
+  border-color: var(--line);
+  background: var(--blue-soft);
+}
+
+.activity-hints span,
+.choice-feedback,
+.test-quality-guide,
+.test-criteria,
+.test-card-builder article,
+.multi-test-record article {
+  border-radius: 4px;
+  background-image: none;
+  box-shadow: none;
+}
+
+.answer-prompt,
+.read-points p {
+  border-left-color: var(--editorial-accent);
+  background: #f0f3ef;
+}
+
+.choice-grid button.is-selected {
+  border-color: var(--editorial-accent);
+  background: var(--blue-soft);
+  box-shadow: inset 3px 0 0 var(--editorial-accent);
+}
+
+.stage-finish,
+.book-finish {
+  border: 1px solid var(--editorial-rule);
+  border-radius: 6px;
+  background: var(--editorial-surface);
+  box-shadow: none;
+}
+
+.stage-finish.is-ready,
+.book-finish.is-ready {
+  border-color: #9db7aa;
+  background: var(--green-soft);
+}
+
+.stage-finish button,
+.book-finish-row button {
+  border-radius: 4px;
+}
+
+.page-round {
+  width: 46px;
+  height: 46px;
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+.page-round:hover:not(:disabled) {
+  transform: none;
+}
+
+/* The side help signal remains persistent and unmistakable. */
+
+.book-status {
+  gap: 0.65rem;
+  padding: 0.45rem 0.5rem 0.45rem 0.8rem;
+  border: 2px solid var(--editorial-accent);
+  border-radius: 6px;
+  background: var(--editorial-surface);
+  box-shadow: none;
+}
+
+.book-status strong {
+  color: var(--ink);
+  font-size: 0.82rem;
+}
+
+.book-status.help-yellow {
+  border-color: #b3861e;
+}
+
+.book-status.help-red {
+  border-color: var(--red);
+}
+
+.book-status button {
+  width: 36px;
+  height: 36px;
+  border-color: var(--editorial-rule);
+  background: #fff;
+}
+
+/* Instructor guide uses the same rules, hierarchy, and reading density. */
+
+.instructor-plan,
+.instructor-setup-console,
+.setup-flow {
+  color: var(--ink);
+  background: var(--editorial-paper);
+  background-image: none;
+}
+
+.instructor-plan-header {
+  border-bottom-color: var(--editorial-rule);
+  background: rgb(251 250 246 / 0.96);
+  box-shadow: none;
+  backdrop-filter: blur(10px);
+}
+
+.instructor-plan-header > div:last-child a,
+.instructor-stage-detail > footer button {
+  border-color: var(--editorial-rule);
+  border-radius: 4px;
+  background: var(--editorial-surface);
+}
+
+.instructor-plan-header a.start-live-link,
+.start-live-link {
+  border-color: var(--editorial-accent);
+  background: var(--editorial-accent);
+}
+
+.instructor-plan-intro,
+.instructor-setup-hero {
+  border-bottom-color: var(--editorial-rule);
+}
+
+.instructor-plan-intro h1,
+.instructor-setup-hero h1 {
+  max-width: 22ch;
+  font-size: clamp(2.25rem, 5vw, 4.4rem);
+  font-weight: 760;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.instructor-plan-intro > div:last-child {
+  padding: 1rem 0;
+  border: 0;
+  border-top: 2px solid var(--editorial-accent);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.instructor-plan-layout {
+  grid-template-columns: 280px minmax(0, 74ch);
+}
+
+.instructor-stage-list button {
+  border-radius: 0;
+}
+
+.instructor-stage-list button.is-active {
+  border-radius: 0 4px 4px 0;
+  background: var(--blue-soft);
+  box-shadow: inset 3px 0 0 var(--editorial-accent);
+}
+
+.instructor-stage-detail h2 {
+  max-width: 22ch;
+  font-size: clamp(2rem, 4vw, 3.35rem);
+  font-weight: 750;
+  letter-spacing: -0.04em;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.instructor-cue-panel {
+  padding: 1.1rem 1.2rem;
+  border: 0;
+  border-left: 3px solid var(--editorial-accent);
+  border-radius: 0 4px 4px 0;
+  background: #f0f3ef;
+  box-shadow: none;
+}
+
+.instructor-teaching-sequence,
+.student-screen-preview,
+.instructor-activity-preview,
+.instructor-completion {
+  padding: 1.2rem 0;
+  border: 0;
+  border-top: 1px solid var(--editorial-rule);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.instructor-teaching-sequence > ol > li {
+  padding: 0.9rem 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+}
+
+.instructor-teaching-sequence > ol > li:first-child {
+  border-top-color: var(--editorial-rule);
+}
+
+.instructor-teaching-sequence i,
+.instructor-activity-preview article > i {
+  border-radius: 4px;
+  background: var(--editorial-accent);
+}
+
+.instructor-teaching-sequence i {
+  color: #fff;
+}
+
+.instructor-completion {
+  border-top-color: #9db7aa;
+  background: transparent;
+}
+
+/* Setup is part of the book: utility panels stay flat and instructional. */
+
+.setup-flow-layout {
+  background: var(--editorial-paper);
+}
+
+.setup-flow-rail > div,
+.setup-tool,
+.setup-proof,
+.setup-final-status,
+.setup-safety,
+.readiness-decision,
+.setup-roster-counts label {
+  border-color: var(--editorial-rule);
+  border-radius: 6px;
+  background: var(--editorial-surface);
+  background-image: none;
+  box-shadow: none;
+}
+
+.setup-flow-rail nav button,
+.setup-os-choice button,
+.setup-action-panel > a,
+.setup-code,
+.setup-proof label,
+.setup-final-status button,
+.setup-flow-main > footer button,
+.setup-flow-main > footer a {
+  border-radius: 4px;
+}
+
+.setup-flow-rail nav button.is-active,
+.setup-os-choice button.is-selected {
+  border-color: var(--editorial-accent);
+  background: var(--blue-soft);
+}
+
+.setup-safety {
+  border-left: 3px solid var(--orange);
+  background: var(--orange-soft);
+}
+
+/* Projector mode shares the editorial hierarchy at a larger scale. */
+
+.presenter {
+  color: var(--ink);
+  background: #f7f6f1;
+  background-image: none;
+}
+
+.presenter-topbar {
+  color: #fff;
+  border-bottom-color: rgb(255 255 255 / 0.16);
+  background: var(--blue-deep);
+}
+
+.presenter-topbar > div:first-child span,
+.presenter-progress span,
+.presenter-clock span,
+.presenter-stage-clock b {
+  color: #d9e6df;
+}
+
+.presenter-progress > div {
+  border-radius: 2px;
+  background: rgb(255 255 255 / 0.18);
+}
+
+.presenter-progress i {
+  border-radius: inherit;
+  background: #fff;
+}
+
+.presenter-stage {
+  background: #f7f6f1;
+  background-image: none;
+}
+
+.course-article.is-presenter,
+.course-article.is-presenter.layout-demo,
+.course-article.is-presenter.layout-question,
+.course-article.is-presenter.layout-summary {
+  --article-accent: var(--editorial-accent);
+  color: var(--ink);
+  background: transparent;
+  background-image: none;
+  box-shadow: none;
+}
+
+.course-article.is-presenter .course-article-heading h1,
+.course-article.is-presenter .course-article-section h3,
+.course-article.is-presenter .course-question > h3,
+.course-article.is-presenter .course-article-conclusion strong {
+  color: var(--ink);
+}
+
+.course-article.is-presenter .course-article-heading > p,
+.course-article.is-presenter .course-article-section p,
+.course-article.is-presenter .course-question li > strong,
+.course-article.is-presenter .course-question-answer p,
+.course-article.is-presenter .course-article-markdown {
+  color: #343a35;
+}
+
+.course-article.is-presenter .course-article-heading h1 {
+  max-width: 22ch;
+  font-weight: 740;
+  letter-spacing: -0.045em;
+  line-height: 1.06;
+}
+
+.course-article.is-presenter .course-article-section + .course-article-section,
+.course-article.is-presenter .course-question.is-inline,
+.course-article.is-presenter .course-question ol,
+.course-article.is-presenter .course-question li,
+.course-article.is-presenter .course-question-answer {
+  border-color: var(--editorial-rule);
+}
+
+.course-article.is-presenter .course-question.is-focus {
+  border-left-color: var(--editorial-accent);
+  background: #edf1ed;
+}
+
+.course-article.is-presenter .course-code-example {
+  border-color: #303b35;
+  background: var(--code);
+}
+
+.course-article.is-presenter .course-question-answer b {
+  color: var(--blue-deep);
+}
+
+.course-article.is-presenter .course-article-conclusion {
+  border-top-color: var(--editorial-accent);
+}
+
+.course-article.is-presenter .course-article-markdown h2,
+.course-article.is-presenter .course-article-markdown h3,
+.course-article.is-presenter .course-article-markdown h4,
+.course-article.is-presenter .course-article-markdown strong {
+  color: var(--ink);
+}
+
+.presenter-controls {
+  border-top-color: rgb(255 255 255 / 0.14);
+  background: #14231d;
+}
+
+.presenter-controls button,
+.presenter-controls a {
+  border-radius: 4px;
+  color: #edf3ef;
+  background: transparent;
+}
+
+.presenter-controls button.control-primary {
+  border-color: #d5e3db;
+  background: #2e6952;
+}
+
+.presenter-next {
+  border-color: #53675d;
+  border-radius: 4px;
+  color: #edf3ef;
+  background: #14231d;
+  box-shadow: none;
+}
+
+.presenter-next span {
+  color: #b8ccc0;
+}
+
+.presenter-notes {
+  border-color: #b49a59;
+  border-radius: 4px;
+  color: #332d20;
+  background: #f5efd9;
+  box-shadow: none;
+}
+
+.presenter-notes header span,
+.presenter-notes header button {
+  color: #6d5418;
+}
+
+.presenter-notes header button {
+  border-color: #b49a59;
+  border-radius: 4px;
+}
+
+.presenter-notes .notes-empty {
+  color: #74684b;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .book-header-nav a:hover,
+  .book-toc summary:hover,
+  .book-toc details li a:hover,
+  .toc-day a:hover,
+  .toc-open li button:hover:not(:disabled),
+  .index-day ol a:hover {
+    color: var(--ink);
+    background: var(--blue-soft);
+  }
+
+  .course-references a:hover {
+    border-bottom-color: var(--editorial-accent);
+    background: transparent;
+  }
+
+  .choice-grid button:hover,
+  .activity-done-button:hover,
+  .stage-timer button:hover,
+  .instructor-stage-detail > footer button:hover:not(:disabled) {
+    border-color: var(--editorial-accent);
+  }
+}
+
+@media (max-width: 860px) {
+  .book-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .book-toc {
+    background: rgb(251 250 246 / 0.98);
+    box-shadow: none;
+  }
+
+  .book-content,
+  .book-main {
+    max-width: 74ch;
+    padding: 2rem 1.2rem 5.5rem;
+  }
+
+  .instructor-plan-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .book-cover-art {
+    min-height: 390px;
+  }
+
+  .book-status {
+    right: 0.75rem;
+    bottom: 0.75rem;
+    left: 0.75rem;
+    width: fit-content;
+    max-width: calc(100vw - 1.5rem);
+  }
+
+  .book-status strong {
+    overflow: hidden;
+    max-width: 34vw;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .stage-brief {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+
+  .activity-card {
+    padding: 1rem;
+  }
+
+  .activity-card-header {
+    margin: -1rem -1rem 1rem;
+    padding: 0.8rem 1rem;
+  }
+
+  .presenter-stage {
+    padding: 1.5rem 1.2rem 5.5rem;
+  }
+
+  .course-article.is-presenter .course-article-heading h1 {
+    font-size: clamp(2rem, 10vw, 3.2rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  :is(.book-header, .book-shell, .instructor-plan, .instructor-setup-console, .setup-flow, .presenter)
+    *,
+  :is(.book-header, .book-shell, .instructor-plan, .instructor-setup-console, .setup-flow, .presenter)
+    *::before,
+  :is(.book-header, .book-shell, .instructor-plan, .instructor-setup-console, .setup-flow, .presenter)
+    *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }

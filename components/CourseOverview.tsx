@@ -1,13 +1,17 @@
 import Link from "next/link";
 import { courseReferences } from "@/content/courseware/references";
 import { interactiveDays } from "@/content/interactive";
+import type { LocalizedText } from "@/content/interactive/types";
 import { getOverviewKorean } from "@/content/overview-ko";
 import { getReadings } from "@/lib/readings";
 import { BilingualText } from "./BilingualText";
 import { BookHeader } from "./BookHeader";
 
-function Copy({ children }: { children: string }) {
-  return <BilingualText en={children} ko={getOverviewKorean(children)} />;
+function Copy({ children }: { children: LocalizedText }) {
+  if (typeof children === "string") {
+    return <BilingualText en={children} ko={getOverviewKorean(children)} />;
+  }
+  return <BilingualText en={children.en} ko={children.ko} />;
 }
 
 export function CourseOverview() {
@@ -33,20 +37,27 @@ export function CourseOverview() {
                     </span>{" "}
                     <Copy>{plan.title}</Copy>
                   </summary>
-                  <p className="toc-group-label">
-                    <BilingualText en="Background reading" ko="보충 읽기" />
-                  </p>
+                      <p className="toc-group-label">
+                        <BilingualText en="Lesson and workbook" ko="교재와 워크북" />
+                      </p>
                   <ul>
                     {readings.map((reading, index) => (
                       <li key={reading.id}>
                         <Link href={`/day/${plan.day}?reading=${index}`}>
-                          R{index + 1} <Copy>{reading.title}</Copy>
+                          R{index + 1}{" "}
+                          <BilingualText
+                            en={reading.title}
+                            ko={
+                              reading.translations?.ko.title ??
+                              getOverviewKorean(reading.title)
+                            }
+                          />
                         </Link>
                       </li>
                     ))}
                   </ul>
-                  <p className="toc-group-label">
-                    <BilingualText en="Live lesson" ko="실강 교안" />
+                      <p className="toc-group-label">
+                        <BilingualText en="Class timeline" ko="수업 시간표" />
                   </p>
                   <ul>
                     {plan.stages.map((stage, index) => (
@@ -192,9 +203,6 @@ export function CourseOverview() {
                       <Link href={`/day/${plan.day}/present`}>
                         <BilingualText en="Class screens" ko="수업 진행 화면" />
                       </Link>
-                      <Link href={`/cards/day/${plan.day}`}>
-                        <BilingualText en="Cards" ko="활동 카드" />
-                      </Link>
                     </div>
                   </header>
                   <p className="index-question">
@@ -202,7 +210,7 @@ export function CourseOverview() {
                   </p>
                   <ol>
                     <li className="index-section-label">
-                      <BilingualText en="Background reading" ko="보충 읽기" />
+                      <BilingualText en="Lesson and workbook" ko="교재와 워크북" />
                     </li>
                     {readings.map((reading, index) => (
                       <li key={reading.id}>
@@ -210,7 +218,13 @@ export function CourseOverview() {
                           <span className="index-item-number">
                             R{index + 1}
                           </span>
-                          <Copy>{reading.title}</Copy>
+                          <BilingualText
+                            en={reading.title}
+                            ko={
+                              reading.translations?.ko.title ??
+                              getOverviewKorean(reading.title)
+                            }
+                          />
                           <i>
                             <BilingualText en="read" ko="읽기" />
                           </i>
@@ -218,7 +232,7 @@ export function CourseOverview() {
                       </li>
                     ))}
                     <li className="index-section-label">
-                      <BilingualText en="Live lesson and practice" ko="실강 교안과 실습" />
+                      <BilingualText en="Class timeline and practice" ko="수업 시간표와 실습" />
                     </li>
                     {plan.stages.map((stage, index) => (
                       <li key={stage.id}>

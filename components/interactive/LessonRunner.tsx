@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { StageLessonDeck } from "@/components/courseware/StageLessonDeck";
+import { curriculumLabs } from "@/content/generated-labs";
 import type { DayCourseware } from "@/content/courseware";
 import { interactiveDays, type InteractiveDayPlan } from "@/content/interactive";
 import {
@@ -85,10 +86,12 @@ export function LessonRunner({
     [language, plan.day, readings],
   );
   const storageKey = classroomCode
-    ? `build-loop:class:${classroomCode.toUpperCase()}`
-    : `build-loop:solo:day:${plan.day}`;
+    ? `build-loop:v2:class:${classroomCode.toUpperCase()}`
+    : `build-loop:v2:solo:day:${plan.day}`;
   const [activeStage, setActiveStage] = useState(0);
-  const [activeReading, setActiveReading] = useState<number | null>(null);
+  const [activeReading, setActiveReading] = useState<number | null>(
+    classroomCode ? null : 0,
+  );
   const [mobileTocOpen, setMobileTocOpen] = useState(false);
   const [teacherStage, setTeacherStage] = useState(0);
   const [activityStates, setActivityStates] = useState<Record<string, ActivityState>>({});
@@ -106,6 +109,15 @@ export function LessonRunner({
   const [progressError, setProgressError] = useState("");
   const teacherStageRef = useRef<number | null>(null);
   const hydratedRef = useRef(false);
+  const dayLabs = useMemo(() => {
+    const labs =
+      curriculumLabs[
+        String(plan.day) as keyof typeof curriculumLabs
+      ] ?? [];
+    return labs.filter(
+      (lab) => !("student" in lab) || lab.student !== false,
+    );
+  }, [plan.day]);
 
   const stage = plan.stages[activeStage];
   const stageCourseware = courseware.stages.find(
@@ -596,7 +608,7 @@ export function LessonRunner({
                   {localizedReadings.length > 0 ? (
                     <>
                       <p className="toc-group-label">
-                        {uiText(language, "Background reading")}
+                        {uiText(language, "Lesson and workbook")}
                       </p>
                       <ul>
                         {localizedReadings.map((reading, index) => (
@@ -619,7 +631,7 @@ export function LessonRunner({
                         ))}
                       </ul>
                       <p className="toc-group-label">
-                        {uiText(language, "Live lesson")}
+                        {uiText(language, "Class timeline")}
                       </p>
                     </>
                   ) : null}
@@ -684,6 +696,22 @@ export function LessonRunner({
                 })}
               </span>
             </div>
+            {dayLabs.length ? (
+              <section className="toc-resources">
+                <strong>{uiText(language, "Practice files")}</strong>
+                {dayLabs.map((lab) => (
+                  <a
+                    href={sitePath(`/labs/${lab.fileName}`)}
+                    key={lab.fileName}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    {language === "ko" ? lab.titleKo : lab.titleEn}
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                ))}
+              </section>
+            ) : null}
           </div>
         </aside>
 
@@ -802,8 +830,10 @@ export function LessonRunner({
             <>
               <p className="book-lede">{interactiveText(language, stage.goal)}</p>
               <ol className="book-brief">
-                {stage.studentBrief.map((line) => (
-                  <li key={line}>{interactiveText(language, line)}</li>
+                {stage.studentBrief.map((line, index) => (
+                  <li key={`${stage.id}-brief-${index}`}>
+                    {interactiveText(language, line)}
+                  </li>
                 ))}
               </ol>
             </>

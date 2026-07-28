@@ -1,78 +1,96 @@
 export const overviewKorean: Record<string, string> = {
   "Vibe Coding Bootcamp": "바이브 코딩 부트캠프",
-  "AI and Your First Prototype": "AI와 첫 프로토타입",
-  "What should a person decide and check when AI writes the code?":
-    "AI가 코드를 작성할 때 사람은 무엇을 결정하고 확인해야 할까요?",
-  "Clear Requests and Debugging": "명확한 요청과 디버깅",
-  "How can a request become testable, and how can a failure become useful evidence?":
-    "어떻게 요청을 테스트 가능하게 만들고, 실패를 유용한 증거로 바꿀 수 있을까요?",
-  "From a Problem to a Project": "문제에서 프로젝트로",
-  "How can your own idea become a small, testable project?":
-    "나만의 아이디어를 작고 테스트 가능한 프로젝트로 어떻게 발전시킬 수 있을까요?",
-  "One Safe Slice": "기능 하나를 안전하게 확장하기",
-  "Can you understand a little, extend one slice, and recover safely?":
-    "코드를 조금 이해하고, 기능 하나를 확장한 뒤, 문제가 생겨도 안전하게 복구할 수 있을까요?",
-  "Test, Learn, and Finish": "테스트하고, 배우고, 완성하기",
-  "How can you prove that another person can use what you built?":
-    "다른 사람이 내가 만든 것을 사용할 수 있다는 사실을 어떻게 증명할 수 있을까요?",
-  "Ship, Showcase, Reflect": "완성하고, 발표하고, 돌아보기",
-  "How can you explain your result and your AI collaboration responsibly?":
-    "결과물과 AI 협업 과정을 어떻게 책임 있게 설명할 수 있을까요?",
 
-  "Welcome and readiness": "환영 및 준비 확인",
-  "Live build demo": "실시간 제작 시연",
-  "The human role": "사람의 역할",
-  "Safety promise": "안전 약속",
+  "Build Your First Working Page": "처음으로 작동하는 페이지 만들기",
+  "How can you use AI to build and verify your first working page?":
+    "AI와 어떻게 첫 작동 페이지를 만드는가?",
+  "Finished result demo and course overview": "완성 결과 시연과 과정 소개",
+  "Check OpenCode, NVIDIA, folder, and browser":
+    "OpenCode·NVIDIA·폴더·브라우저 확인",
+  "From a web file to the browser": "웹페이지의 가장 작은 구조 설명",
+  "Instructor live build": "강사 라이브 제작 시연",
   Break: "휴식",
-  "Tools and files": "도구와 파일",
-  "Guided first build": "첫 제작 따라 하기",
-  "CHECK, FIX, SAVE": "확인하고, 수정하고, 저장하기",
-  "Project Studio": "프로젝트 제작 시간",
-  "Share and exit ticket": "공유 및 마무리 확인",
-  "Day 1 review": "1일차 복습",
-  "Vague / clear A–B test": "모호한 요청과 명확한 요청 A/B 테스트",
-  "The Prompt Frame": "프롬프트 작성 틀",
-  "Context management": "맥락 관리",
-  "Debugging demo": "디버깅 시연",
-  "Guided lab build": "실습 따라 하기",
-  "Compare and exit ticket": "비교 및 마무리 확인",
-  "Review and ownership": "복습 및 주도권",
-  "Free topic exploration": "자유 주제 탐색",
-  "User, problem, success": "사용자, 문제, 성공 기준",
-  "MUST 3 / NICE 2": "필수 3개 / 선택 2개",
-  "MUST 1–3 / NICE up to 2": "필수 1–3개 / 선택 최대 2개",
-  "Wireframe and Project Brief": "와이어프레임과 프로젝트 기획서",
-  "Plan review and approval": "계획 검토 및 승인",
-  "Plan review": "계획 검토",
-  "Plan review and READY gate": "계획 검토 및 READY 관문",
-  "v0 Project Studio": "v0 프로젝트 제작 시간",
-  "30-second pitch": "30초 소개",
-  "Project status": "프로젝트 상태 확인",
-  "Code map": "코드 지도",
-  "Event, state, screen, storage": "이벤트, 상태, 화면, 저장소",
-  "Event, handler, state, render, screen":
-    "이벤트, 처리 함수, 상태, 렌더링, 화면",
-  "Action path and optional storage": "동작 경로와 선택적 저장",
-  "Sprint and Save Point": "스프린트와 저장 지점",
-  "Recovery paths": "복구 방법",
-  "Approve one slice": "기능 하나 승인받기",
-  "Review one slice": "기능 하나 검토하기",
-  "Final checkpoint": "최종 점검",
-  "Test strategy": "테스트 전략",
-  "Write test cards": "테스트 카드 작성",
-  "Two peer-test rounds": "동료 테스트 2회",
-  "Sort problems": "문제 분류",
-  "Safety and accessibility": "안전성과 접근성",
-  "Approve the fix plan": "수정 계획 승인",
-  "Review the fix plan": "수정 계획 검토",
-  "Backup and demo path": "백업과 데모 경로",
-  "Final readiness": "최종 준비 확인",
-  "Last blocker fix": "마지막 핵심 문제 해결",
-  "Code Freeze": "코드 동결(Code Freeze)",
-  "Partner rehearsal": "짝과 발표 연습",
-  Showcase: "결과물 발표",
-  "Peer feedback": "동료 피드백",
-  "Reflection and close": "성찰 및 마무리",
+  "Build the shared first page": "공통 첫 페이지 제작",
+  "Change one part and describe an error": "한 부분 수정과 오류 설명",
+  "Personalize and check at phone width": "개인화와 모바일 확인",
+  "GitHub Pages test publish": "GitHub Pages 시험 배포",
+  "Save the URL and working copy": "URL과 작동본 보관",
+
+  "Turn Your Idea into a Buildable Service":
+    "아이디어를 실제로 만들 수 있는 서비스로 바꾸기",
+  "How can you turn your idea into something small enough to build and test?":
+    "내 아이디어를 어떻게 만들 수 있는 크기로 바꾸는가?",
+  "Reopen the test URL": "시험 URL 다시 열기",
+  "User and use situation": "사용자와 사용 상황",
+  "One core user flow and a smaller scope": "핵심 이용 흐름과 범위 줄이기",
+  "Real content and screen order": "실제 콘텐츠와 화면 순서",
+  "A useful build request and live demo": "좋은 제작 요청과 강사 시연",
+  "Personal plan and paper screen": "개인 계획과 종이 스케치",
+  "Build personal project v1": "개인 프로젝트 v1 제작",
+  "Five-second comprehension test": "5초 이해 테스트",
+  "Save v1": "v1 보관",
+
+  "Make the Design Intentional": "의도가 보이는 디자인 만들기",
+  "How can you remove the generic AI-made look and make the page easier to understand?":
+    "어떻게 AI가 만든 티를 줄이고 읽기 좋은 화면으로 만드는가?",
+  "View each other's first screens without explanation":
+    "설명 없이 서로의 첫 화면 보기",
+  "Design as an order of information": "디자인은 정보의 순서라는 설명",
+  "Diagnose common AI-generated design": "흔한 AI 생성 화면 진단",
+  "Real content and consistent design constraints":
+    "실제 콘텐츠와 일관된 디자인 제한",
+  "Instructor before-and-after redesign": "강사 전후 개선 시연",
+  "Shared design clinic": "공통 디자인 클리닉",
+  "Analyze a reference screen": "참고 화면 분석",
+  "Choose a personal design direction": "개인 디자인 방향",
+  "Improve the personal project design": "개인 프로젝트 디자인 개선",
+  "Check mobile, keyboard, and readability": "모바일·키보드·가독성 확인",
+  "Save before-and-after evidence and decisions": "전후 화면과 결정 보관",
+
+  "Complete One Core Interaction": "핵심 상호작용 하나 완성하기",
+  "How can you turn a static page into a service someone can actually use?":
+    "어떻게 정적인 화면을 쓸 수 있는 서비스로 만드는가?",
+  "Choose today's user action and result": "오늘 완성할 사용자 행동 정하기",
+  "Input, choice, action, result, and screen state":
+    "입력·선택·행동·결과와 화면 상태",
+  "Define success and no-result behavior before building":
+    "구현 전 정상 결과와 결과 없음 정의",
+  "Instructor interaction build": "강사 기능 구현 시연",
+  "Shared interaction lab": "공통 기능 실습",
+  "Decide empty, invalid, and saved states": "빈값·잘못된 값·저장 여부 판단",
+  "Build the personal project's core interaction": "개인 프로젝트 기능 제작",
+  "Partner use and one fix": "짝 사용과 문제 한 가지 수정",
+  "Recheck the full path and save": "전체 경로 재확인과 보관",
+
+  "Make It Work for Someone Else": "다른 사람도 사용할 수 있게 만들기",
+  "How can you find out whether someone else can really use what you built?":
+    "다른 사람도 정말 사용할 수 있는지 어떻게 알아내는가?",
+  "Write one user task": "다른 사람에게 줄 사용 과제 작성",
+  "Observe without explaining": "설명하지 않고 관찰하는 법",
+  "First cross-use session": "1차 교차 사용",
+  "Organize observations": "관찰 결과 정리",
+  "Choose what to fix now": "무엇을 지금 고칠지 판단",
+  "Fix the most important problem": "중요한 문제 수정",
+  "Check mobile, keyboard, and public safety":
+    "모바일·키보드·공개 안전 확인",
+  "Upload the public release candidate": "공개 후보 업로드",
+  "Check another device and record limitations":
+    "다른 기기 확인과 한계 기록",
+
+  "Publish, Recheck, and Hand It to Someone Else":
+    "배포하고, 다시 확인하고, 다른 사람에게 넘겨주기",
+  "How can you publish the project, verify it on another device, and hand it to someone else?":
+    "어떻게 다른 사람에게 실제로 건넬 수 있는가?",
+  "Check files and sensitive information before publishing":
+    "공개 전 파일과 민감정보 확인",
+  "Final publish and republish demo": "최종 배포와 수정 배포 시연",
+  "Publish the final personal project": "개인 최종 배포",
+  "Test the core action on another device": "다른 기기에서 핵심 행동 확인",
+  "Fix a public-environment issue and republish":
+    "공개 환경 문제 수정과 재배포",
+  "Prepare the README and QR code": "README와 QR 준비",
+  "Small-group public showcase": "소그룹 공개 쇼케이스",
+  "Map the next step and reflect": "다음 단계 지도와 개인 회고",
 
   "What is vibe coding?": "바이브 코딩이란 무엇인가?",
   "A claim is not evidence": "주장은 증거가 아니다",

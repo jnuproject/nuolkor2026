@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import type {
   BilingualCopy,
   TeachingSlide as TeachingSlideData,
@@ -22,6 +24,8 @@ export function TeachingSlide({
   const language = useLanguage();
   const [revealed, setRevealed] = useState(false);
   const isQuestion = Boolean(slide.question);
+  const isLessonOverview =
+    variant === "lesson" && slide.id.endsWith("-overview");
   const isSequential = ["flow", "demo", "studio", "run"].includes(
     slide.layout,
   );
@@ -36,14 +40,20 @@ export function TeachingSlide({
         "course-article",
         `layout-${slide.layout}`,
         `is-${variant}`,
+        isLessonOverview ? "is-overview" : "",
       ].join(" ")}
       id={slide.id}
-      aria-labelledby={titleId}
+      aria-label={
+        isLessonOverview ? localized(slide.title, language) : undefined
+      }
+      aria-labelledby={isLessonOverview ? undefined : titleId}
       data-slide-id={slide.id}
     >
       <header className="course-article-heading">
         <span>{localized(slide.kicker, language)}</span>
-        <SlideTitle id={titleId}>{localized(slide.title, language)}</SlideTitle>
+        {isLessonOverview ? null : (
+          <SlideTitle id={titleId}>{localized(slide.title, language)}</SlideTitle>
+        )}
         {slide.lead ? <p>{localized(slide.lead, language)}</p> : null}
       </header>
 
@@ -98,6 +108,14 @@ export function TeachingSlide({
             <code>{localized(slide.code, language)}</code>
           </pre>
         </figure>
+      ) : null}
+
+      {slide.markdown ? (
+        <div className="course-article-markdown">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {localized(slide.markdown, language)}
+          </ReactMarkdown>
+        </div>
       ) : null}
 
       {slide.question ? (

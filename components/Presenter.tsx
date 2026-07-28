@@ -22,9 +22,8 @@ function formatTime(totalSeconds: number): string {
 }
 
 const showcasePhases = [
-  { label: "DEMO", seconds: 120 },
-  { label: "FEEDBACK", seconds: 60 },
-  { label: "SWITCH", seconds: 60 },
+  { label: "DEMO", seconds: 90 },
+  { label: "SWITCH", seconds: 30 },
 ] as const;
 
 export function Presenter({
@@ -248,9 +247,7 @@ export function Presenter({
                     language,
                     showcasePhases[showcasePhase].label === "DEMO"
                       ? "Demo"
-                      : showcasePhases[showcasePhase].label === "FEEDBACK"
-                        ? "Feedback"
-                        : "Switch",
+                      : "Switch",
                   ).toUpperCase()
                 : `${slide.minutes} ${uiText(language, "min")}`}
             </span>
@@ -382,7 +379,7 @@ export function Presenter({
             }}
             type="button"
           >
-            {uiText(language, "4-min showcase")}
+            {uiText(language, "90-sec showcase")}
           </button>
         ) : null}
         {showcase ? (

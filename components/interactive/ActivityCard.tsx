@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { LessonActivity } from "@/content/interactive";
+import type { LocalizedText } from "@/content/interactive/types";
 import { interactiveText } from "@/content/translations/interactive-ko";
 import { uiText } from "@/content/translations/ui-ko";
 import { useLanguage } from "@/lib/language";
@@ -54,9 +55,13 @@ function normalize(value: string): string {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 }
 
-function promptFieldCount(prompt?: string): number {
+function textKey(value: LocalizedText): string {
+  return typeof value === "string" ? value : value.en;
+}
+
+function promptFieldCount(prompt?: LocalizedText): number {
   if (!prompt) return 0;
-  return prompt
+  return textKey(prompt)
     .split("\n")
     .map((line) => line.trim())
     .filter((line) => line.endsWith(":")).length;
@@ -68,13 +73,14 @@ function textIsComplete(activity: LessonActivity, value: string): boolean {
 
   if (activity.expected?.length) {
     const response = normalize(trimmed);
+    const expectedCopy = activity.expected.map(textKey);
     const expected =
-      activity.expected.length === 1
-        ? activity.expected[0]
+      expectedCopy.length === 1
+        ? expectedCopy[0]
             .split(/[→,]/)
             .map((item) => item.trim())
             .filter(Boolean)
-        : activity.expected;
+        : expectedCopy;
     return expected.every((item) => response.includes(normalize(item)));
   }
 
@@ -91,8 +97,8 @@ function textIsComplete(activity: LessonActivity, value: string): boolean {
   return lines.length >= required;
 }
 
-function isFieldGroup(items: string[]): boolean {
-  const joined = items.join(" ").toLowerCase();
+function isFieldGroup(items: LocalizedText[]): boolean {
+  const joined = items.map(textKey).join(" ").toLowerCase();
   return (
     items.length <= 5 &&
     joined.includes("action") &&
@@ -137,8 +143,10 @@ export function ActivityCard({
         <p>{interactiveText(language, activity.instruction)}</p>
         {activity.content?.length ? (
           <div className="activity-hints">
-            {activity.content.map((line) => (
-              <span key={line}>{interactiveText(language, line)}</span>
+            {activity.content.map((line, index) => (
+              <span key={`${activity.id}-hint-${index}`}>
+                {interactiveText(language, line)}
+              </span>
             ))}
           </div>
         ) : null}
@@ -162,16 +170,17 @@ export function ActivityCard({
         {header}
         <p>{interactiveText(language, activity.instruction)}</p>
         <div className="interactive-checklist">
-          {items.map((item) => {
-            const checked = selected.includes(item);
+          {items.map((item, index) => {
+            const itemKey = textKey(item);
+            const checked = selected.includes(itemKey);
             return (
-              <label key={item}>
+              <label key={`${activity.id}-check-${index}`}>
                 <input
                   checked={checked}
                   onChange={() => {
                     const next = checked
-                      ? selected.filter((entry) => entry !== item)
-                      : [...selected, item];
+                      ? selected.filter((entry) => entry !== itemKey)
+                      : [...selected, itemKey];
                     onUpdate(next, next.length >= minimum);
                   }}
                   type="checkbox"
@@ -211,20 +220,23 @@ export function ActivityCard({
           {header}
           <p>{interactiveText(language, activity.instruction)}</p>
           <div className="answer-field-grid">
-            {fields.map((field) => (
-              <label key={field}>
+            {fields.map((field, index) => {
+              const fieldKey = textKey(field);
+              return (
+              <label key={`${activity.id}-field-${index}`}>
                 <span>{interactiveText(language, field)}</span>
                 <textarea
                   onBlur={() => update(answers, true)}
                   onChange={(event) =>
-                    update({ ...answers, [field]: event.target.value })
+                    update({ ...answers, [fieldKey]: event.target.value })
                   }
                   placeholder={uiText(language, "Write your evidence…")}
                   rows={2}
-                  value={stringValue(answers[field])}
+                  value={stringValue(answers[fieldKey])}
                 />
               </label>
-            ))}
+              );
+            })}
           </div>
           <small className="activity-requirement">
             {uiText(
@@ -289,15 +301,18 @@ export function ActivityCard({
     const selected = stringValue(value);
     const chosen = activity.options?.find((option) => option.value === selected);
     const inferredCorrect = (option: NonNullable<typeof chosen>) =>
-      /^(correct|good)\b/i.test(option.feedback ?? "");
+      /^(correct|good)\b/i.test(
+        option.feedback ? textKey(option.feedback) : "",
+      );
+    const expectedValues = activity.expected?.map(textKey) ?? [];
     const hasCorrectOption = Boolean(
-      activity.expected?.length ||
+      expectedValues.length ||
         activity.options?.some((option) => inferredCorrect(option)),
     );
     const isCorrect = Boolean(
       chosen &&
-        (activity.expected?.includes(chosen.value) ||
-          (!activity.expected?.length && inferredCorrect(chosen))),
+        (expectedValues.includes(chosen.value) ||
+          (!expectedValues.length && inferredCorrect(chosen))),
     );
 
     return (
@@ -317,8 +332,8 @@ export function ActivityCard({
                   option.value,
                   hasCorrectOption
                     ? Boolean(
-                        activity.expected?.includes(option.value) ||
-                          (!activity.expected?.length && inferredCorrect(option)),
+                        expectedValues.includes(option.value) ||
+                          (!expectedValues.length && inferredCorrect(option)),
                       )
                     : true,
                 )
@@ -346,12 +361,17 @@ export function ActivityCard({
     const data = recordValue(value);
     const checks = stringArray(data.checks);
     const expected = activity.expected ?? [];
+    const expectedKeys = expected.map(textKey);
     const prompt = interactiveText(
       language,
-      activity.prompt ?? activity.content?.join("\n") ?? "",
+      activity.prompt ??
+        activity.content
+          ?.map((line) => interactiveText(language, line))
+          .join("\n") ??
+        "",
     );
     const confirmed = Boolean(data.confirmed);
-    const complete = confirmed && checks.length === expected.length;
+    const complete = confirmed && checks.length === expectedKeys.length;
 
     return (
       <section className="activity-card activity-prompt-card">
@@ -373,19 +393,20 @@ export function ActivityCard({
         </div>
         {expected.length ? (
           <div className="interactive-checklist prompt-expectations">
-            {expected.map((item) => {
-              const checked = checks.includes(item);
+            {expected.map((item, index) => {
+              const itemKey = textKey(item);
+              const checked = checks.includes(itemKey);
               return (
-                <label key={item}>
+                <label key={`${activity.id}-expectation-${index}`}>
                   <input
                     checked={checked}
                     onChange={() => {
                       const nextChecks = checked
-                        ? checks.filter((entry) => entry !== item)
-                        : [...checks, item];
+                        ? checks.filter((entry) => entry !== itemKey)
+                        : [...checks, itemKey];
                       onUpdate(
                         { ...data, checks: nextChecks, confirmed },
-                        confirmed && nextChecks.length === expected.length,
+                        confirmed && nextChecks.length === expectedKeys.length,
                       );
                     }}
                     type="checkbox"
@@ -403,7 +424,7 @@ export function ActivityCard({
               const nextConfirmed = event.target.checked;
               onUpdate(
                 { ...data, confirmed: nextConfirmed, checks },
-                nextConfirmed && checks.length === expected.length,
+                nextConfirmed && checks.length === expectedKeys.length,
               );
             }}
             type="checkbox"
@@ -453,18 +474,22 @@ export function ActivityCard({
           {header}
           <p>{interactiveText(language, activity.instruction)}</p>
           <div className="test-field-group">
-            {fieldLabels.map((field) => {
-              const isResult = /pass|not yet|result/i.test(field);
+            {fieldLabels.map((field, index) => {
+              const fieldKey = textKey(field);
+              const isResult = /pass|not yet|result/i.test(fieldKey);
               return (
-                <label key={field}>
+                <label key={`${activity.id}-test-field-${index}`}>
                   <span>{interactiveText(language, field)}</span>
                   {isResult ? (
                     <select
                       onChange={(event) => {
-                        const next = { ...fields, [field]: event.target.value };
+                        const next = {
+                          ...fields,
+                          [fieldKey]: event.target.value,
+                        };
                         update(next, true);
                       }}
-                      value={stringValue(fields[field])}
+                      value={stringValue(fields[fieldKey])}
                     >
                       <option value="">{uiText(language, "Choose…")}</option>
                       <option value="PASS">{uiText(language, "Pass")}</option>
@@ -474,10 +499,13 @@ export function ActivityCard({
                     <input
                       onBlur={() => update(fields, true)}
                       onChange={(event) =>
-                        update({ ...fields, [field]: event.target.value })
+                        update({
+                          ...fields,
+                          [fieldKey]: event.target.value,
+                        })
                       }
                       placeholder={uiText(language, "Record what you observed…")}
-                      value={stringValue(fields[field])}
+                      value={stringValue(fields[fieldKey])}
                     />
                   )}
                 </label>
@@ -487,8 +515,10 @@ export function ActivityCard({
           {activity.expected?.length ? (
             <div className="test-quality-guide">
               <span>{uiText(language, "Check against").toUpperCase()}</span>
-              {activity.expected.map((item) => (
-                <p key={item}>{interactiveText(language, item)}</p>
+              {activity.expected.map((item, index) => (
+                <p key={`${activity.id}-quality-${index}`}>
+                  {interactiveText(language, item)}
+                </p>
               ))}
             </div>
           ) : null}
@@ -496,13 +526,15 @@ export function ActivityCard({
       );
     }
 
-    const rows = explicitItems.length ? explicitItems : ["Browser test"];
+    const rows = explicitItems.length
+      ? explicitItems
+      : [{ en: "Browser test", ko: "브라우저 테스트" }];
     const expected = activity.expected ?? [];
     const pairedExpected = expected.length === rows.length;
     const draftMode =
       Boolean(expected.length && !pairedExpected) &&
       /do not run|write.*card|test card/i.test(
-        `${activity.instruction} ${activity.title}`,
+        `${textKey(activity.instruction)} ${textKey(activity.title)}`,
       );
     const rowData = nestedRecords(data.rows);
     const criteria = stringArray(data.criteria);
@@ -510,14 +542,18 @@ export function ActivityCard({
 
     if (draftMode) {
       const completedRows = rows.filter((row) =>
-        expected.every((field) => stringValue(rowData[row]?.[field]).trim()),
+        expected.every((field) =>
+          stringValue(rowData[textKey(row)]?.[textKey(field)]).trim(),
+        ),
       ).length;
       const update = (
         nextRows: Record<string, Record<string, string>>,
         persist = false,
       ) => {
         const done = rows.filter((row) =>
-          expected.every((field) => stringValue(nextRows[row]?.[field]).trim()),
+          expected.every((field) =>
+            stringValue(nextRows[textKey(row)]?.[textKey(field)]).trim(),
+          ),
         ).length;
         onUpdate({ ...data, rows: nextRows }, done >= minimum, persist);
       };
@@ -527,31 +563,37 @@ export function ActivityCard({
           {header}
           <p>{interactiveText(language, activity.instruction)}</p>
           <div className="test-card-builder">
-            {rows.map((row) => (
-              <article key={row}>
+            {rows.map((row, rowIndex) => {
+              const rowKey = textKey(row);
+              return (
+              <article key={`${activity.id}-draft-row-${rowIndex}`}>
                 <strong>
                   {uiText(language, interactiveText(language, row))}
                 </strong>
-                {expected.map((field) => (
-                  <label key={field}>
+                {expected.map((field, fieldIndex) => {
+                  const fieldKey = textKey(field);
+                  return (
+                  <label key={`${activity.id}-draft-field-${fieldIndex}`}>
                     <span>{interactiveText(language, field)}</span>
                     <input
                       onBlur={() => update(rowData, true)}
                       onChange={(event) =>
                         update({
                           ...rowData,
-                          [row]: {
-                            ...rowData[row],
-                            [field]: event.target.value,
+                          [rowKey]: {
+                            ...rowData[rowKey],
+                            [fieldKey]: event.target.value,
                           },
                         })
                       }
-                      value={stringValue(rowData[row]?.[field])}
+                      value={stringValue(rowData[rowKey]?.[fieldKey])}
                     />
                   </label>
-                ))}
+                  );
+                })}
               </article>
-            ))}
+              );
+            })}
           </div>
           <small className="activity-requirement">
             {uiText(
@@ -566,13 +608,13 @@ export function ActivityCard({
 
     const completedRows = rows.filter(
       (row) =>
-        stringValue(rowData[row]?.actual).trim() &&
-        stringValue(rowData[row]?.result),
+        stringValue(rowData[textKey(row)]?.actual).trim() &&
+        stringValue(rowData[textKey(row)]?.result),
     ).length;
     const globalCriteria = pairedExpected ? [] : expected;
     const complete =
       completedRows >= minimum &&
-      globalCriteria.every((item) => criteria.includes(item));
+      globalCriteria.every((item) => criteria.includes(textKey(item)));
     const updateRows = (
       nextRows: Record<string, Record<string, string>>,
       nextCriteria = criteria,
@@ -580,13 +622,15 @@ export function ActivityCard({
     ) => {
       const done = rows.filter(
         (row) =>
-          stringValue(nextRows[row]?.actual).trim() &&
-          stringValue(nextRows[row]?.result),
+          stringValue(nextRows[textKey(row)]?.actual).trim() &&
+          stringValue(nextRows[textKey(row)]?.result),
       ).length;
       onUpdate(
         { ...data, rows: nextRows, criteria: nextCriteria },
         done >= minimum &&
-          globalCriteria.every((item) => nextCriteria.includes(item)),
+          globalCriteria.every((item) =>
+            nextCriteria.includes(textKey(item)),
+          ),
         persist,
       );
     };
@@ -596,8 +640,10 @@ export function ActivityCard({
         {header}
         <p>{interactiveText(language, activity.instruction)}</p>
         <div className="multi-test-record">
-          {rows.map((row, index) => (
-            <article key={row}>
+          {rows.map((row, index) => {
+            const rowKey = textKey(row);
+            return (
+            <article key={`${activity.id}-test-row-${index}`}>
               <header>
                 <span>
                   {uiText(language, "Test {number}", {
@@ -622,23 +668,28 @@ export function ActivityCard({
                   onChange={(event) =>
                     updateRows({
                       ...rowData,
-                      [row]: { ...rowData[row], actual: event.target.value },
+                      [rowKey]: {
+                        ...rowData[rowKey],
+                        actual: event.target.value,
+                      },
                     })
                   }
                   placeholder={uiText(language, "What really happened?")}
-                  value={stringValue(rowData[row]?.actual)}
+                  value={stringValue(rowData[rowKey]?.actual)}
                 />
               </label>
               <div className="test-result-buttons">
                 {["PASS", "NOT YET"].map((option) => (
                   <button
-                    aria-pressed={rowData[row]?.result === option}
-                    className={rowData[row]?.result === option ? "is-selected" : ""}
+                    aria-pressed={rowData[rowKey]?.result === option}
+                    className={
+                      rowData[rowKey]?.result === option ? "is-selected" : ""
+                    }
                     key={option}
                     onClick={() => {
                       const nextRows = {
                         ...rowData,
-                        [row]: { ...rowData[row], result: option },
+                        [rowKey]: { ...rowData[rowKey], result: option },
                       };
                       updateRows(nextRows, criteria, true);
                     }}
@@ -649,21 +700,23 @@ export function ActivityCard({
                 ))}
               </div>
             </article>
-          ))}
+            );
+          })}
         </div>
         {globalCriteria.length ? (
           <div className="interactive-checklist test-criteria">
             <strong>{uiText(language, "Final check").toUpperCase()}</strong>
-            {globalCriteria.map((item) => {
-              const checked = criteria.includes(item);
+            {globalCriteria.map((item, index) => {
+              const itemKey = textKey(item);
+              const checked = criteria.includes(itemKey);
               return (
-                <label key={item}>
+                <label key={`${activity.id}-criterion-${index}`}>
                   <input
                     checked={checked}
                     onChange={() => {
                       const next = checked
-                        ? criteria.filter((entry) => entry !== item)
-                        : [...criteria, item];
+                        ? criteria.filter((entry) => entry !== itemKey)
+                        : [...criteria, itemKey];
                       updateRows(rowData, next, true);
                     }}
                     type="checkbox"
@@ -703,16 +756,17 @@ export function ActivityCard({
         {header}
         <p>{interactiveText(language, activity.instruction)}</p>
         <div className="interactive-checklist">
-          {items.map((item) => {
-            const checked = checks.includes(item);
+          {items.map((item, index) => {
+            const itemKey = textKey(item);
+            const checked = checks.includes(itemKey);
             return (
-              <label key={item}>
+              <label key={`${activity.id}-peer-${index}`}>
                 <input
                   checked={checked}
                   onChange={() => {
                     const nextChecks = checked
-                      ? checks.filter((entry) => entry !== item)
-                      : [...checks, item];
+                      ? checks.filter((entry) => entry !== itemKey)
+                      : [...checks, itemKey];
                     onUpdate(
                       { ...data, checks: nextChecks, observation },
                       nextChecks.length >= minimum && observation.trim().length > 2,
@@ -766,15 +820,19 @@ export function ActivityCard({
       <p>{interactiveText(language, activity.instruction)}</p>
       {activity.content?.length ? (
         <div className="read-points">
-          {activity.content.map((line) => (
-            <p key={line}>{interactiveText(language, line)}</p>
+          {activity.content.map((line, index) => (
+            <p key={`${activity.id}-read-${index}`}>
+              {interactiveText(language, line)}
+            </p>
           ))}
         </div>
       ) : null}
       {activity.items?.length ? (
         <ul className="read-list">
-          {activity.items.map((item) => (
-            <li key={item}>{interactiveText(language, item)}</li>
+          {activity.items.map((item, index) => (
+            <li key={`${activity.id}-item-${index}`}>
+              {interactiveText(language, item)}
+            </li>
           ))}
         </ul>
       ) : null}

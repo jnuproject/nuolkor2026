@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import type { DayCourseware } from "@/content/courseware";
 import type { InteractiveDayPlan } from "@/content/interactive";
 import {
@@ -15,9 +17,11 @@ import { LanguageToggle } from "../LanguageToggle";
 export function InstructorPlanView({
   plan,
   courseware,
+  guideMarkdown,
 }: {
   plan: InteractiveDayPlan;
   courseware: DayCourseware;
+  guideMarkdown: string;
 }) {
   const language = useLanguage();
   const [selected, setSelected] = useState(0);
@@ -125,8 +129,10 @@ export function InstructorPlanView({
           <div className="instructor-cue-panel">
             <span>{uiText(language, "Instructor cue")}</span>
             <ol>
-              {stage.teacherCue.map((cue) => (
-                <li key={cue}>{teacherCueText(language, cue)}</li>
+              {stage.teacherCue.map((cue, index) => (
+                <li key={`${stage.id}-cue-${index}`}>
+                  {teacherCueText(language, cue)}
+                </li>
               ))}
             </ol>
           </div>
@@ -178,8 +184,10 @@ export function InstructorPlanView({
             <span>{uiText(language, "Student screen").toUpperCase()}</span>
             <h3>{uiText(language, "What students see now")}</h3>
             <ol>
-              {stage.studentBrief.map((line) => (
-                <li key={line}>{interactiveText(language, line)}</li>
+              {stage.studentBrief.map((line, index) => (
+                <li key={`${stage.id}-brief-${index}`}>
+                  {interactiveText(language, line)}
+                </li>
               ))}
             </ol>
           </div>
@@ -227,6 +235,33 @@ export function InstructorPlanView({
           </footer>
         </section>
       </div>
+
+      <section className="instructor-full-guide">
+        <header>
+          <span>{uiText(language, "Full instructor manuscript")}</span>
+          <h2>{uiText(language, "Detailed teaching guide")}</h2>
+          <p>
+            {language === "ko"
+              ? "강의 대본, 시연 순서, 예상 문제와 대응을 위에서 아래로 확인할 수 있습니다."
+              : "The bilingual stage guide above is the English teaching view. The complete operational manuscript below is currently maintained in Korean."}
+          </p>
+        </header>
+        {language === "ko" ? (
+          <div lang="ko">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {guideMarkdown}
+            </ReactMarkdown>
+          </div>
+        ) : (
+          <div className="instructor-guide-language-note">
+            <p>
+              Use the stage timeline above for the complete English teaching
+              sequence, student instructions, evidence activities, and
+              completion criteria.
+            </p>
+          </div>
+        )}
+      </section>
     </main>
   );
 }

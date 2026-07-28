@@ -1,27 +1,54 @@
 import { curriculumContent } from "@/content/generated";
 
-export type Reading = {
-  id: string;
+type ReadingCopy = {
   title: string;
   body: string;
 };
 
+export type Reading = {
+  id: string;
+  title: string;
+  body: string;
+  translations?: {
+    ko: ReadingCopy;
+  };
+};
+
+function documentCopy(markdown: string, fallbackTitle: string): ReadingCopy {
+  const heading = markdown.match(/^#\s+(.+)$/m);
+  const title = heading?.[1]?.trim() || fallbackTitle;
+  const body = heading
+    ? markdown
+        .slice(0, heading.index)
+        .concat(markdown.slice((heading.index ?? 0) + heading[0].length))
+        .trim()
+    : markdown.trim();
+
+  return { title, body };
+}
+
 export function getReadings(day: number): Reading[] {
   const content =
     curriculumContent.days[String(day) as keyof typeof curriculumContent.days];
-  const markdown = content?.lecture ?? "";
-  if (!markdown.trim()) {
+  if (!content) {
     return [];
   }
-  const matches = [...markdown.matchAll(/^## (.+)$/gm)];
-  return matches.map((match, index) => {
-    const start = (match.index ?? 0) + match[0].length;
-    const end =
-      index + 1 < matches.length ? matches[index + 1].index : markdown.length;
-    return {
-      id: `day${day}-reading-${index + 1}`,
-      title: match[1].trim(),
-      body: markdown.slice(start, end).trim(),
-    };
-  });
+
+  const lessonEn = documentCopy(content.lessonEn, "Lesson");
+  const lessonKo = documentCopy(content.lessonKo, "수업 읽기");
+  const workbookEn = documentCopy(content.workbookEn, "Workbook");
+  const workbookKo = documentCopy(content.workbookKo, "워크북");
+
+  return [
+    {
+      id: `day${day}-lesson`,
+      ...lessonEn,
+      translations: { ko: lessonKo },
+    },
+    {
+      id: `day${day}-workbook`,
+      ...workbookEn,
+      translations: { ko: workbookKo },
+    },
+  ];
 }

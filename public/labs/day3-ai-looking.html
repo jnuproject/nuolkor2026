@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NUOL Campus Service Finder — Design Clinic</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #201a32;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at 10% 10%, #ffe7fb 0, transparent 32%),
+        radial-gradient(circle at 90% 10%, #dff4ff 0, transparent 36%),
+        linear-gradient(145deg, #faf7ff, #eef7ff);
+    }
+
+    .sample-warning {
+      margin: 0;
+      padding: 8px 20px;
+      background: #201a32;
+      color: #fff;
+      text-align: center;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: min(1180px, calc(100% - 40px));
+      margin: 18px auto;
+      padding: 14px 20px;
+      border: 1px solid rgba(112, 78, 200, 0.18);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.7);
+      box-shadow: 0 18px 50px rgba(75, 40, 150, 0.12);
+      backdrop-filter: blur(16px);
+    }
+
+    .logo { font-weight: 900; }
+
+    .pill {
+      display: inline-flex;
+      padding: 8px 14px;
+      border-radius: 999px;
+      color: #6d35e8;
+      background: #eee5ff;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .hero {
+      width: min(1050px, calc(100% - 40px));
+      min-height: 690px;
+      margin: 0 auto;
+      padding: 105px 30px 70px;
+      text-align: center;
+    }
+
+    h1 {
+      max-width: 900px;
+      margin: 24px auto;
+      font-size: clamp(4rem, 10vw, 8.2rem);
+      line-height: 0.9;
+      letter-spacing: -0.07em;
+      background: linear-gradient(90deg, #6d35e8, #0088d8, #ef4fac);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .lead {
+      max-width: 700px;
+      margin: 0 auto;
+      color: #716885;
+      font-size: 1.25rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 32px 0;
+    }
+
+    button {
+      min-height: 50px;
+      padding: 0 24px;
+      border: 0;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #6d35e8, #a647e6);
+      color: white;
+      font: inherit;
+      font-weight: 800;
+      box-shadow: 0 14px 30px rgba(109, 53, 232, 0.27);
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .secondary {
+      color: #6d35e8;
+      background: white;
+      border: 1px solid #d8c8ff;
+    }
+
+    .task,
+    .details {
+      width: min(1100px, calc(100% - 40px));
+      margin: 0 auto 30px;
+      padding: 28px;
+      border: 1px solid rgba(112, 78, 200, 0.18);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: 0 24px 60px rgba(75, 40, 150, 0.13);
+      text-align: center;
+    }
+
+    .task h2 {
+      margin: 0 0 8px;
+      font-size: 2rem;
+    }
+
+    .task p {
+      margin: 0 auto 22px;
+      color: #716885;
+    }
+
+    .details {
+      background: linear-gradient(145deg, #eee5ff, #dff5ff);
+    }
+
+    .details p {
+      margin: 8px 0 0;
+    }
+
+    [hidden] { display: none; }
+
+    .stats,
+    .features,
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      width: min(1100px, calc(100% - 40px));
+      margin: 0 auto 70px;
+    }
+
+    .card {
+      padding: 28px;
+      border: 1px solid rgba(112, 78, 200, 0.18);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: 0 24px 60px rgba(75, 40, 150, 0.13);
+      text-align: center;
+    }
+
+    .stat {
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: #6d35e8;
+    }
+
+    h2 {
+      margin: 90px auto 30px;
+      text-align: center;
+      font-size: 2.8rem;
+    }
+
+    .service-note {
+      margin: -16px auto 28px;
+      color: #716885;
+      text-align: center;
+    }
+
+    .icon {
+      display: inline-grid;
+      width: 64px;
+      height: 64px;
+      place-items: center;
+      border-radius: 22px;
+      background: linear-gradient(145deg, #eadfff, #dff5ff);
+      font-size: 1.8rem;
+    }
+
+    .service-card {
+      position: relative;
+      min-height: 240px;
+    }
+
+    .service-card .pill {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+
+    .service-card .name {
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    .service-card .place {
+      color: #716885;
+    }
+
+    footer {
+      padding: 60px 20px;
+      text-align: center;
+      color: #716885;
+    }
+
+    @media (max-width: 700px) {
+      .nav span:not(.logo) { display: none; }
+      .hero { min-height: 610px; padding-top: 80px; }
+      .hero-actions { flex-direction: column; }
+      .stats,
+      .features,
+      .service-grid {
+        grid-template-columns: repeat(3, minmax(260px, 1fr));
+        overflow-x: auto;
+        padding-bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <p class="sample-warning">Classroom sample — not official NUOL information.</p>
+  <nav class="nav">
+    <span class="logo">✨ NUOL SERVICE FINDER</span>
+    <span>Explore</span>
+    <span>Services</span>
+    <span>Locations</span>
+    <span class="pill">CAMPUS GUIDE</span>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <span class="pill">✨ STUDENT SUPPORT ✨</span>
+      <h1>Find the campus service you need.</h1>
+      <p class="lead">Check where to study, print a document, or ask for academic help.</p>
+      <div class="hero-actions">
+        <button type="button">Get Started 🚀</button>
+        <button class="secondary" type="button">Learn More ✨</button>
+      </div>
+      <span class="pill">Trusted by visionary learners everywhere</span>
+    </section>
+
+    <section class="task" aria-labelledby="task-title">
+      <h2 id="task-title">Need help finding a building?</h2>
+      <p>See what to bring and where to ask for accessible entry information.</p>
+      <button id="detailsButton" type="button" aria-expanded="false" aria-controls="detailsNote">Show access details</button>
+    </section>
+
+    <section id="detailsNote" class="details" hidden>
+      <strong>Access details</strong>
+      <p>Bring your student card. The information desk can help you locate an elevator or accessible entrance.</p>
+    </section>
+
+    <section class="stats" aria-label="Service statistics">
+      <article class="card"><div class="stat">12K+</div><p>Empowered Students</p></article>
+      <article class="card"><div class="stat">98%</div><p>Transformative Success</p></article>
+      <article class="card"><div class="stat">50+</div><p>Innovation Moments</p></article>
+    </section>
+
+    <h2>Everything you need to thrive</h2>
+    <section class="features">
+      <article class="card"><span class="icon">⚡</span><h3>Seamless</h3><p>An effortlessly powerful experience designed around your journey.</p></article>
+      <article class="card"><span class="icon">✨</span><h3>Innovative</h3><p>Unlock meaningful possibilities with intelligent service discovery.</p></article>
+      <article class="card"><span class="icon">🎯</span><h3>Empowering</h3><p>Transform curiosity into limitless opportunity and impact.</p></article>
+    </section>
+
+    <h2>Your transformative campus support</h2>
+    <p class="service-note">Hours shown for weekdays.</p>
+    <section class="service-grid">
+      <article class="card service-card"><span class="pill">POPULAR</span><h3>08:00–20:00</h3><p class="name">Central Library</p><p class="place">Library Building</p><button type="button">Explore</button></article>
+      <article class="card service-card"><span class="pill">TRENDING</span><h3>08:30–17:00</h3><p class="name">Print &amp; Copy Desk</p><p class="place">Student Center · First floor</p><button type="button">Explore</button></article>
+      <article class="card service-card"><span class="pill">PREMIUM</span><h3>09:00–16:00</h3><p class="name">Academic Support Desk</p><p class="place">Administration Building</p><button type="button">Explore</button></article>
+    </section>
+  </main>
+
+  <footer>Made with ✨ for visionary innovators · Join the future today</footer>
+
+  <script>
+    const detailsButton = document.querySelector('#detailsButton');
+    const detailsNote = document.querySelector('#detailsNote');
+
+    detailsButton.addEventListener('click', () => {
+      const willOpen = detailsNote.hidden;
+      detailsNote.hidden = !willOpen;
+      detailsButton.setAttribute('aria-expanded', String(willOpen));
+      detailsButton.textContent = willOpen ? 'Hide access details' : 'Show access details';
+    });
+  </script>
+</body>
+</html>

@@ -10,7 +10,7 @@ const siteOrigin = new URL("https://jnuproject.github.io/");
 const siteUrl = new URL("nuolkor2026/", siteOrigin);
 const socialImage = new URL("og.png", siteUrl).toString();
 const description =
-  "A six-day, 18-hour interactive vibe coding classroom with guided activities, live progress, help signals, and instructor controls.";
+  "A six-day, 18-hour bilingual course for defining, building, refining, testing, and publishing a useful web project with AI.";
 
 const languageInitScript = `
   (function () {

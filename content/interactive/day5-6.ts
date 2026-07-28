@@ -1,529 +1,488 @@
-import type { InteractiveDayPlan } from "./types";
+import { text, type InteractiveDayPlan } from "./types";
 
 export const day5Plan: InteractiveDayPlan = {
   day: 5,
-  title: "Test, Learn, and Finish",
-  question: "How can you prove that another person can use what you built?",
-  artifact: "Test evidence and a verified release candidate",
+  title: text(
+    "Make It Work for Someone Else",
+    "다른 사람도 사용할 수 있게 만들기",
+  ),
+  question: text(
+    "What can I learn when another person uses the project without my explanation?",
+    "다른 사람이 내 설명 없이 프로젝트를 사용할 때 무엇을 배울 수 있을까요?",
+  ),
+  artifact: text(
+    "An unmoderated user observation, one prioritized and re-tested fix, a public release candidate, and a complete backup",
+    "설명 없는 사용자 관찰, 우선순위를 정해 재시험한 수정, 공개 후보 URL, 전체 백업",
+  ),
   stages: [
     {
-      id: "day5-test-strategy",
+      id: "day5-write-one-user-task",
       start: "00:00",
       end: "00:15",
       minutes: 15,
       phase: "TELL",
-      title: "Test strategy",
-      goal: "Know what counts as evidence and protect the last working build.",
+      title: text(
+        "Write one task for another person",
+        "다른 사람에게 줄 사용 과제 작성",
+      ),
+      goal: text(
+        "Ask for a useful outcome without teaching the clicks.",
+        "클릭 방법을 알려 주지 않고 유용한 결과를 요청합니다.",
+      ),
       studentBrief: [
-        "Do not add a new feature today.",
-        "Write Expected before Actual.",
-        "Use TELL → WATCH → CHECK → FIX → SAVE.",
+        text(
+          "Write one sentence that tells the tester what to achieve, not which controls to use.",
+          "어떤 조작을 할지가 아니라 무엇을 이루어야 하는지를 한 문장으로 적으세요.",
+        ),
       ],
       teacherCue: [
-        "오늘은 기능 추가일이 아니라 작동 증거를 만드는 날이라고 선언한다.",
-        "단일 파일과 다중 파일 학생이 각각 시작 Save Point를 만들고 복사본을 직접 열었는지 확인한다.",
-        "AI의 설명이 아니라 학생이 직접 실행한 결과만 증거로 인정한다.",
+        text(
+          "Reject tasks that name button colors, positions, or exact click sequences. Keep the tester's goal and safe sample data.",
+          "버튼 색·위치·정확한 클릭 순서를 알려 주는 과제는 다시 쓰게 한다. 테스터의 목표와 안전한 예시 데이터만 남긴다.",
+        ),
       ],
-      completion:
-        "A Day 5 start copy opens and works, and the learner selects Action + Expected + Actual as test evidence.",
+      completion: text(
+        "The task states a result and does not reveal the interface path.",
+        "과제가 결과를 말하고 화면 사용 방법은 알려 주지 않습니다.",
+      ),
       activities: [
         {
-          id: "day5-evidence-read",
-          kind: "read",
-          title: "A claim is not evidence",
-          instruction: "Read the three parts of a test record.",
-          content: [
-            "Action: what you do.",
-            "Expected: what should happen.",
-            "Actual: what really happens.",
-            "Write Expected before you run the test.",
-          ],
-        },
-        {
-          id: "day5-evidence-choice",
-          kind: "choice",
-          title: "Choose the evidence",
-          instruction: "Which note is useful test evidence?",
-          options: [
-            {
-              label: "AI says the project works.",
-              value: "ai-claim",
-              feedback: "This is a claim. Run the project yourself.",
-            },
-            {
-              label: "Action, Expected, and Actual are recorded.",
-              value: "test-record",
-              feedback: "Correct. Another person can repeat this test.",
-            },
-            {
-              label: "The page looks good.",
-              value: "opinion",
-              feedback: "This is an opinion, not a repeatable result.",
-            },
-          ],
-          expected: ["test-record"],
-        },
-        {
-          id: "day5-start-save",
-          kind: "checklist",
-          title: "Protect the working version",
-          instruction: "Make and test the Day 5 start copy.",
-          items: [
-            "Open and test my-app.",
-            "For one file, make my-app/day5-start.html.",
-            "For many files, copy the full project as my-app-day5-start.",
-            "Open the copy and run the main path.",
-          ],
-          minimum: 4,
-        },
-      ],
-    },
-    {
-      id: "day5-write-test-cards",
-      start: "00:15",
-      end: "00:30",
-      minutes: 15,
-      phase: "CHECK",
-      title: "Write test cards",
-      goal: "Write a HAPPY test and handle each relevant risk with a visible expected result.",
-      studentBrief: [
-        "Write one HAPPY test.",
-        "For EMPTY, INVALID, and BOUNDARY, write a test when the condition exists; otherwise write N/A and why.",
-        "Use a result that another person can see.",
-      ],
-      teacherCue: [
-        "학생이 Actual을 실행하기 전에 Expected를 쓰게 한다.",
-        "기능 내용을 대신 제안하지 말고 EMPTY·INVALID·BOUNDARY가 학생의 기존 기능에 실제로 적용되는지 확인한다. 해당하지 않으면 N/A와 이유를 인정한다.",
-        "‘It works’처럼 관찰할 수 없는 결과는 다시 쓰게 한다.",
-      ],
-      completion:
-        "A HAPPY card checks a MUST feature, and EMPTY, INVALID, and BOUNDARY each have either a relevant test card or N/A with a reason.",
-      activities: [
-        {
-          id: "day5-four-types",
-          kind: "read",
-          title: "Test risk types",
-          instruction: "Read each type, then decide whether the risk exists in your feature.",
-          content: [
-            "HAPPY — the intended use.",
-            "EMPTY — required input is missing; use N/A when no input is required.",
-            "INVALID — a stated value or action rule is violated; use N/A when no such rule exists.",
-            "BOUNDARY — the edge of a stated limit; use N/A when the feature has no limit.",
-          ],
-        },
-        {
-          id: "day5-four-cards",
-          kind: "test-record",
-          title: "Write the relevant test cards",
-          instruction:
-            "HAPPY is required. For each other type, record Feature, Action or Input, and Expected—or N/A with a reason. Do not run it yet.",
-          items: [
-            "HAPPY",
-            "EMPTY or N/A + reason",
-            "INVALID or N/A + reason",
-            "BOUNDARY or N/A + reason",
-          ],
-          expected: [
-            "Feature",
-            "Action or Input",
-            "Expected visible result",
-          ],
-          minimum: 4,
-        },
-        {
-          id: "day5-card-check",
-          kind: "checklist",
-          title: "Check the cards",
-          instruction: "Check the quality of the tests and N/A decisions.",
-          items: [
-            "The HAPPY card checks a MUST feature.",
-            "Every relevant card has an action or input.",
-            "Every Expected result can be seen or compared.",
-            "Every N/A names why that risk does not exist in this feature.",
-            "No card says only “It works.”",
-          ],
-          minimum: 5,
-        },
-      ],
-    },
-    {
-      id: "day5-peer-test-rounds",
-      start: "00:30",
-      end: "01:00",
-      minutes: 30,
-      phase: "WATCH",
-      title: "Two peer-test rounds",
-      goal: "Watch a peer use the project and record what really happens.",
-      studentBrief: [
-        "Maker: watch and do not explain.",
-        "Tester: think aloud and use no private data.",
-        "Do not fix during the test.",
-      ],
-      teacherCue: [
-        "앞 4분에는 테스터·제작자 규칙과 안전한 샘플 데이터 사용을 시연한다.",
-        "다음 12분에는 첫 라운드를 진행하고, 2분 동안 기록을 저장한 뒤 역할과 프로젝트를 바꾼다.",
-        "마지막 12분에는 둘째 라운드를 진행한다. 제작자는 키보드나 마우스를 잡지 않고, 취향 대신 멈춤·반복·예상 밖 행동을 기록한다.",
-      ],
-      completion:
-        "Both learners complete one tester role and one maker role, with at least one pass and one clear observation recorded.",
-      activities: [
-        {
-          id: "day5-peer-round-one",
-          kind: "peer",
-          title: "Peer test — Round 1",
-          instruction:
-            "The tester uses the cards. The maker watches and records evidence.",
-          items: [
-            "First action",
-            "Pause or repeat",
-            "Unexpected action or result",
-            "One pass or fail",
-          ],
-          durationMinutes: 12,
+          id: "day5-one-user-task",
+          kind: "short-answer",
+          title: text("Write the user task", "사용 과제 작성"),
+          instruction: text(
+            "Write the one-sentence task and the safe sample information the tester may use.",
+            "한 문장 사용 과제와 테스터가 사용할 수 있는 안전한 예시 정보를 적으세요.",
+          ),
+          placeholder: text(
+            "Task… Safe sample information…",
+            "과제… 안전한 예시 정보…",
+          ),
           minimum: 1,
         },
+      ],
+    },
+    {
+      id: "day5-observe-without-explaining",
+      start: "00:15",
+      end: "00:35",
+      minutes: 20,
+      phase: "WATCH",
+      title: text(
+        "Learn to observe without explaining",
+        "설명하지 않고 관찰하는 법",
+      ),
+      goal: text(
+        "Separate what a person does from what they later say they liked.",
+        "사람이 실제로 한 행동과 나중에 말한 취향을 구분합니다.",
+      ),
+      studentBrief: [
+        text(
+          "Watch for the first action, pauses, repeated actions, unexpected choices, and whether the task is completed.",
+          "첫 행동, 멈춤, 반복 행동, 예상 밖의 선택, 과제 완료 여부를 관찰하세요.",
+        ),
+      ],
+      teacherCue: [
+        text(
+          "Demonstrate the maker staying silent and keeping hands away from the tester's keyboard and mouse.",
+          "제작자가 말하지 않고 테스터의 키보드와 마우스에 손대지 않는 모습을 시연한다.",
+        ),
+      ],
+      completion: text(
+        "The learner can distinguish an observation from an opinion or suggestion.",
+        "학생이 관찰, 의견, 제안을 구분할 수 있습니다.",
+      ),
+      activities: [
         {
-          id: "day5-peer-round-two",
-          kind: "peer",
-          title: "Peer test — Round 2",
-          instruction:
-            "Switch roles. Test the other project and record what happened.",
-          items: [
-            "Action or Input",
-            "Expected",
-            "Actual",
-            "One clear observation",
-          ],
-          durationMinutes: 12,
+          id: "day5-observation-method-read",
+          kind: "read",
+          title: text("Observation method", "관찰 방법"),
+          instruction: text(
+            "Learn what to watch and what the maker must not do during the session.",
+            "사용 중 무엇을 보고 제작자가 무엇을 하지 않아야 하는지 익히세요.",
+          ),
+          hidden: true,
+        },
+      ],
+    },
+    {
+      id: "day5-first-cross-use",
+      start: "00:35",
+      end: "01:00",
+      minutes: 25,
+      phase: "CHECK",
+      title: text("Run the first cross-use session", "1차 교차 사용"),
+      goal: text(
+        "Collect behavior evidence from another person using the real project.",
+        "다른 사람이 실제 프로젝트를 사용하는 행동 근거를 모읍니다.",
+      ),
+      studentBrief: [
+        text(
+          "Give the task, stay silent, observe the full attempt, then switch roles.",
+          "과제를 건네고 말하지 않은 채 전체 시도를 관찰한 뒤 역할을 바꾸세요.",
+        ),
+      ],
+      teacherCue: [
+        text(
+          "Use the planned pairs. Protect silent observation and safe data; intervene only for safety or a complete technical stop.",
+          "계획한 짝을 사용한다. 설명 없는 관찰과 안전한 데이터를 지키고 안전 문제나 완전한 기술 중단일 때만 개입한다.",
+        ),
+      ],
+      completion: text(
+        "Each learner has observed one complete attempt and recorded behavior rather than only an opinion.",
+        "각 학생이 한 번의 전체 시도를 관찰하고 의견만이 아니라 행동을 기록했습니다.",
+      ),
+      activities: [
+        {
+          id: "day5-first-use-observation",
+          kind: "short-answer",
+          title: text(
+            "Record the first user session",
+            "첫 사용자 테스트 기록",
+          ),
+          instruction: text(
+            "Record the first action, one pause or repeated action, one unexpected action, and whether the task was completed.",
+            "첫 행동, 멈춤 또는 반복 행동 하나, 예상 밖 행동 하나, 과제 완료 여부를 적으세요.",
+          ),
+          placeholder: text(
+            "First action… Pause/repetition… Unexpected action… Completed or not…",
+            "첫 행동… 멈춤/반복… 예상 밖 행동… 완료 여부…",
+          ),
+          minimum: 1,
+        },
+      ],
+    },
+    {
+      id: "day5-turn-observation-into-problem",
+      start: "01:00",
+      end: "01:10",
+      minutes: 10,
+      phase: "CHECK",
+      title: text(
+        "Turn the observation into a problem statement",
+        "관찰 결과 정리",
+      ),
+      goal: text(
+        "Describe a reproducible difference between expected and actual use.",
+        "예상한 사용과 실제 사용의 재현 가능한 차이를 설명합니다.",
+      ),
+      studentBrief: [
+        text(
+          "Write what the tester tried, what happened, what should have happened, and why it mattered.",
+          "테스터가 한 행동, 실제로 일어난 일, 일어나야 했던 일, 중요한 이유를 적으세요.",
+        ),
+      ],
+      teacherCue: [
+        text(
+          "Replace labels such as confusing or bad with a specific action and visible result.",
+          "헷갈린다·나쁘다 같은 표현을 구체적인 행동과 눈에 보이는 결과로 바꾸게 한다.",
+        ),
+      ],
+      completion: text(
+        "The problem statement can be reproduced and checked after a change.",
+        "문제 문장을 다시 재현하고 수정 뒤 확인할 수 있습니다.",
+      ),
+      activities: [
+        {
+          id: "day5-problem-statement",
+          kind: "short-answer",
+          title: text(
+            "Write the observed problem",
+            "관찰한 문제 작성",
+          ),
+          instruction: text(
+            "Write the action, actual result, expected result, and user impact.",
+            "행동, 실제 결과, 기대 결과, 사용자에게 미친 영향을 적으세요.",
+          ),
+          placeholder: text(
+            "Action… Actual… Expected… Impact…",
+            "행동… 실제… 기대… 영향…",
+          ),
           minimum: 1,
         },
       ],
     },
     {
       id: "day5-break",
-      start: "01:00",
-      end: "01:10",
+      start: "01:10",
+      end: "01:20",
       minutes: 10,
       phase: "BREAK",
-      title: "Break",
-      goal: "Rest and return ready to sort the evidence.",
-      studentBrief: ["Take a 10-minute break.", "Do not start a fix."],
-      teacherCue: [
-        "학생이 수정 작업을 시작하지 않게 하고, 반복된 문제와 안전 문제를 빠르게 파악한다.",
+      title: text("Break", "휴식"),
+      goal: text("Rest before choosing and fixing a problem.", "고칠 문제를 고르기 전에 쉽니다."),
+      studentBrief: [
+        text(
+          "Pause and return with the observation record.",
+          "작업을 멈추고 관찰 기록을 가지고 돌아오세요.",
+        ),
       ],
-      completion: "The break timer ends and the learner returns at 01:10.",
+      teacherCue: [
+        text(
+          "Do not solve learners' problems during the break. Prepare to help with prioritization.",
+          "휴식 중 학생의 문제를 대신 해결하지 않는다. 우선순위 판단을 도울 준비를 한다.",
+        ),
+      ],
+      completion: text(
+        "The learner returns ready to choose one evidence-based fix.",
+        "학생이 근거가 있는 수정 하나를 고를 준비를 해서 돌아옵니다.",
+      ),
       activities: [
         {
           id: "day5-break-timer",
           kind: "timer",
-          title: "10-minute break",
-          instruction: "Pause your work and return when the timer ends.",
+          title: text("Ten-minute break", "10분 휴식"),
+          instruction: text(
+            "Rest and return when the timer ends.",
+            "쉬고 타이머가 끝나면 돌아오세요.",
+          ),
           durationMinutes: 10,
+          hidden: true,
         },
       ],
     },
     {
-      id: "day5-sort-problems",
-      start: "01:10",
-      end: "01:25",
+      id: "day5-choose-fix-priority",
+      start: "01:20",
+      end: "01:35",
       minutes: 15,
-      phase: "CHECK",
-      title: "Sort problems",
-      goal: "Turn observations into evidence and choose what matters first.",
+      phase: "TELL",
+      title: text(
+        "Decide what to fix now",
+        "무엇을 지금 고칠지 판단",
+      ),
+      goal: text(
+        "Prioritize the problem that most blocks the main path and can be re-tested today.",
+        "핵심 흐름을 가장 많이 막고 오늘 다시 시험할 수 있는 문제를 우선합니다.",
+      ),
       studentBrief: [
-        "A new feature is not a bug.",
-        "Choose no more than three fixes.",
+        text(
+          "Choose one fix for now, one possible fix if time remains, and one item for a later version.",
+          "지금 고칠 것 하나, 시간이 남으면 고칠 것 하나, 다음 버전으로 미룰 것 하나를 정하세요.",
+        ),
       ],
       teacherCue: [
-        "의견을 Action·Actual·Expected가 포함된 재현 가능한 문장으로 바꾸게 한다.",
-        "핵심 행동 차단, 오답, 안전 문제, 발표 차단은 MUST FIX로 분류한다.",
-        "새 기능과 큰 재설계는 LATER로 보내고 수정 후보를 최대 세 개로 제한한다.",
+        text(
+          "Do not let visual preference outrank a task blocker. Do not let learners try to implement every comment.",
+          "시각 취향이 과제 방해 문제보다 우선하지 않게 한다. 모든 의견을 구현하려 하지 않게 한다.",
+        ),
       ],
-      completion:
-        "The learner records evidence for each chosen problem, assigns a priority, and keeps no more than three fixes.",
+      completion: text(
+        "One observed problem is selected with a reason and a clear re-test.",
+        "관찰한 문제 하나가 이유와 분명한 재시험 방법과 함께 선택되었습니다.",
+      ),
       activities: [
         {
-          id: "day5-problem-evidence",
+          id: "day5-fix-priority",
           kind: "short-answer",
-          title: "Write the evidence",
-          instruction: "Describe one problem without giving an opinion.",
-          prompt:
-            "When the tester __________, the project __________. I expected __________.",
-          placeholder: "Write one repeatable observation.",
-          minimum: 1,
-        },
-        {
-          id: "day5-priority-choice",
-          kind: "choice",
-          title: "Choose a priority",
-          instruction: "Classify the first problem.",
-          options: [
-            {
-              label: "MUST FIX",
-              value: "must-fix",
-              feedback:
-                "Use this for a blocked main action, wrong result, unsafe result, or demo blocker.",
-            },
-            {
-              label: "SHOULD FIX",
-              value: "should-fix",
-              feedback:
-                "Use this when the action is hard but a safe workaround exists.",
-            },
-            {
-              label: "LATER",
-              value: "later",
-              feedback:
-                "Use this for a new feature, large redesign, or unsafe test.",
-            },
-          ],
-        },
-        {
-          id: "day5-priority-check",
-          kind: "checklist",
-          title: "Keep the plan small",
-          instruction: "Check the problem list.",
-          items: [
-            "Each problem has evidence.",
-            "A new feature is not listed as a bug.",
-            "Safety and the main path come first.",
-            "I chose no more than three fixes.",
-          ],
-          minimum: 4,
-        },
-      ],
-    },
-    {
-      id: "day5-safety-accessibility",
-      start: "01:25",
-      end: "01:40",
-      minutes: 15,
-      phase: "CHECK",
-      title: "Safety and accessibility",
-      goal: "Find an obvious safety or access barrier before fixing.",
-      studentBrief: [
-        "Check secrets, private data, text, labels, focus, and a narrow window.",
-        "Record one issue.",
-      ],
-      teacherCue: [
-        "비밀정보가 보이면 즉시 RED로 전환하고 화면 공유와 추가 입력을 중단시킨다.",
-        "완전한 접근성 인증이 아니라 명백한 사용 장벽을 찾는 빠른 점검임을 설명한다.",
-        "Tab 이동과 좁은 브라우저 창을 학생이 직접 시험하게 한다.",
-      ],
-      completion:
-        "All safety and quick-access checks are marked, and one observed issue or “no issue found” is recorded.",
-      activities: [
-        {
-          id: "day5-safety-check",
-          kind: "checklist",
-          title: "Safety check",
-          instruction: "Check the current project.",
-          items: [
-            "No password, API key, or secret is visible.",
-            "No sensitive personal data is stored or shown.",
-            "Important facts or numbers were checked.",
-            "Every external link or library is understood.",
-            "The project does not ask a user to pay or sign in.",
-          ],
-          minimum: 5,
-        },
-        {
-          id: "day5-access-check",
-          kind: "checklist",
-          title: "Quick access check",
-          instruction: "Use the keyboard and a narrow browser window.",
-          items: [
-            "The page has a clear title.",
-            "Buttons say what they do.",
-            "Text is readable.",
-            "Tab reaches the main controls.",
-            "I can identify the focused control while using Tab.",
-            "Every input has a visible label, or this project has no input.",
-            "The main path works in a narrow window.",
-          ],
-          minimum: 7,
-        },
-        {
-          id: "day5-access-issue",
-          kind: "short-answer",
-          title: "Record one result",
-          instruction: "Write one issue. If none was found, say what you tested.",
-          placeholder: "I tested… I found…",
+          title: text("Record the fix priority", "수정 우선순위 기록"),
+          instruction: text(
+            "Write what you will fix now, why it is first, how the same user will re-test it, and what will wait.",
+            "지금 고칠 것, 그것이 우선인 이유, 같은 사용자가 다시 시험할 방법, 미룰 것을 적으세요.",
+          ),
+          placeholder: text(
+            "Fix now… Reason… Re-test… Later…",
+            "지금 수정… 이유… 재시험… 나중에…",
+          ),
           minimum: 1,
         },
       ],
     },
     {
-      id: "day5-approve-fix-plan",
-      start: "01:40",
-      end: "01:50",
-      minutes: 10,
+      id: "day5-fix-and-retest",
+      start: "01:35",
+      end: "02:15",
+      minutes: 40,
       phase: "FIX",
-      title: "Review the fix plan",
-      goal: "Use self-check and peer-check to make one small fix READY or identify one Yellow mismatch.",
+      title: text(
+        "Fix the important problem and re-test",
+        "중요한 문제 수정",
+      ),
+      goal: text(
+        "Make one bounded change, preserve existing behavior, and ask the original tester to attempt the same task again.",
+        "범위가 작은 변경 하나를 만들고 기존 동작을 유지하며 원래 테스터가 같은 과제를 다시 시도하게 합니다.",
+      ),
       studentBrief: [
-        "Start with a MUST FIX item.",
-        "One problem, one small change, one success check.",
-        "Self-check, then peer-check the same gate. Use Yellow only for a mismatch or help request.",
+        text(
+          "Give AI the observation evidence, change only the blocker, then run the same unassisted task with the same tester.",
+          "AI에게 관찰 근거를 주고 방해 문제만 고친 뒤 같은 테스터에게 같은 과제를 설명 없이 다시 맡기세요.",
+        ),
       ],
       teacherCue: [
-        "전원 강사 승인 줄을 만들지 않는다. 학생이 같은 기준으로 자가검수한 뒤 짝이 다시 검수하게 한다.",
-        "자가검수와 짝검수가 모두 통과하면 READY로 표시한다. 불일치나 도움 요청은 Yellow로 표시하고 강사는 그 항목만 확인한다.",
-        "READY 또는 Yellow 불일치 해결 전에는 AI 변경 요청을 보내지 않게 하며, 강사는 학생의 프로젝트 선택을 대신 쓰지 않는다.",
+        text(
+          "Require one change at a time. A maker's own check is not a substitute for the original user's uncoached re-test.",
+          "한 번에 변경 하나만 허용한다. 제작자의 자체 확인으로 원래 사용자의 설명 없는 재시험을 대신하지 않는다.",
+        ),
       ],
-      completion:
-        "The first fix has Problem, Evidence, Small fix, Success means, and Must keep working; the learner completes the same self/peer gate and either marks READY or resolves one Yellow mismatch with focused teacher help.",
+      completion: text(
+        "The original tester has repeated the same task and the learner has recorded success or the remaining blocker.",
+        "원래 테스터가 같은 과제를 다시 수행했고 학생이 성공 또는 남은 막힘을 기록했습니다.",
+      ),
       activities: [
         {
-          id: "day5-fix-plan",
+          id: "day5-fix-retest-evidence",
           kind: "short-answer",
-          title: "Write Fix 1",
-          instruction: "Write the first small fix plan.",
-          prompt:
-            "Problem:\nEvidence:\nPriority:\nSmall fix:\nSuccess means:\nMust keep working:",
-          placeholder: "Complete every line.",
+          title: text(
+            "Record the change and re-test",
+            "변경과 재시험 기록",
+          ),
+          instruction: text(
+            "Write what changed, what stayed working, what the original tester did in the re-test, and whether the blocker remains.",
+            "바꾼 것, 계속 작동한 것, 원래 테스터가 재시험에서 한 행동, 막힘이 남았는지를 적으세요.",
+          ),
+          placeholder: text(
+            "Changed… Preserved… Re-test behavior… Result…",
+            "변경… 유지… 재시험 행동… 결과…",
+          ),
           minimum: 1,
         },
-        {
-          id: "day5-fix-approval",
-          kind: "checklist",
-          title: "Self → peer → Yellow gate",
-          instruction:
-            "Self-check the five plan criteria, then have a partner repeat them. If both agree, mark READY; if one item differs or needs help, mark Yellow and show only that item to the teacher.",
-          items: [
-            "MUST FIX comes first.",
-            "The change is small.",
-            "Success can be tested.",
-            "One working MUST path is named for regression.",
-            "No large new feature is added.",
-            "My partner repeated the same five checks.",
-            "Both checks agree, or I marked the mismatched item Yellow for focused teacher help.",
-          ],
-          minimum: 7,
-        },
       ],
     },
     {
-      id: "day5-project-studio",
-      start: "01:50",
-      end: "02:45",
-      minutes: 55,
-      phase: "STUDIO",
-      title: "Project Studio",
-      goal: "Fix one reviewed READY problem at a time, re-test, and save only working code.",
+      id: "day5-quality-and-public-safety",
+      start: "02:15",
+      end: "02:35",
+      minutes: 20,
+      phase: "CHECK",
+      title: text(
+        "Check mobile, keyboard, content, and public safety",
+        "모바일·키보드·공개 안전 확인",
+      ),
+      goal: text(
+        "Use the real page to check the first screen, main path, relevant alternative state, phone width, keyboard, refresh, and public files.",
+        "실제 페이지에서 첫 화면, 핵심 흐름, 관련 대체 상태, 휴대전화, 키보드, 새로고침, 공개 파일을 확인합니다.",
+      ),
       studentBrief: [
-        "Fix one problem.",
-        "Test the failed path and the main HAPPY path.",
-        "Save only after the tests pass.",
+        text(
+          "Run the release checks and record any failure before uploading the candidate.",
+          "배포 전 확인을 실행하고 실패가 있으면 후보를 올리기 전에 기록하세요.",
+        ),
       ],
       teacherCue: [
-        "학생이 검수한 READY Fix 1부터 시작하고 한 번에 하나의 변경만 요청하게 한다.",
-        "수정 뒤 실패했던 테스트와 핵심 HAPPY 경로를 모두 다시 실행하게 한다.",
-        "RED 상태에서는 새 프롬프트를 멈추고 마지막 작동 Save Point로 복구하게 한다.",
+        text(
+          "Ask for observed results. Remove private information, secret keys, unnecessary files, and broken paths before publication.",
+          "관찰한 결과를 요구한다. 공개 전에 개인정보, 비밀 키, 불필요한 파일, 깨진 경로를 제거한다.",
+        ),
       ],
-      completion:
-        "At least the first reviewed READY fix passes its failed test, the main HAPPY path and named MUST paths still pass, and a working Save Point is recorded.",
+      completion: text(
+        "The project has recorded results for its main path, relevant edge state, mobile, keyboard, refresh, and public-safety checks.",
+        "프로젝트에 핵심 흐름, 관련 예외 상태, 모바일, 키보드, 새로고침, 공개 안전 확인 결과가 기록되어 있습니다.",
+      ),
       activities: [
         {
-          id: "day5-fix-prompt",
-          kind: "prompt",
-          title: "Fix one problem",
-          instruction:
-            "Complete this request for one reviewed READY problem. Read it before you send it.",
-          prompt:
-            "Problem:\n[write the problem]\n\nEvidence:\n[write what happened]\n\nExpected:\n[write the result you need]\n\nPlease fix only this problem.\nKeep every working MUST feature working.\nDo not add a new feature, library, login, API, or file unless I approve it.\nAfter the change, tell me what I should test again.",
-        },
-        {
-          id: "day5-fix-record",
-          kind: "test-record",
-          title: "Test after the fix",
-          instruction: "Record all five results after each reviewed READY fix.",
-          items: [
-            "Failed test before",
-            "Actual result after",
-            "Main HAPPY re-test",
-            "Other MUST paths",
-            "Save Point",
-          ],
-          expected: [
-            "The failed test passes.",
-            "The main path still works.",
-            "No private or secret data appears.",
-          ],
-          minimum: 5,
-        },
-        {
-          id: "day5-studio-timer",
-          kind: "timer",
-          title: "50-minute fix window",
-          instruction:
-            "Repeat CHECK → FIX → CHECK → SAVE. Use the remaining time to close the record and stop before the final smoke test.",
-          durationMinutes: 50,
+          id: "day5-release-check-evidence",
+          kind: "short-answer",
+          title: text(
+            "Record the release checks",
+            "배포 전 확인 기록",
+          ),
+          instruction: text(
+            "Record the first-screen, main-path, relevant edge-state, phone, keyboard, refresh, and public-safety results.",
+            "첫 화면, 핵심 흐름, 관련 예외 상태, 휴대전화, 키보드, 새로고침, 공개 안전 결과를 적으세요.",
+          ),
+          placeholder: text(
+            "First screen… Main path… Edge state… Phone… Keyboard… Refresh… Safety…",
+            "첫 화면… 핵심 흐름… 예외 상태… 휴대전화… 키보드… 새로고침… 안전…",
+          ),
+          minimum: 1,
         },
       ],
     },
     {
-      id: "day5-backup-demo",
-      start: "02:45",
-      end: "03:00",
+      id: "day5-upload-release-candidate",
+      start: "02:35",
+      end: "02:50",
       minutes: 15,
       phase: "SAVE",
-      title: "Backup and demo path",
-      goal: "Verify the release candidate and record the Day 6 demo path.",
+      title: text(
+        "Upload the public release candidate",
+        "공개 후보 버전 업로드",
+      ),
+      goal: text(
+        "Publish the tested candidate or preserve verifiable fallback evidence when an external service is unavailable.",
+        "시험한 후보를 공개하거나 외부 서비스 장애 때 검증 가능한 대체 근거를 보관합니다.",
+      ),
       studentBrief: [
-        "Run one final smoke test.",
-        "Open and test the release candidate copy.",
-        "Write the exact demo path.",
+        text(
+          "Upload the complete project, open the candidate URL, and run the main task without signing in.",
+          "전체 프로젝트를 올리고 후보 URL을 연 뒤 로그인 없이 핵심 과제를 실행하세요.",
+        ),
       ],
       teacherCue: [
-        "앞 5분에는 활성 프로젝트에서 최종 smoke test 다섯 항목을 기록하게 한다.",
-        "다음 5분에는 단일 파일은 day5-release-candidate.html, 다중 파일은 my-app-day5-release-candidate로 복사하고 복사본을 직접 연다.",
-        "마지막 5분에는 복사본에서 핵심 경로를 다시 통과하고 Open·Click or enter·Show·Stop 데모 경로를 저장하게 한다.",
+        text(
+          "For multi-file projects, preserve every referenced relative path. Use the documented fallback only for a confirmed external outage.",
+          "여러 파일 프로젝트는 참조되는 모든 상대 경로를 유지한다. 확인된 외부 장애에서만 정해 둔 대체 근거를 사용한다.",
+        ),
       ],
-      completion:
-        "The verified release candidate opens and passes the smoke test, and an exact open–act–show demo path is saved.",
+      completion: text(
+        "A working candidate URL or instructor-verifiable fallback package exists.",
+        "작동하는 후보 URL 또는 강사가 검증할 수 있는 대체 패키지가 있습니다.",
+      ),
       activities: [
         {
-          id: "day5-smoke-test",
-          kind: "test-record",
-          title: "Final smoke test",
-          instruction: "Run the project from the beginning.",
-          items: [
-            "Open the project",
-            "Run the main demo path",
-            "Refresh and verify the project's stated storage behavior, then run the main path again",
-            "Check for private or secret data",
-            "Check for a blocking error",
-          ],
-          expected: [
-            "The first screen appears.",
-            "The main result appears.",
-            "After refresh, stored or reset state matches the project promise and the main path can run again.",
-            "No private or secret data appears.",
-            "No blocking error appears.",
-          ],
-          minimum: 5,
-        },
-        {
-          id: "day5-release-copy",
-          kind: "checklist",
-          title: "Make the release candidate",
-          instruction: "Copy, open, and test the correct release candidate.",
-          items: [
-            "For one file, make my-app/day5-release-candidate.html.",
-            "For many files, copy the project as my-app-day5-release-candidate.",
-            "Open the release candidate copy.",
-            "Run the smoke test on the copy.",
-          ],
-          minimum: 4,
-        },
-        {
-          id: "day5-demo-path",
+          id: "day5-release-candidate-url",
           kind: "short-answer",
-          title: "Draft the demo path",
-          instruction: "Write only the actions and visible result.",
-          prompt: "Open:\nClick or enter:\nShow:\nStop:",
-          placeholder: "Write the exact path for Day 6.",
+          title: text(
+            "Record the release candidate",
+            "공개 후보 기록",
+          ),
+          instruction: text(
+            "Save the candidate URL. For a confirmed outage, record the full fallback package location and the teacher's verification.",
+            "후보 URL을 저장하세요. 확인된 장애라면 전체 대체 패키지 위치와 강사의 검증을 기록하세요.",
+          ),
+          placeholder: text(
+            "Candidate URL or verified fallback location…",
+            "후보 URL 또는 검증된 대체 위치…",
+          ),
+          minimum: 1,
+        },
+      ],
+    },
+    {
+      id: "day5-other-environment-and-backup",
+      start: "02:50",
+      end: "03:00",
+      minutes: 10,
+      phase: "SAVE",
+      title: text(
+        "Check another environment and record the limitation",
+        "다른 기기 확인과 한계 기록",
+      ),
+      goal: text(
+        "Confirm the public candidate outside the maker's normal browser and preserve the complete Day 5 version.",
+        "제작자가 평소 쓰는 브라우저 밖에서 공개 후보를 확인하고 Day 5 전체 버전을 보관합니다.",
+      ),
+      studentBrief: [
+        text(
+          "Open the candidate on another device or browser, run the main task, and save the complete Day 5 backup and one known limitation.",
+          "다른 기기나 브라우저에서 후보를 열어 핵심 과제를 실행하고 Day 5 전체 백업과 알려진 한계 하나를 저장하세요.",
+        ),
+      ],
+      teacherCue: [
+        text(
+          "A single-file project may use backups/day5-release.html; a multi-file project must preserve the complete referenced structure.",
+          "단일 파일 프로젝트는 backups/day5-release.html을 사용할 수 있고 여러 파일 프로젝트는 참조 구조 전체를 보관해야 한다.",
+        ),
+      ],
+      completion: text(
+        "The candidate has an external-use result, one honest limitation, and a complete Day 5 backup.",
+        "후보에 다른 환경 사용 결과, 솔직한 한계 하나, 완전한 Day 5 백업이 있습니다.",
+      ),
+      activities: [
+        {
+          id: "day5-external-check-and-backup",
+          kind: "short-answer",
+          title: text(
+            "Record the external check and backup",
+            "다른 환경 확인과 백업 기록",
+          ),
+          instruction: text(
+            "Write the device or browser, the main-task result, one known limitation, and the complete backup location.",
+            "사용한 기기 또는 브라우저, 핵심 과제 결과, 알려진 한계 하나, 전체 백업 위치를 적으세요.",
+          ),
+          placeholder: text(
+            "Environment… Result… Limitation… Backup…",
+            "환경… 결과… 한계… 백업…",
+          ),
           minimum: 1,
         },
       ],
@@ -533,426 +492,435 @@ export const day5Plan: InteractiveDayPlan = {
 
 export const day6Plan: InteractiveDayPlan = {
   day: 6,
-  title: "Ship, Showcase, Reflect",
-  question: "How can you explain your result and your AI collaboration responsibly?",
-  artifact: "A final backup, a two-minute demo, feedback, and reflection",
+  title: text(
+    "Publish, Recheck, and Hand It to Someone Else",
+    "배포하고, 다시 확인하고, 다른 사람에게 넘겨주기",
+  ),
+  question: text(
+    "How do I make a project work in another person's environment and hand it over responsibly?",
+    "프로젝트가 다른 사람의 환경에서도 작동하게 하고 책임 있게 전달하려면 어떻게 해야 할까요?",
+  ),
+  artifact: text(
+    "A final public URL, one verified republish, a concise handoff, a 90-second live demo, and a next-step reflection",
+    "최종 공개 URL, 검증한 재배포, 짧은 인수인계, 90초 실제 시연, 다음 단계 회고",
+  ),
   stages: [
     {
-      id: "day6-final-readiness",
+      id: "day6-check-public-files-and-secrets",
       start: "00:00",
-      end: "00:20",
-      minutes: 20,
+      end: "00:15",
+      minutes: 15,
       phase: "CHECK",
-      title: "Final readiness",
-      goal: "Choose the working version and test the full demo path.",
+      title: text(
+        "Check public files and sensitive information",
+        "공개 전 파일과 민감정보 확인",
+      ),
+      goal: text(
+        "Prepare the exact folder that another person may safely receive.",
+        "다른 사람에게 안전하게 건넬 정확한 폴더를 준비합니다.",
+      ),
       studentBrief: [
-        "Choose the version that works, not only the newest one.",
-        "Run the full path twice.",
-        "Use TELL → WATCH → CHECK → FIX → SAVE.",
+        text(
+          "Keep required project files and remove secrets, private information, temporary files, and broken absolute paths.",
+          "필요한 프로젝트 파일은 유지하고 비밀 정보, 개인정보, 임시 파일, 깨진 절대 경로는 제거하세요.",
+        ),
       ],
       teacherCue: [
-        "Day 5 발표 후보와 현재 프로젝트를 비교하고 실제 작동하는 버전을 고르게 한다.",
-        "처음부터 데모 경로를 실행하고 새로고침 뒤 한 번 더 실행하게 한다.",
-        "GREEN은 대본 작성, YELLOW는 한 개의 승인된 blocker, RED는 마지막 작동본 복구로 보낸다.",
+        text(
+          "Show the local project folder → GitHub repository → public Pages URL relationship. Stop immediately if a secret is visible.",
+          "로컬 프로젝트 폴더 → GitHub 저장소 → 공개 Pages URL의 관계를 보여 준다. 비밀 정보가 보이면 즉시 중단한다.",
+        ),
       ],
-      completion:
-        "The learner records the exact version, runs the full demo path twice, and updates the side signal with evidence.",
+      completion: text(
+        "The public folder contains every required file and no private or secret information.",
+        "공개 폴더에 필요한 파일이 모두 있고 개인정보나 비밀 정보는 없습니다.",
+      ),
       activities: [
         {
-          id: "day6-version-choice",
+          id: "day6-public-folder-evidence",
           kind: "short-answer",
-          title: "Choose the working version",
-          instruction:
-            "Open the Day 5 release candidate and the current project. Record the version you will test first.",
-          prompt: "File or folder:\nWhy this version:",
-          placeholder: "Choose it because it works.",
+          title: text(
+            "Record the public-folder check",
+            "공개 폴더 확인 기록",
+          ),
+          instruction: text(
+            "Write the folder location, required files, items removed, and the result of opening index.html locally.",
+            "폴더 위치, 필요한 파일, 제거한 항목, index.html을 로컬에서 연 결과를 적으세요.",
+          ),
+          placeholder: text(
+            "Folder… Required files… Removed… Local result…",
+            "폴더… 필요한 파일… 제거한 것… 로컬 결과…",
+          ),
           minimum: 1,
         },
-        {
-          id: "day6-readiness-test",
-          kind: "test-record",
-          title: "Run the full path",
-          instruction:
-            "Test from a known start, refresh and compare the result with the project's stated storage behavior, then run the path with a second safe sample.",
-          items: [
-            "Open the project",
-            "Run the demo path with Sample A or another safe sample",
-            "Refresh and compare stored or reset state with the project promise",
-            "Run the path with Sample B or a different safe sample",
-            "Check for private or secret data",
-            "Confirm the final file or folder",
-          ],
-          expected: [
-            "The first screen appears.",
-            "The MUST results appear.",
-            "After refresh, the state matches the project's promise.",
-            "The second sample produces the expected result without a false duplicate.",
-            "No private or secret data appears.",
-            "The exact version is known.",
-          ],
-          minimum: 6,
-        },
       ],
     },
     {
-      id: "day6-last-blocker",
-      start: "00:20",
-      end: "00:40",
+      id: "day6-live-publish-and-republish-demo",
+      start: "00:15",
+      end: "00:35",
       minutes: 20,
-      phase: "FIX",
-      title: "Last blocker fix",
-      goal: "Fix only one repeatable demo blocker or restore the last working version.",
+      phase: "WATCH",
+      title: text(
+        "Watch a publish and republish demonstration",
+        "최종 배포와 수정 배포 시연",
+      ),
+      goal: text(
+        "See one complete cycle from tested files to a public URL and a visible update at the same URL.",
+        "시험한 파일이 공개 URL이 되고 같은 URL에 눈에 보이는 수정이 반영되는 전체 과정을 봅니다.",
+      ),
       studentBrief: [
-        "No new feature.",
-        "Fix only a repeatable demo blocker.",
-        "If the fix fails, restore the Day 5 candidate.",
+        text(
+          "Watch the first publish, public test, visible change, upload, deployment wait, and second public test.",
+          "첫 배포, 공개 테스트, 눈에 보이는 변경, 업로드, 배포 대기, 두 번째 공개 테스트를 보세요.",
+        ),
       ],
       teacherCue: [
-        "반복 가능하고 데모를 막으며 새 기능이 아니고 작은 변경으로 시험 가능한 문제만 승인한다.",
-        "GREEN 학생은 코드를 바꾸지 않고 대본을 정리하게 한다.",
-        "20분 안에 통과하지 못하면 더 새 버전을 고집하지 말고 Day 5 발표 후보로 복구하게 한다.",
+        text(
+          "Use the prepared candidate as index.html. Show the deployment status and refresh the public URL only after it completes.",
+          "준비된 후보를 index.html로 사용한다. 배포 상태를 보여 주고 완료된 뒤에만 공개 URL을 새로고침한다.",
+        ),
       ],
-      completion:
-        "The learner either records “READY — NO CHANGE” or re-tests one approved blocker and chooses a working version to freeze.",
+      completion: text(
+        "The learner can explain why a local change is not public until the changed files are uploaded and deployed.",
+        "학생이 변경 파일을 업로드하고 배포하기 전에는 로컬 변경이 공개되지 않는 이유를 설명할 수 있습니다.",
+      ),
       activities: [
         {
-          id: "day6-blocker-gate",
-          kind: "choice",
-          title: "Use the blocker gate",
-          instruction: "Choose the safe next action.",
-          options: [
-            {
-              label: "READY — no code change",
-              value: "no-change",
-              feedback: "Keep the working version. Prepare the demo.",
-            },
-            {
-              label: "One repeatable demo blocker — ask for approval",
-              value: "approve-fix",
-              feedback:
-                "The problem must block the demo and fit one small testable change.",
-            },
-            {
-              label: "Main path fails — restore the Day 5 candidate",
-              value: "restore",
-              feedback: "A working older version is safer than a broken newer one.",
-            },
-          ],
-        },
-        {
-          id: "day6-blocker-prompt",
-          kind: "prompt",
-          optional: true,
-          title: "Fix only the blocker",
-          instruction:
-            "Use this only after teacher approval. If you are ready, do not send it.",
-          prompt:
-            "This is the final blocker before my demo.\n\nAction:\n[write the action]\n\nActual:\n[write what happened]\n\nExpected:\n[write what must happen]\n\nFix only this blocker.\nDo not add a new feature, library, API, login, or file.\nKeep every working MUST feature unchanged.\nAfter the change, tell me the exact demo path to re-test.",
-        },
-        {
-          id: "day6-blocker-retest",
-          kind: "test-record",
-          title: "Re-test or restore",
-          instruction:
-            "Run the blocker test and the full demo path. If it fails, restore the Day 5 candidate.",
-          content: [
-            "Blocker test or no-change decision",
-            "Full demo path",
-            "Refresh and repeat",
-            "Version to freeze",
-          ],
-          expected: [
-            "The chosen version completes the full demo path.",
-            "No new feature was added.",
-          ],
-          minimum: 4,
+          id: "day6-publish-demo-read",
+          kind: "read",
+          title: text("Publish and republish", "배포와 재배포"),
+          instruction: text(
+            "Observe how one public URL receives a tested update.",
+            "공개 URL 하나에 시험한 수정이 반영되는 과정을 보세요.",
+          ),
+          hidden: true,
         },
       ],
     },
     {
-      id: "day6-code-freeze",
-      start: "00:40",
-      end: "00:50",
-      minutes: 10,
+      id: "day6-final-personal-publish",
+      start: "00:35",
+      end: "01:05",
+      minutes: 30,
       phase: "SAVE",
-      title: "Code Freeze",
-      goal: "Stop code changes and verify the final backup.",
+      title: text("Publish the final personal project", "개인 최종 배포"),
+      goal: text(
+        "Create the final sign-in-free URL or an instructor-verified fallback for a confirmed external outage.",
+        "로그인 없이 열리는 최종 URL을 만들거나 확인된 외부 장애 때 강사가 검증한 대체 결과를 만듭니다.",
+      ),
       studentBrief: [
-        "No new AI change request after freeze.",
-        "Open and test the final backup.",
-        "Write new ideas as a Next Step.",
+        text(
+          "Upload the complete public folder, wait for deployment, open the final URL, and run the main action.",
+          "공개 폴더 전체를 올리고 배포를 기다린 뒤 최종 URL을 열어 핵심 행동을 실행하세요.",
+        ),
       ],
       teacherCue: [
-        "전체가 Code Freeze 규칙을 확인한 뒤 코드 변경을 멈추게 한다.",
-        "단일 파일은 day6-final.html, 다중 파일은 my-app-day6-final로 복사하게 한다.",
-        "파일 존재가 아니라 복사본에서 데모 경로가 통과하는 것을 완료 기준으로 삼는다.",
+        text(
+          "Check repository settings, index.html location, and deployment status before changing code. Use fallback evidence only for confirmed external failure.",
+          "코드를 바꾸기 전에 저장소 설정, index.html 위치, 배포 상태를 확인한다. 확인된 외부 장애에서만 대체 근거를 사용한다.",
+        ),
       ],
-      completion:
-        "Code Freeze is confirmed, the exact final backup opens, and its full demo path passes.",
+      completion: text(
+        "The final URL opens without sign-in and the main action works, or the approved fallback proves the same result.",
+        "최종 URL이 로그인 없이 열리고 핵심 행동이 작동하거나 승인된 대체 결과에서 같은 작동을 증명합니다.",
+      ),
       activities: [
         {
-          id: "day6-freeze-rules",
-          kind: "read",
-          title: "Code Freeze",
-          instruction: "Read the freeze rules before you make the final copy.",
-          content: [
-            "No new AI change request.",
-            "No new feature.",
-            "No redesign.",
-            "Write every new idea as a Next Step.",
-          ],
-        },
-        {
-          id: "day6-final-copy",
-          kind: "checklist",
-          title: "Make the final backup",
-          instruction: "Copy and open the final version.",
-          items: [
-            "I created the final backup: my-app/day6-final.html for a one-file project, or my-app-day6-final for a multi-file project.",
-            "I opened the final backup.",
-            "The full demo path passes in the final backup.",
-            "The Day 5 candidate and Day 5 test record are easy to locate.",
-          ],
-          minimum: 4,
-        },
-        {
-          id: "day6-final-record",
-          kind: "test-record",
-          title: "Verify the frozen version",
-          instruction: "Record the exact backup and its result.",
-          content: [
-            "Final file or folder",
-            "Open result",
-            "Demo path result",
-            "Final status",
-          ],
-          expected: ["The final backup opens and the demo path works."],
-          minimum: 4,
+          id: "day6-final-url",
+          kind: "short-answer",
+          title: text("Save the final URL", "최종 URL 저장"),
+          instruction: text(
+            "Paste the final public URL and record the main action you tested there. For a confirmed outage, record the verified fallback location.",
+            "최종 공개 URL을 붙여넣고 그 주소에서 시험한 핵심 행동을 적으세요. 확인된 장애라면 검증된 대체 위치를 기록하세요.",
+          ),
+          placeholder: text(
+            "Final URL… Public test… or verified fallback…",
+            "최종 URL… 공개 테스트… 또는 검증된 대체 결과…",
+          ),
+          minimum: 1,
         },
       ],
     },
     {
       id: "day6-break",
-      start: "00:50",
-      end: "01:00",
+      start: "01:05",
+      end: "01:15",
       minutes: 10,
       phase: "BREAK",
-      title: "Break",
-      goal: "Rest and prepare a private, clean presentation screen.",
+      title: text("Break", "휴식"),
+      goal: text("Rest before cross-device testing.", "다른 기기 테스트 전에 쉽니다."),
       studentBrief: [
-        "Take a 10-minute break.",
-        "Close private tabs and notifications.",
+        text(
+          "Pause and return with the final URL ready to share.",
+          "작업을 멈추고 최종 URL을 공유할 준비를 해서 돌아오세요.",
+        ),
       ],
       teacherCue: [
-        "발표 순서, 케이블, 브라우저, 타이머를 최종 확인하고 첫 발표자를 준비시킨다.",
+        text(
+          "Prepare device pairs and QR support during the break.",
+          "휴식 중 기기 짝과 QR 지원을 준비한다.",
+        ),
       ],
-      completion:
-        "The break timer ends, private tabs are closed, and the learner returns at 01:00.",
+      completion: text(
+        "The learner returns ready to test another environment.",
+        "학생이 다른 환경을 시험할 준비를 해서 돌아옵니다.",
+      ),
       activities: [
         {
           id: "day6-break-timer",
           kind: "timer",
-          title: "10-minute break",
-          instruction:
-            "Close private tabs and notifications. Return when the timer ends.",
+          title: text("Ten-minute break", "10분 휴식"),
+          instruction: text(
+            "Rest and return when the timer ends.",
+            "쉬고 타이머가 끝나면 돌아오세요.",
+          ),
           durationMinutes: 10,
+          hidden: true,
         },
       ],
     },
     {
-      id: "day6-partner-rehearsal",
-      start: "01:00",
-      end: "01:20",
+      id: "day6-test-another-device",
+      start: "01:15",
+      end: "01:35",
       minutes: 20,
-      phase: "WATCH",
-      title: "Partner rehearsal",
-      goal: "Rehearse a clear two-minute demo with a partner.",
+      phase: "CHECK",
+      title: text(
+        "Use the public project on another device",
+        "다른 기기에서 핵심 행동 확인",
+      ),
+      goal: text(
+        "Find differences that appear only outside the maker's computer.",
+        "제작자의 컴퓨터 밖에서만 나타나는 차이를 찾습니다.",
+      ),
       studentBrief: [
-        "Show User & Problem, Working MUST Features, Test & Learning, and Limit & Next Step.",
-        "Use the final backup.",
-        "Remove extra clicks and words.",
+        text(
+          "Open the final URL on another device or browser, run the main action, and check phone width, refresh, and file paths.",
+          "다른 기기나 브라우저에서 최종 URL을 열고 핵심 행동, 휴대전화 너비, 새로고침, 파일 경로를 확인하세요.",
+        ),
       ],
       teacherCue: [
-        "20초·60초·25초·15초의 네 구간으로 2분 발표를 구성하게 한다.",
-        "학생이 긴 대본보다 Open·Click or enter·Show·Stop 경로를 먼저 고정하게 한다.",
-        "짝이 실제로 보거나 듣지 못한 부분을 한 가지씩 피드백하게 한다.",
+        text(
+          "Remind learners that localStorage and local files do not automatically move to another device.",
+          "localStorage의 내용과 로컬 파일은 다른 기기로 자동 이동하지 않는다는 점을 알려 준다.",
+        ),
       ],
-      completion:
-        "Each learner completes one timed rehearsal in two minutes or less, records partner feedback, and saves the final click path.",
+      completion: text(
+        "The learner has an observed result from another environment and one exact public issue or a clean pass.",
+        "학생이 다른 환경의 관찰 결과와 정확한 공개 문제 하나 또는 정상 통과 기록을 가지고 있습니다.",
+      ),
       activities: [
         {
-          id: "day6-demo-script",
+          id: "day6-other-device-evidence",
           kind: "short-answer",
-          title: "Write the two-minute demo",
-          instruction: "Write short notes for the four parts.",
-          prompt:
-            "0:00–0:20 — User & Problem:\n0:20–1:20 — Working MUST Features:\n1:20–1:45 — Test & Learning:\n1:45–2:00 — Limit & Next Step:\n\nOpen:\nClick or enter:\nShow:\nStop:",
-          placeholder: "Use short notes, not a long speech.",
-          minimum: 1,
-        },
-        {
-          id: "day6-rehearsal-timer",
-          kind: "timer",
-          title: "Two-minute rehearsal",
-          instruction: "Start the final backup and finish before the timer ends.",
-          durationMinutes: 2,
-        },
-        {
-          id: "day6-partner-feedback",
-          kind: "peer",
-          title: "Partner check",
-          instruction: "Give short feedback, then switch roles.",
-          items: [
-            "The clearest part",
-            "One click or sentence to remove",
-            "One part I could not see or hear",
-          ],
+          title: text(
+            "Record the other-device test",
+            "다른 기기 테스트 기록",
+          ),
+          instruction: text(
+            "Write the device or browser, main-action result, phone-width result, refresh result, and any path problem.",
+            "기기 또는 브라우저, 핵심 행동 결과, 휴대전화 너비 결과, 새로고침 결과, 경로 문제를 적으세요.",
+          ),
+          placeholder: text(
+            "Environment… Main action… Phone width… Refresh… Paths…",
+            "환경… 핵심 행동… 휴대전화 너비… 새로고침… 경로…",
+          ),
           minimum: 1,
         },
       ],
     },
     {
-      id: "day6-showcase",
-      start: "01:20",
-      end: "02:40",
-      minutes: 80,
-      phase: "SHARE",
-      title: "Showcase",
-      goal: "Show working evidence in a fair, timed presentation slot.",
+      id: "day6-fix-public-problem-and-republish",
+      start: "01:35",
+      end: "01:55",
+      minutes: 20,
+      phase: "FIX",
+      title: text(
+        "Fix one public issue and republish",
+        "공개 환경 문제 수정과 재배포",
+      ),
+      goal: text(
+        "Make one evidence-based public change and verify it at the same URL.",
+        "근거가 있는 공개 변경 하나를 만들고 같은 URL에서 확인합니다.",
+      ),
       studentBrief: [
-        "2 minutes: demo.",
-        "1 minute: question or feedback.",
-        "1 minute: switch.",
-        "Start from the final backup, show evidence, and respect the next presenter.",
+        text(
+          "Fix the observed public problem or make one small visible verified change, upload it, wait, and test the same URL again.",
+          "관찰한 공개 문제를 고치거나 눈에 보이는 작은 변경 하나를 만든 뒤 업로드하고 기다려 같은 URL을 다시 시험하세요.",
+        ),
       ],
       teacherCue: [
-        "발표자마다 2분 데모, 1분 질문 또는 피드백, 1분 전환을 동일하게 적용한다.",
-        "발표 시작·동기화에 8분을 두고, 조당 발표 창은 72분이다. N명이면 G = ceil(N ÷ 18)개 조로 나누며, 1–18명은 1개 조, 19–36명은 2개 조, 37–54명은 3개 조다.",
-        "각 조에 진행 담당, 시간 담당, 증거 기록 담당을 지정한다. 8분에 전 조가 1번 슬롯을 시작하고 80분에 발표·대체·결석 인원을 합산해 보고한다.",
-        "발표는 Final 백업에서 시작한다. 실행 실패 시 알려진 시작 상태에서 한 번만 재시도한 뒤 Day 5 후보, Day 5 테스트 기록 순으로 전환한다. 테스트 기록만 보일 때는 과거 통과를 증명할 뿐 현재 라이브 동작은 증명하지 못한다고 밝힌다.",
+        text(
+          "Prioritize path and behavior problems. Do not allow a last-minute redesign or new feature.",
+          "경로와 동작 문제를 우선한다. 마지막 순간의 전체 디자인 변경이나 새 기능 추가를 허용하지 않는다.",
+        ),
       ],
-      completion:
-        "The learner starts from the final backup, completes the scheduled demo or makes one controlled retry before using the Day 5 candidate and then the Day 5 test record, and the audience records what the evidence actually proves.",
+      completion: text(
+        "The same public URL shows the intended update and the main action still works.",
+        "같은 공개 URL에 의도한 수정이 보이고 핵심 행동도 계속 작동합니다.",
+      ),
       activities: [
         {
-          id: "day6-showcase-timer",
-          kind: "timer",
-          title: "Four-minute showcase slot",
-          instruction:
-            "Repeat this timer for each presenter: 2:00 demo, 1:00 feedback, 1:00 switch.",
-          content: ["DEMO — 2:00", "FEEDBACK — 1:00", "SWITCH — 1:00"],
-          durationMinutes: 4,
-        },
-        {
-          id: "day6-showcase-record",
-          kind: "peer",
-          title: "Show the evidence",
-          instruction:
-            "Present your final build. As an audience member, record what you saw.",
-          items: [
-            "User and problem",
-            "Working result",
-            "Test and learning",
-            "Limit and next step",
-          ],
-          minimum: 4,
+          id: "day6-republish-evidence",
+          kind: "short-answer",
+          title: text("Record the republish", "재배포 기록"),
+          instruction: text(
+            "Write the public issue or visible change, the uploaded file, the deployment result, and the re-test at the same URL.",
+            "공개 문제 또는 눈에 보이는 변경, 올린 파일, 배포 결과, 같은 URL의 재시험을 적으세요.",
+          ),
+          placeholder: text(
+            "Issue/change… File… Deployment… Same-URL re-test…",
+            "문제/변경… 파일… 배포… 같은 URL 재시험…",
+          ),
+          minimum: 1,
         },
       ],
     },
     {
-      id: "day6-peer-feedback",
-      start: "02:40",
-      end: "02:50",
-      minutes: 10,
-      phase: "SHARE",
-      title: "Peer feedback",
-      goal: "Give two specific feedback notes based on what you saw or heard.",
-      studentBrief: [
-        "Write what you saw.",
-        "Do not judge English, project topic, or visual taste.",
-      ],
-      teacherCue: [
-        "서로 다른 발표 두 개에 대해 실제 관찰, 명확한 결정, 질문을 기록하게 한다.",
-        "영어 유창성, 주제 취향, 화려함에 대한 평가는 받지 않는다.",
-        "두 피드백 카드를 발표자에게 전달하게 한다.",
-      ],
-      completion:
-        "Two feedback records each contain I saw, One clear decision, and One question, and both are delivered.",
-      activities: [
-        {
-          id: "day6-feedback-one",
-          kind: "peer",
-          title: "Feedback 1",
-          instruction: "Write specific feedback for one presenter.",
-          items: ["I saw", "One clear decision", "One question"],
-          minimum: 3,
-        },
-        {
-          id: "day6-feedback-two",
-          kind: "peer",
-          title: "Feedback 2",
-          instruction: "Write specific feedback for a different presenter.",
-          items: ["I saw", "One clear decision", "One question"],
-          minimum: 3,
-        },
-      ],
-    },
-    {
-      id: "day6-reflection-close",
-      start: "02:50",
-      end: "03:00",
-      minutes: 10,
+      id: "day6-readme-and-qr",
+      start: "01:55",
+      end: "02:10",
+      minutes: 15,
       phase: "SAVE",
-      title: "Reflection and close",
-      goal: "Explain one decision, one AI check, and one next learning habit.",
+      title: text(
+        "Prepare the README and QR",
+        "README와 QR 준비",
+      ),
+      goal: text(
+        "Give another person enough information to open, use, and understand the current limit of the project.",
+        "다른 사람이 프로젝트를 열고 사용하고 현재 한계를 이해할 수 있는 정보를 제공합니다.",
+      ),
       studentBrief: [
-        "Name what you decided.",
-        "Name what you checked or changed.",
-        "Save the final handoff.",
+        text(
+          "Write the project name, user, purpose, opening URL, short use steps, current limitation, and tools used; then create and test the QR.",
+          "프로젝트 이름, 사용자, 목적, URL, 짧은 사용법, 현재 한계, 사용 도구를 쓰고 QR을 만들어 시험하세요.",
+        ),
       ],
       teacherCue: [
-        "화려한 결과보다 학생의 판단, 검증, 복구 행동을 구체적으로 쓰게 한다.",
-        "AI의 역할과 학생의 책임을 구분한 마지막 문장을 완성하게 한다.",
-        "최종 백업, 테스트 증거, 대본, 피드백, 회고의 위치를 확인하게 한다.",
+        text(
+          "Keep the handoff short and factual. Test the QR with a second device before accepting it.",
+          "인수인계는 짧고 사실적으로 작성하게 한다. QR은 다른 기기로 시험한 뒤 인정한다.",
+        ),
       ],
-      completion:
-        "The reflection and responsibility statement are complete, and the learner confirms the final handoff files.",
+      completion: text(
+        "The handoff explains the project and its limitation, and the tested QR opens the final URL.",
+        "인수인계가 프로젝트와 한계를 설명하고 시험한 QR이 최종 URL을 엽니다.",
+      ),
       activities: [
         {
-          id: "day6-reflection",
+          id: "day6-handoff-and-qr-evidence",
           kind: "short-answer",
-          title: "Reflect on the build",
-          instruction: "Answer with short, honest notes.",
-          prompt:
-            "One important decision I made:\nOne AI result I checked or changed:\nOne recovery method that helped:\nOne habit for my next project:\nOne thing I want to learn next:",
-          placeholder: "Write your own evidence.",
+          title: text(
+            "Record the handoff and QR",
+            "인수인계와 QR 기록",
+          ),
+          instruction: text(
+            "Write where the README and QR are saved, the current limitation, and the result of opening the QR on another device.",
+            "README와 QR 보관 위치, 현재 한계, 다른 기기에서 QR을 연 결과를 적으세요.",
+          ),
+          placeholder: text(
+            "README… QR… Limitation… QR test…",
+            "README… QR… 한계… QR 시험…",
+          ),
           minimum: 1,
         },
+      ],
+    },
+    {
+      id: "day6-small-group-showcase",
+      start: "02:10",
+      end: "02:45",
+      minutes: 35,
+      phase: "SHARE",
+      title: text(
+        "Run the small-group public showcase",
+        "소그룹 공개 쇼케이스",
+      ),
+      goal: text(
+        "Demonstrate the real public project in 90 seconds and receive evidence-based peer feedback.",
+        "실제 공개 프로젝트를 90초 동안 시연하고 근거 중심의 동료 피드백을 받습니다.",
+      ),
+      studentBrief: [
+        text(
+          "Show the user and purpose, run the main action at the public URL, explain one tested change, and name one limitation.",
+          "사용자와 목적을 말하고 공개 URL에서 핵심 행동을 실행하며 시험한 변경 하나와 한계 하나를 설명하세요.",
+        ),
+      ],
+      teacherCue: [
+        text(
+          "Use groups of four to six. Keep each demo to 90 seconds and feedback to observation, one clear decision, and one question.",
+          "4~6명 소그룹으로 운영한다. 시연은 90초로 지키고 피드백은 관찰, 분명한 결정 하나, 질문 하나로 제한한다.",
+        ),
+      ],
+      completion: text(
+        "The learner has completed a live public demo and recorded peer use or feedback.",
+        "학생이 실제 공개 시연을 마치고 동료 사용 또는 피드백을 기록했습니다.",
+      ),
+      activities: [
         {
-          id: "day6-responsibility",
+          id: "day6-showcase-evidence",
           kind: "short-answer",
-          title: "Name the responsibility",
-          instruction: "Complete the final statement.",
-          prompt:
-            "AI helped me __________, and I was responsible for __________.",
-          placeholder: "Name both roles.",
+          title: text(
+            "Record the showcase evidence",
+            "쇼케이스 근거 기록",
+          ),
+          instruction: text(
+            "Write what you demonstrated, one observed peer response, one clear decision a peer noticed, and one question received.",
+            "시연한 것, 관찰한 동료 반응 하나, 동료가 발견한 분명한 결정 하나, 받은 질문 하나를 적으세요.",
+          ),
+          placeholder: text(
+            "Demonstrated… Peer response… Clear decision… Question…",
+            "시연… 동료 반응… 분명한 결정… 질문…",
+          ),
           minimum: 1,
         },
+      ],
+    },
+    {
+      id: "day6-next-step-and-reflection",
+      start: "02:45",
+      end: "03:00",
+      minutes: 15,
+      phase: "SAVE",
+      title: text(
+        "Map the next step and complete the reflection",
+        "다음 단계 지도와 개인 회고",
+      ),
+      goal: text(
+        "Separate AI contribution, human decisions, direct verification, current limits, and the next learning step.",
+        "AI의 기여, 사람의 결정, 직접 검증, 현재 한계, 다음 학습 단계를 구분합니다.",
+      ),
+      studentBrief: [
+        text(
+          "Record what AI helped with, what you decided, what you verified, what remains limited, and what you would learn or build next.",
+          "AI가 도운 일, 자신이 결정한 일, 직접 확인한 일, 남은 한계, 다음에 배우거나 만들 일을 적으세요.",
+        ),
+      ],
+      teacherCue: [
+        text(
+          "Explain the signs that a later version may need a backend or external API, but do not add one now. End with a verified final handoff.",
+          "다음 버전에 백엔드나 외부 API가 필요할 수 있는 신호를 설명하되 지금 추가하지 않는다. 검증된 최종 인계로 끝낸다.",
+        ),
+      ],
+      completion: text(
+        "The final project, URL, backup, handoff, evidence, reflection, and one next step are all locatable.",
+        "최종 프로젝트, URL, 백업, 인수인계, 근거, 회고, 다음 단계 한 가지를 모두 찾을 수 있습니다.",
+      ),
+      activities: [
         {
-          id: "day6-handoff-check",
-          kind: "checklist",
-          title: "Final handoff",
-          instruction: "Confirm the files and records you will keep.",
-          items: [
-            "Final working file or folder",
-            "Final backup",
-            "Project Brief",
-            "Test cards",
-            "Useful prompts",
-            "Two-minute demo script",
-            "Feedback and reflection",
-          ],
-          minimum: 7,
+          id: "day6-final-reflection",
+          kind: "short-answer",
+          title: text("Complete the final reflection", "최종 회고 작성"),
+          instruction: text(
+            "Write what AI helped with, what you decided, what you verified yourself, one current limitation, and one next step.",
+            "AI가 도운 일, 자신이 결정한 일, 직접 검증한 일, 현재 한계 하나, 다음 단계 하나를 적으세요.",
+          ),
+          placeholder: text(
+            "AI helped… I decided… I verified… Current limit… Next step…",
+            "AI가 도운 일… 내가 결정한 일… 직접 검증한 일… 현재 한계… 다음 단계…",
+          ),
+          minimum: 1,
         },
       ],
     },

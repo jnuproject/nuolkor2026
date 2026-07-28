@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NUOL Campus Service Finder — Filter Lab</title>
+  <style>
+    :root {
+      --ink: #18211d;
+      --muted: #5c6862;
+      --line: #d9e0dc;
+      --paper: #fff;
+      --wash: #f5f7f5;
+      --accent: #175f46;
+      --accent-soft: #e8f3ed;
+      --focus: #f2b84b;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--wash); color: var(--ink); font-family: Arial, Helvetica, sans-serif; line-height: 1.55; }
+    main { width: min(900px, calc(100% - 36px)); margin: 48px auto; }
+    .sample-note { margin: 0 0 24px; color: var(--muted); font-size: 0.86rem; font-weight: 700; }
+    h1 { max-width: 650px; margin: 0 0 10px; font-size: clamp(2.4rem, 8vw, 4.6rem); line-height: 1; letter-spacing: -0.05em; }
+    .lead { max-width: 630px; margin: 0 0 34px; color: var(--muted); font-size: 1.1rem; }
+    .filter-panel { margin-bottom: 28px; padding: 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--paper); }
+    fieldset { margin: 0; padding: 0; border: 0; }
+    legend { margin-bottom: 12px; font-weight: 800; }
+    .choices { display: flex; flex-wrap: wrap; gap: 8px; }
+    .choice { position: relative; }
+    .choice input { position: absolute; opacity: 0; pointer-events: none; }
+    .choice label { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid var(--line); border-radius: 9px; background: #fff; cursor: pointer; }
+    .choice input:checked + label { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 800; }
+    .choice input:focus-visible + label { outline: 3px solid var(--focus); outline-offset: 3px; }
+    button { margin-top: 18px; min-height: 48px; padding: 0 20px; border: 0; border-radius: 9px; background: var(--accent); color: #fff; font: inherit; font-weight: 800; cursor: pointer; }
+    button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+    .result-summary { margin: 0 0 8px; color: var(--muted); }
+    .services { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
+    .services li { display: grid; grid-template-columns: 130px 1fr 210px; gap: 20px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+    .time { color: var(--accent); font-weight: 800; }
+    .name { font-weight: 800; }
+    .place { color: var(--muted); }
+    .notice { margin-top: 18px; padding: 18px; border-left: 4px solid var(--accent); background: var(--accent-soft); }
+    .access-panel { margin-top: 34px; padding-top: 24px; border-top: 1px solid var(--line); }
+    .access-panel h2 { margin: 0 0 4px; font-size: 1.2rem; }
+    .access-panel p { margin: 0; color: var(--muted); }
+    @media (max-width: 620px) {
+      main { margin: 28px auto; }
+      .services li { grid-template-columns: 1fr; gap: 4px; }
+      button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="sample-note">Classroom sample — not official NUOL information.</p>
+    <h1>Find the campus service you need.</h1>
+    <p class="lead">Choose what you need. The next version of this lab should show only matching services.</p>
+
+    <section class="filter-panel" aria-labelledby="filter-title">
+      <fieldset>
+        <legend id="filter-title">What do you need?</legend>
+        <div class="choices">
+          <div class="choice"><input type="radio" name="need" id="all" value="all" checked><label for="all">All</label></div>
+          <div class="choice"><input type="radio" name="need" id="study" value="study"><label for="study">Study</label></div>
+          <div class="choice"><input type="radio" name="need" id="print" value="print"><label for="print">Print</label></div>
+          <div class="choice"><input type="radio" name="need" id="help" value="help"><label for="help">Academic help</label></div>
+          <div class="choice"><input type="radio" name="need" id="weekend" value="weekend"><label for="weekend">Weekend only</label></div>
+        </div>
+      </fieldset>
+      <button id="showButton" type="button">Show matching services</button>
+    </section>
+
+    <p id="resultSummary" class="result-summary" aria-live="polite">3 services shown</p>
+    <ul id="serviceList" class="services">
+      <li data-need="study"><span class="time">08:00–20:00</span><span class="name">Central Library</span><span class="place">Library Building</span></li>
+      <li data-need="print"><span class="time">08:30–17:00</span><span class="name">Print &amp; Copy Desk</span><span class="place">Student Center · First floor</span></li>
+      <li data-need="help"><span class="time">09:00–16:00</span><span class="name">Academic Support Desk</span><span class="place">Administration Building</span></li>
+    </ul>
+    <p id="emptyNotice" class="notice" hidden>No listed service matches this need. Choose another option.</p>
+
+    <section class="access-panel" aria-labelledby="access-title">
+      <h2 id="access-title">Need help finding a building?</h2>
+      <p>See what to bring and where to ask for accessible entry information.</p>
+      <button id="detailsButton" type="button" aria-expanded="false" aria-controls="detailsNote">Show access details</button>
+      <div id="detailsNote" class="notice" hidden>
+        Bring your student card. The information desk can help you locate an elevator or accessible entrance.
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const detailsButton = document.querySelector('#detailsButton');
+    const detailsNote = document.querySelector('#detailsNote');
+
+    detailsButton.addEventListener('click', () => {
+      const willOpen = detailsNote.hidden;
+      detailsNote.hidden = !willOpen;
+      detailsButton.setAttribute('aria-expanded', String(willOpen));
+      detailsButton.textContent = willOpen ? 'Hide access details' : 'Show access details';
+    });
+
+    // Student task: make the need filter work.
+    // Keep the current content and visual design.
+  </script>
+</body>
+</html>

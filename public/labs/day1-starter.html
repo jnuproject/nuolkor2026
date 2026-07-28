@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NUOL Campus Service Finder</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17202a;
+      --muted: #5b6673;
+      --line: #d8dee5;
+      --paper: #ffffff;
+      --wash: #f4f7f9;
+      --accent: #145c45;
+      --accent-hover: #0f4937;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--wash);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.55;
+    }
+
+    main {
+      width: min(760px, calc(100% - 32px));
+      margin: 48px auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: clamp(24px, 5vw, 48px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(2rem, 8vw, 3.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .sample-note {
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .intro {
+      margin: 0 0 32px;
+      color: var(--muted);
+      font-size: 1.1rem;
+    }
+
+    h2 {
+      margin: 32px 0 12px;
+      font-size: 1.15rem;
+    }
+
+    .services {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .services li {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .time { color: var(--accent); font-weight: 700; }
+    .service { font-weight: 700; }
+    .place { display: block; color: var(--muted); font-weight: 400; }
+
+    button {
+      margin-top: 24px;
+      min-height: 48px;
+      padding: 0 20px;
+      border: 0;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover { background: var(--accent-hover); }
+    button:focus-visible { outline: 3px solid #f3b61f; outline-offset: 3px; }
+
+    .details {
+      margin-top: 16px;
+      padding: 16px;
+      border-left: 4px solid var(--accent);
+      background: #edf7f2;
+    }
+
+    [hidden] { display: none; }
+
+    @media (max-width: 520px) {
+      main { margin: 16px auto; }
+      .services li { grid-template-columns: 1fr; gap: 4px; }
+      button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="sample-note">Classroom sample — not official NUOL information.</p>
+    <p class="time">Campus information · Weekdays</p>
+    <h1>NUOL Campus Service Finder</h1>
+    <p class="intro">Find where to study, print a document, or ask for academic help.</p>
+
+    <h2>Campus services</h2>
+    <ul class="services">
+      <li>
+        <span class="time">08:00–20:00</span>
+        <span class="service">Central Library <span class="place">Library Building</span></span>
+      </li>
+      <li>
+        <span class="time">08:30–17:00</span>
+        <span class="service">Print &amp; Copy Desk <span class="place">Student Center · First floor</span></span>
+      </li>
+      <li>
+        <span class="time">09:00–16:00</span>
+        <span class="service">Academic Support Desk <span class="place">Administration Building</span></span>
+      </li>
+    </ul>
+
+    <button id="detailsButton" type="button" aria-expanded="false" aria-controls="detailsNote">
+      Show access details
+    </button>
+
+    <section id="detailsNote" class="details" hidden>
+      <strong>Before you go</strong>
+      <p>Bring your student card. The information desk can help you find an accessible entrance.</p>
+    </section>
+  </main>
+
+  <script>
+    const button = document.querySelector('#detailsButton');
+    const note = document.querySelector('#detailsNote');
+
+    button.addEventListener('click', () => {
+      const isOpen = !note.hidden;
+      note.hidden = isOpen;
+      button.setAttribute('aria-expanded', String(!isOpen));
+      button.textContent = isOpen ? 'Show access details' : 'Hide access details';
+    });
+  </script>
+</body>
+</html>

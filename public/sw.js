@@ -1,7 +1,7 @@
 const SCRIPT_PATH = new URL(self.location.href).pathname;
 const BASE_PATH = SCRIPT_PATH.replace(/\/sw\.js$/, "");
 const CACHE_NAMESPACE = `build-loop:${BASE_PATH || "/"}:`;
-const CACHE_NAME = `${CACHE_NAMESPACE}v8`;
+const CACHE_NAME = `${CACHE_NAMESPACE}v9`;
 const withBasePath = (path) => `${BASE_PATH}${path}`;
 const isWithinBasePath = (pathname) =>
   BASE_PATH === "" ||
@@ -52,10 +52,13 @@ self.addEventListener("fetch", (event) => {
         }
         return response;
       })
-      .catch(() =>
-        caches
-          .match(event.request)
-          .then((cached) => cached || caches.match(withBasePath("/"))),
-      ),
+      .catch(async () => {
+        const cached = await caches.match(event.request);
+        if (cached) return cached;
+        if (event.request.mode === "navigate") {
+          return (await caches.match(withBasePath("/"))) || Response.error();
+        }
+        return Response.error();
+      }),
   );
 });

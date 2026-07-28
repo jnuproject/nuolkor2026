@@ -461,8 +461,10 @@ export function ClassroomDashboard() {
         <div className="teacher-cues">
           <span>{uiText(language, "Teacher cue").toUpperCase()}</span>
           <ul>
-            {currentStage?.teacherCue.map((cue) => (
-              <li key={cue}>{teacherCueText(language, cue)}</li>
+            {currentStage?.teacherCue.map((cue, index) => (
+              <li key={`${currentStage.id}-cue-${index}`}>
+                {teacherCueText(language, cue)}
+              </li>
             ))}
           </ul>
         </div>

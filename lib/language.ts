@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from "react";
+import { useEffect, useState } from "react";
 import {
   LANGUAGE_CHANGE_EVENT,
   LANGUAGE_STORAGE_KEY,
@@ -43,17 +43,23 @@ export function detectLanguage(): Language {
   return window.navigator.language.toLowerCase().startsWith("ko") ? "ko" : "en";
 }
 
-function subscribe(onStoreChange: () => void) {
-  window.addEventListener(LANGUAGE_CHANGE_EVENT, onStoreChange);
-  window.addEventListener("storage", onStoreChange);
-  return () => {
-    window.removeEventListener(LANGUAGE_CHANGE_EVENT, onStoreChange);
-    window.removeEventListener("storage", onStoreChange);
-  };
-}
-
 export function useLanguage(): Language {
-  return useSyncExternalStore(subscribe, detectLanguage, () => "en");
+  const [language, setLanguage] = useState<Language>("en");
+
+  useEffect(() => {
+    const syncLanguage = () => setLanguage(detectLanguage());
+
+    syncLanguage();
+    window.addEventListener(LANGUAGE_CHANGE_EVENT, syncLanguage);
+    window.addEventListener("storage", syncLanguage);
+
+    return () => {
+      window.removeEventListener(LANGUAGE_CHANGE_EVENT, syncLanguage);
+      window.removeEventListener("storage", syncLanguage);
+    };
+  }, []);
+
+  return language;
 }
 
 export function localized(

@@ -26,10 +26,28 @@ export const COURSE_MANIFEST = {
   1: {
     "stages": [
       {
-        "id": "day1-welcome-readiness",
+        "id": "day1-show-finished-result",
         "activities": [
           {
-            "id": "day1-readiness-check",
+            "id": "day1-show-finished-result-read",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": "day1-check-opencode-nvidia-folder-browser",
+        "activities": [
+          {
+            "id": "day1-tools-ready-read",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": "day1-smallest-web-structure",
+        "activities": [
+          {
+            "id": "day1-smallest-web-structure-read",
             "required": false
           }
         ]
@@ -38,38 +56,8 @@ export const COURSE_MANIFEST = {
         "id": "day1-live-build-demo",
         "activities": [
           {
-            "id": "day1-demo-watch",
-            "required": true
-          },
-          {
-            "id": "day1-demo-human-decision",
-            "required": true
-          }
-        ]
-      },
-      {
-        "id": "day1-human-role",
-        "activities": [
-          {
-            "id": "day1-role-choice",
-            "required": true
-          },
-          {
-            "id": "day1-success-statement",
-            "required": true
-          }
-        ]
-      },
-      {
-        "id": "day1-safety-promise",
-        "activities": [
-          {
-            "id": "day1-safety-checklist",
-            "required": true
-          },
-          {
-            "id": "day1-safety-fix-choice",
-            "required": true
+            "id": "day1-live-build-demo-read",
+            "required": false
           }
         ]
       },
@@ -83,78 +71,46 @@ export const COURSE_MANIFEST = {
         ]
       },
       {
-        "id": "day1-tools-files",
+        "id": "day1-build-shared-first-page",
         "activities": [
           {
-            "id": "day1-tool-roles",
-            "required": false
-          },
-          {
-            "id": "day1-correct-location",
+            "id": "day1-shared-page-browser-evidence",
             "required": true
           }
         ]
       },
       {
-        "id": "day1-guided-first-build",
+        "id": "day1-fix-one-difference",
         "activities": [
           {
-            "id": "day1-build-prompt",
-            "required": true
-          },
-          {
-            "id": "day1-watch-plan",
-            "required": true
-          },
-          {
-            "id": "day1-first-build-check",
+            "id": "day1-one-revision-evidence",
             "required": true
           }
         ]
       },
       {
-        "id": "day1-check-fix-save",
+        "id": "day1-personalize-and-check-mobile",
         "activities": [
           {
-            "id": "day1-base-tests",
-            "required": true
-          },
-          {
-            "id": "day1-one-fix",
-            "required": false
-          },
-          {
-            "id": "day1-base-save",
+            "id": "day1-personalization-decision",
             "required": true
           }
         ]
       },
       {
-        "id": "day1-project-studio",
+        "id": "day1-test-publish-github-pages",
         "activities": [
           {
-            "id": "day1-studio-plan",
-            "required": true
-          },
-          {
-            "id": "day1-studio-build",
-            "required": true
-          },
-          {
-            "id": "day1-studio-tests-save",
+            "id": "day1-test-public-url",
             "required": true
           }
         ]
       },
       {
-        "id": "day1-share-exit",
+        "id": "day1-save-working-version",
         "activities": [
           {
-            "id": "day1-partner-share",
-            "required": true
-          },
-          {
-            "id": "day1-exit-answer",
+            "id": "day1-working-backup-location",
             "required": true
           }
         ]
@@ -164,61 +120,37 @@ export const COURSE_MANIFEST = {
   2: {
     "stages": [
       {
-        "id": "day2-review",
+        "id": "day2-reopen-test-url",
         "activities": [
           {
-            "id": "day2-loop-order",
+            "id": "day2-reopen-url-read",
             "required": false
-          },
+          }
+        ]
+      },
+      {
+        "id": "day2-user-and-situation",
+        "activities": [
           {
-            "id": "day2-day1-test",
+            "id": "day2-project-sentence",
             "required": true
           }
         ]
       },
       {
-        "id": "day2-ab-test",
+        "id": "day2-one-complete-path",
         "activities": [
           {
-            "id": "day2-ab-choice",
-            "required": true
-          },
-          {
-            "id": "day2-ab-evidence",
+            "id": "day2-complete-path",
             "required": true
           }
         ]
       },
       {
-        "id": "day2-prompt-frame",
+        "id": "day2-real-content-and-order",
         "activities": [
           {
-            "id": "day2-frame-read",
-            "required": false
-          },
-          {
-            "id": "day2-frame-write",
-            "required": true
-          },
-          {
-            "id": "day2-frame-check",
-            "required": true
-          }
-        ]
-      },
-      {
-        "id": "day2-context-management",
-        "activities": [
-          {
-            "id": "day2-handoff-read",
-            "required": false
-          },
-          {
-            "id": "day2-handoff-draft",
-            "required": true
-          },
-          {
-            "id": "day2-handoff-fact-check",
+            "id": "day2-real-content-draft",
             "required": true
           }
         ]
@@ -233,65 +165,46 @@ export const COURSE_MANIFEST = {
         ]
       },
       {
-        "id": "day2-debugging-demo",
+        "id": "day2-good-build-request-demo",
         "activities": [
           {
-            "id": "day2-debug-watch",
-            "required": true
-          },
+            "id": "day2-good-request-demo-read",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": "day2-personal-plan-and-paper-screen",
+        "activities": [
           {
-            "id": "day2-debug-record",
-            "required": true
-          },
-          {
-            "id": "day2-debug-prompt",
+            "id": "day2-plan-and-sketch-location",
             "required": true
           }
         ]
       },
       {
-        "id": "day2-guided-lab",
+        "id": "day2-build-personal-v1",
         "activities": [
           {
-            "id": "day2-lab-prompt",
-            "required": true
-          },
-          {
-            "id": "day2-lab-watch",
-            "required": true
-          },
-          {
-            "id": "day2-basic-tests",
+            "id": "day2-v1-browser-evidence",
             "required": true
           }
         ]
       },
       {
-        "id": "day2-project-studio",
+        "id": "day2-five-second-test",
         "activities": [
           {
-            "id": "day2-six-tests",
-            "required": true
-          },
-          {
-            "id": "day2-studio-fix-handoff",
-            "required": true
-          },
-          {
-            "id": "day2-regression-save",
+            "id": "day2-five-second-observation",
             "required": true
           }
         ]
       },
       {
-        "id": "day2-compare-exit",
+        "id": "day2-save-v1",
         "activities": [
           {
-            "id": "day2-peer-compare",
-            "required": true
-          },
-          {
-            "id": "day2-exit-ticket",
+            "id": "day2-v1-backup-location",
             "required": true
           }
         ]
@@ -301,62 +214,47 @@ export const COURSE_MANIFEST = {
   3: {
     "stages": [
       {
-        "id": "day3-review-ownership",
+        "id": "day3-first-screen-observation",
         "activities": [
           {
-            "id": "day3-loop-recall",
-            "required": false
-          },
-          {
-            "id": "day3-ownership-check",
-            "required": false
-          }
-        ]
-      },
-      {
-        "id": "day3-free-topic-exploration",
-        "activities": [
-          {
-            "id": "day3-own-observations",
-            "required": true
-          },
-          {
-            "id": "day3-own-choice",
+            "id": "day3-first-impression-evidence",
             "required": true
           }
         ]
       },
       {
-        "id": "day3-user-problem-success",
+        "id": "day3-design-is-information-order",
         "activities": [
           {
-            "id": "day3-user",
-            "required": true
-          },
+            "id": "day3-information-order-read",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": "day3-diagnose-ai-defaults",
+        "activities": [
           {
-            "id": "day3-problem",
-            "required": true
-          },
-          {
-            "id": "day3-success",
+            "id": "day3-ai-default-diagnosis",
             "required": true
           }
         ]
       },
       {
-        "id": "day3-must-nice",
+        "id": "day3-real-content-consistent-limits",
         "activities": [
           {
-            "id": "day3-priority-read",
+            "id": "day3-visual-system-read",
             "required": false
-          },
+          }
+        ]
+      },
+      {
+        "id": "day3-live-before-after-demo",
+        "activities": [
           {
-            "id": "day3-priority-list",
-            "required": true
-          },
-          {
-            "id": "day3-v0-scope-gate",
-            "required": true
+            "id": "day3-live-design-demo-read",
+            "required": false
           }
         ]
       },
@@ -370,65 +268,55 @@ export const COURSE_MANIFEST = {
         ]
       },
       {
-        "id": "day3-wireframe-brief",
+        "id": "day3-common-design-clinic",
         "activities": [
           {
-            "id": "day3-project-brief",
-            "required": true
-          },
-          {
-            "id": "day3-one-screen-wireframe",
+            "id": "day3-clinic-change-evidence",
             "required": true
           }
         ]
       },
       {
-        "id": "day3-plan-review",
+        "id": "day3-analyze-reference",
         "activities": [
           {
-            "id": "day3-ai-plan-review",
-            "required": true
-          },
-          {
-            "id": "day3-review-watch",
-            "required": true
-          },
-          {
-            "id": "day3-approval-gate",
+            "id": "day3-reference-decision",
             "required": true
           }
         ]
       },
       {
-        "id": "day3-v0-studio",
+        "id": "day3-personal-design-direction",
         "activities": [
           {
-            "id": "day3-v0-tell-watch",
-            "required": true
-          },
-          {
-            "id": "day3-v0-check-fix",
-            "required": true
-          },
-          {
-            "id": "day3-v0-save",
+            "id": "day3-three-direction-words",
             "required": true
           }
         ]
       },
       {
-        "id": "day3-pitch",
+        "id": "day3-improve-personal-design",
         "activities": [
           {
-            "id": "day3-pitch-timer",
-            "required": false
-          },
-          {
-            "id": "day3-pitch-peer",
+            "id": "day3-design-change-evidence",
             "required": true
-          },
+          }
+        ]
+      },
+      {
+        "id": "day3-mobile-keyboard-readability",
+        "activities": [
           {
-            "id": "day3-exit-action",
+            "id": "day3-usability-check-evidence",
+            "required": true
+          }
+        ]
+      },
+      {
+        "id": "day3-save-before-after",
+        "activities": [
+          {
+            "id": "day3-design-backup-and-evidence",
             "required": true
           }
         ]
@@ -438,61 +326,46 @@ export const COURSE_MANIFEST = {
   4: {
     "stages": [
       {
-        "id": "day4-project-status",
+        "id": "day4-choose-one-user-action",
         "activities": [
           {
-            "id": "day4-old-path-test",
+            "id": "day4-one-success-sentence",
             "required": true
           }
         ]
       },
       {
-        "id": "day4-code-map",
+        "id": "day4-interaction-and-screen-state",
         "activities": [
           {
-            "id": "day4-code-role-read",
+            "id": "day4-interaction-state-read",
             "required": false
-          },
+          }
+        ]
+      },
+      {
+        "id": "day4-define-results-before-build",
+        "activities": [
           {
-            "id": "day4-code-map-prompt",
-            "required": true
-          },
-          {
-            "id": "day4-code-map-check",
+            "id": "day4-result-rules",
             "required": true
           }
         ]
       },
       {
-        "id": "day4-action-trace",
+        "id": "day4-live-feature-demo",
         "activities": [
           {
-            "id": "day4-action-flow-read",
+            "id": "day4-live-feature-demo-read",
             "required": false
-          },
-          {
-            "id": "day4-action-trace-prompt",
-            "required": true
-          },
-          {
-            "id": "day4-action-trace-record",
-            "required": true
           }
         ]
       },
       {
-        "id": "day4-sprint-save-point",
+        "id": "day4-common-filter-lab",
         "activities": [
           {
-            "id": "day4-sprint-loop",
-            "required": false
-          },
-          {
-            "id": "day4-test-before-sprint",
-            "required": true
-          },
-          {
-            "id": "day4-start-save-point",
+            "id": "day4-common-lab-evidence",
             "required": true
           }
         ]
@@ -507,65 +380,37 @@ export const COURSE_MANIFEST = {
         ]
       },
       {
-        "id": "day4-recovery-paths",
+        "id": "day4-decide-edge-and-storage",
         "activities": [
           {
-            "id": "day4-recovery-read",
-            "required": false
-          },
-          {
-            "id": "day4-recovery-choice",
-            "required": true
-          },
-          {
-            "id": "day4-recovery-proof",
+            "id": "day4-edge-storage-decision",
             "required": true
           }
         ]
       },
       {
-        "id": "day4-slice-approval",
+        "id": "day4-build-personal-core-interaction",
         "activities": [
           {
-            "id": "day4-slice-definition",
-            "required": true
-          },
-          {
-            "id": "day4-slice-gate",
-            "required": true
-          },
-          {
-            "id": "day4-slice-status",
+            "id": "day4-core-interaction-evidence",
             "required": true
           }
         ]
       },
       {
-        "id": "day4-project-studio",
+        "id": "day4-partner-use-and-one-fix",
         "activities": [
           {
-            "id": "day4-studio-tell-watch",
-            "required": true
-          },
-          {
-            "id": "day4-studio-check-fix",
-            "required": true
-          },
-          {
-            "id": "day4-studio-save-handoff",
+            "id": "day4-partner-fix-evidence",
             "required": true
           }
         ]
       },
       {
-        "id": "day4-final-checkpoint",
+        "id": "day4-recheck-and-save",
         "activities": [
           {
-            "id": "day4-final-peer-check",
-            "required": true
-          },
-          {
-            "id": "day4-day5-first-action",
+            "id": "day4-working-backup-evidence",
             "required": true
           }
         ]
@@ -575,48 +420,37 @@ export const COURSE_MANIFEST = {
   5: {
     "stages": [
       {
-        "id": "day5-test-strategy",
+        "id": "day5-write-one-user-task",
         "activities": [
           {
-            "id": "day5-evidence-read",
-            "required": false
-          },
-          {
-            "id": "day5-evidence-choice",
-            "required": true
-          },
-          {
-            "id": "day5-start-save",
+            "id": "day5-one-user-task",
             "required": true
           }
         ]
       },
       {
-        "id": "day5-write-test-cards",
+        "id": "day5-observe-without-explaining",
         "activities": [
           {
-            "id": "day5-four-types",
+            "id": "day5-observation-method-read",
             "required": false
-          },
+          }
+        ]
+      },
+      {
+        "id": "day5-first-cross-use",
+        "activities": [
           {
-            "id": "day5-four-cards",
-            "required": true
-          },
-          {
-            "id": "day5-card-check",
+            "id": "day5-first-use-observation",
             "required": true
           }
         ]
       },
       {
-        "id": "day5-peer-test-rounds",
+        "id": "day5-turn-observation-into-problem",
         "activities": [
           {
-            "id": "day5-peer-round-one",
-            "required": true
-          },
-          {
-            "id": "day5-peer-round-two",
+            "id": "day5-problem-statement",
             "required": true
           }
         ]
@@ -631,82 +465,46 @@ export const COURSE_MANIFEST = {
         ]
       },
       {
-        "id": "day5-sort-problems",
+        "id": "day5-choose-fix-priority",
         "activities": [
           {
-            "id": "day5-problem-evidence",
-            "required": true
-          },
-          {
-            "id": "day5-priority-choice",
-            "required": true
-          },
-          {
-            "id": "day5-priority-check",
+            "id": "day5-fix-priority",
             "required": true
           }
         ]
       },
       {
-        "id": "day5-safety-accessibility",
+        "id": "day5-fix-and-retest",
         "activities": [
           {
-            "id": "day5-safety-check",
-            "required": true
-          },
-          {
-            "id": "day5-access-check",
-            "required": true
-          },
-          {
-            "id": "day5-access-issue",
+            "id": "day5-fix-retest-evidence",
             "required": true
           }
         ]
       },
       {
-        "id": "day5-approve-fix-plan",
+        "id": "day5-quality-and-public-safety",
         "activities": [
           {
-            "id": "day5-fix-plan",
-            "required": true
-          },
-          {
-            "id": "day5-fix-approval",
+            "id": "day5-release-check-evidence",
             "required": true
           }
         ]
       },
       {
-        "id": "day5-project-studio",
+        "id": "day5-upload-release-candidate",
         "activities": [
           {
-            "id": "day5-fix-prompt",
+            "id": "day5-release-candidate-url",
             "required": true
-          },
-          {
-            "id": "day5-fix-record",
-            "required": true
-          },
-          {
-            "id": "day5-studio-timer",
-            "required": false
           }
         ]
       },
       {
-        "id": "day5-backup-demo",
+        "id": "day5-other-environment-and-backup",
         "activities": [
           {
-            "id": "day5-smoke-test",
-            "required": true
-          },
-          {
-            "id": "day5-release-copy",
-            "required": true
-          },
-          {
-            "id": "day5-demo-path",
+            "id": "day5-external-check-and-backup",
             "required": true
           }
         ]
@@ -716,48 +514,28 @@ export const COURSE_MANIFEST = {
   6: {
     "stages": [
       {
-        "id": "day6-final-readiness",
+        "id": "day6-check-public-files-and-secrets",
         "activities": [
           {
-            "id": "day6-version-choice",
-            "required": true
-          },
-          {
-            "id": "day6-readiness-test",
+            "id": "day6-public-folder-evidence",
             "required": true
           }
         ]
       },
       {
-        "id": "day6-last-blocker",
+        "id": "day6-live-publish-and-republish-demo",
         "activities": [
           {
-            "id": "day6-blocker-gate",
-            "required": true
-          },
-          {
-            "id": "day6-blocker-prompt",
+            "id": "day6-publish-demo-read",
             "required": false
-          },
-          {
-            "id": "day6-blocker-retest",
-            "required": true
           }
         ]
       },
       {
-        "id": "day6-code-freeze",
+        "id": "day6-final-personal-publish",
         "activities": [
           {
-            "id": "day6-freeze-rules",
-            "required": false
-          },
-          {
-            "id": "day6-final-copy",
-            "required": true
-          },
-          {
-            "id": "day6-final-record",
+            "id": "day6-final-url",
             "required": true
           }
         ]
@@ -772,61 +550,46 @@ export const COURSE_MANIFEST = {
         ]
       },
       {
-        "id": "day6-partner-rehearsal",
+        "id": "day6-test-another-device",
         "activities": [
           {
-            "id": "day6-demo-script",
-            "required": true
-          },
-          {
-            "id": "day6-rehearsal-timer",
-            "required": false
-          },
-          {
-            "id": "day6-partner-feedback",
+            "id": "day6-other-device-evidence",
             "required": true
           }
         ]
       },
       {
-        "id": "day6-showcase",
+        "id": "day6-fix-public-problem-and-republish",
         "activities": [
           {
-            "id": "day6-showcase-timer",
-            "required": false
-          },
-          {
-            "id": "day6-showcase-record",
+            "id": "day6-republish-evidence",
             "required": true
           }
         ]
       },
       {
-        "id": "day6-peer-feedback",
+        "id": "day6-readme-and-qr",
         "activities": [
           {
-            "id": "day6-feedback-one",
-            "required": true
-          },
-          {
-            "id": "day6-feedback-two",
+            "id": "day6-handoff-and-qr-evidence",
             "required": true
           }
         ]
       },
       {
-        "id": "day6-reflection-close",
+        "id": "day6-small-group-showcase",
         "activities": [
           {
-            "id": "day6-reflection",
+            "id": "day6-showcase-evidence",
             "required": true
-          },
+          }
+        ]
+      },
+      {
+        "id": "day6-next-step-and-reflection",
+        "activities": [
           {
-            "id": "day6-responsibility",
-            "required": true
-          },
-          {
-            "id": "day6-handoff-check",
+            "id": "day6-final-reflection",
             "required": true
           }
         ]

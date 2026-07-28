@@ -1,5 +1,16 @@
 import type { DayNumber } from "@/content/course";
 
+export type LocalizedText =
+  | string
+  | {
+      en: string;
+      ko: string;
+    };
+
+export function text(en: string, ko: string): LocalizedText {
+  return { en, ko };
+}
+
 export type ActivityKind =
   | "read"
   | "watch"
@@ -12,22 +23,22 @@ export type ActivityKind =
   | "timer";
 
 export type ChoiceOption = {
-  label: string;
+  label: LocalizedText;
   value: string;
-  feedback?: string;
+  feedback?: LocalizedText;
 };
 
 export type LessonActivity = {
   id: string;
   kind: ActivityKind;
-  title: string;
-  instruction: string;
-  content?: string[];
-  items?: string[];
-  prompt?: string;
-  placeholder?: string;
+  title: LocalizedText;
+  instruction: LocalizedText;
+  content?: LocalizedText[];
+  items?: LocalizedText[];
+  prompt?: LocalizedText;
+  placeholder?: LocalizedText;
   options?: ChoiceOption[];
-  expected?: string[];
+  expected?: LocalizedText[];
   durationMinutes?: number;
   minimum?: number;
   optional?: boolean;
@@ -40,19 +51,19 @@ export type LessonStage = {
   end: string;
   minutes: number;
   phase: "TELL" | "WATCH" | "CHECK" | "FIX" | "SAVE" | "STUDIO" | "SHARE" | "BREAK";
-  title: string;
-  goal: string;
-  studentBrief: string[];
-  teacherCue: string[];
-  completion: string;
+  title: LocalizedText;
+  goal: LocalizedText;
+  studentBrief: LocalizedText[];
+  teacherCue: LocalizedText[];
+  completion: LocalizedText;
   activities: LessonActivity[];
 };
 
 export type InteractiveDayPlan = {
   day: DayNumber;
-  title: string;
-  question: string;
-  artifact: string;
+  title: LocalizedText;
+  question: LocalizedText;
+  artifact: LocalizedText;
   stages: LessonStage[];
 };
 

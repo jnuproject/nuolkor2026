@@ -5,10 +5,9 @@ the National University of Laos.
 
 ## Classroom views
 
-- **Student** — Korean/English activities, saved checks, copyable prompts, and help signals
-- **Instructor** — Korean/English facilitation views, timing, and recovery guidance
-- **Present** — projector-ready Korean/English screens, timer, and keyboard controls
-- **Cards** — Korean/English printable quick-reference material
+- **Student** — continuous Korean/English lessons and workbooks, focused evidence activities, and help signals
+- **Instructor** — Korean/English stage guidance, the complete Korean teaching manuscript, timing, and recovery guidance
+- **Present** — projector-ready screens derived from the same canonical lessons, with timers and keyboard controls
 - **Live classroom** — room code, participant progress, help status, and instructor controls
 
 The language selection applies to every route and follows the learner or
@@ -39,10 +38,10 @@ cp .env.example .env.local
 npm run dev
 ```
 
-The source curriculum lives in the sibling `교안제작/` directory in the
+The source curriculum lives in the sibling `교안완성본/` directory in the
 authoring workspace. Run `npm run content:sync` there after editing the source
-Markdown. The generated `content/generated.ts` file is committed so deployment
-does not depend on that sibling directory.
+Markdown. The generated curriculum, lab index, and copied `public/labs` files
+are committed so deployment does not depend on that sibling directory.
 
 ## Supabase setup
 
@@ -78,4 +77,4 @@ workflow in `.github/workflows/deploy-pages.yml`.
 - `B`: blank or restore the projector screen
 - `F`: enter full screen
 
-Day 6 also includes a repeatable four-minute showcase timer.
+Day 6 also includes timing support for the small-group 90-second showcase.
