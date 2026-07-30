@@ -438,7 +438,13 @@ test("turns the legacy cards route into a bilingual workbook guide", async () =>
 });
 
 test("keeps projector slides clean and moves controls to the instructor page", async () => {
-  const [presenter, instructorPlan, controller, presentationState] =
+  const [
+    presenter,
+    instructorPlan,
+    controller,
+    presentationState,
+    instructorPage,
+  ] =
     await Promise.all([
       readFile(path.join(projectRoot, "components", "Presenter.tsx"), "utf8"),
       readFile(
@@ -463,6 +469,7 @@ test("keeps projector slides clean and moves controls to the instructor page", a
         path.join(projectRoot, "lib", "use-presentation-state.ts"),
         "utf8",
       ),
+      readRoute("instructor/day/1"),
     ]);
 
   assert.match(presenter, /presenter-projector/);
@@ -471,11 +478,45 @@ test("keeps projector slides clean and moves controls to the instructor page", a
     /presenter-topbar|presenter-controls|presenter-notes|LanguageToggle/,
   );
   assert.match(instructorPlan, /<PresentationController/);
+  assert.match(instructorPlan, /state=\{presentationState\}/);
+  assert.match(instructorPlan, /slide\.stageId === nextStage\.id/);
   assert.match(controller, /StageTimer/);
   assert.match(controller, /slide\.teacherNotes/);
   assert.match(controller, /update\(\{ revealed: true \}\)/);
   assert.match(presentationState, /BroadcastChannel/);
   assert.match(presentationState, /localStorage/);
+
+  const hierarchy = [
+    'class="instructor-plan-intro"',
+    'class="presentation-controller"',
+    'class="instructor-plan-layout"',
+    'class="instructor-teaching-sequence"',
+    'class="instructor-full-guide"',
+  ].map((marker) => instructorPage.indexOf(marker));
+
+  assert.ok(
+    hierarchy.every((position) => position >= 0) &&
+      hierarchy.every(
+        (position, index) => index === 0 || position > hierarchy[index - 1],
+      ),
+    "Instructor page hierarchy is out of order",
+  );
+
+  for (const className of [
+    "instructor-teaching-sequence",
+    "instructor-full-guide",
+  ]) {
+    const openingTag = instructorPage.match(
+      new RegExp(`<details[^>]*class="${className}"[^>]*>`),
+    )?.[0];
+
+    assert.ok(openingTag, `${className} is not a details element`);
+    assert.doesNotMatch(
+      openingTag,
+      /\sopen(?:=|[\s>])/,
+      `${className} should be collapsed initially`,
+    );
+  }
 });
 
 test("derives continuous courseware from lesson Markdown and renders it top to bottom", async () => {

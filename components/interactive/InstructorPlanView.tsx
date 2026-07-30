@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getDayInfo } from "@/content/course";
@@ -13,6 +12,7 @@ import {
 } from "@/content/translations/interactive-ko";
 import { uiText } from "@/content/translations/ui-ko";
 import { useLanguage } from "@/lib/language";
+import { usePresentationState } from "@/lib/use-presentation-state";
 import { LanguageToggle } from "../LanguageToggle";
 import { PresentationController } from "./PresentationController";
 
@@ -27,7 +27,16 @@ export function InstructorPlanView({
 }) {
   const language = useLanguage();
   const dayInfo = getDayInfo(plan.day);
-  const [selected, setSelected] = useState(0);
+  const slides = courseware.stages.flatMap((item) => item.slides);
+  const [presentationState, updatePresentation] = usePresentationState(
+    plan.day,
+    slides.length,
+  );
+  const activeSlide = slides[presentationState.index];
+  const activeStageIndex = plan.stages.findIndex(
+    (item) => item.id === activeSlide?.stageId,
+  );
+  const selected = activeStageIndex >= 0 ? activeStageIndex : 0;
   const stage = plan.stages[selected];
   const coursewareStage = courseware.stages.find(
     (item) => item.stageId === stage.id,
@@ -38,6 +47,19 @@ export function InstructorPlanView({
       activity.kind !== "timer" &&
       !activity.hidden,
   );
+  const selectStage = (index: number) => {
+    const nextStage = plan.stages[index];
+    const nextSlideIndex = slides.findIndex(
+      (slide) => slide.stageId === nextStage.id,
+    );
+
+    if (nextSlideIndex >= 0) {
+      updatePresentation({
+        index: nextSlideIndex,
+        revealed: false,
+      });
+    }
+  };
 
   return (
     <main className="instructor-plan">
@@ -52,12 +74,8 @@ export function InstructorPlanView({
               day: plan.day,
             }).toUpperCase()}
           </span>
-          <strong>{interactiveText(language, plan.title)}</strong>
         </div>
         <div>
-          <Link href={`/day/${plan.day}/present`} target="_blank">
-            {uiText(language, "Projector slides ↗")}
-          </Link>
           <Link className="start-live-link" href="/instructor/live">
             {uiText(language, "Start live class")}
           </Link>
@@ -65,20 +83,18 @@ export function InstructorPlanView({
         </div>
       </header>
 
-      {dayInfo ? (
-        <PresentationController
-          day={dayInfo}
-          slides={courseware.stages.flatMap((item) => item.slides)}
-        />
-      ) : null}
-
       <section className="instructor-plan-intro">
         <div>
           <span className="eyebrow">
-            {uiText(language, "180-minute run of show").toUpperCase()}
+            {uiText(language, "Day {day} · 180-minute run of show", {
+              day: plan.day,
+            }).toUpperCase()}
           </span>
-          <h1>{interactiveText(language, plan.question)}</h1>
-          <p>
+          <h1>{interactiveText(language, plan.title)}</h1>
+          <p className="instructor-plan-question">
+            {interactiveText(language, plan.question)}
+          </p>
+          <p className="instructor-plan-direction">
             {uiText(
               language,
               "Proceed one stage at a time. Check the completion criteria for student activities before moving on.",
@@ -91,6 +107,15 @@ export function InstructorPlanView({
         </div>
       </section>
 
+      {dayInfo ? (
+        <PresentationController
+          day={dayInfo}
+          slides={slides}
+          state={presentationState}
+          update={updatePresentation}
+        />
+      ) : null}
+
       <div className="instructor-plan-layout">
         <nav
           className="instructor-stage-list"
@@ -101,7 +126,7 @@ export function InstructorPlanView({
               aria-current={selected === index ? "step" : undefined}
               className={selected === index ? "is-active" : ""}
               key={item.id}
-              onClick={() => setSelected(index)}
+              onClick={() => selectStage(index)}
               type="button"
             >
               <span>{String(index + 1).padStart(2, "0")}</span>
@@ -148,8 +173,8 @@ export function InstructorPlanView({
           </div>
 
           {coursewareStage?.slides.length ? (
-            <section className="instructor-teaching-sequence">
-              <header>
+            <details className="instructor-teaching-sequence">
+              <summary>
                 <div>
                   <span>{uiText(language, "Teaching sequence").toUpperCase()}</span>
                   <strong>
@@ -158,10 +183,8 @@ export function InstructorPlanView({
                     })}
                   </strong>
                 </div>
-                <Link href={`/day/${plan.day}/present`} target="_blank">
-                  {uiText(language, "Open projector slides ↗")}
-                </Link>
-              </header>
+                <i aria-hidden="true">+</i>
+              </summary>
               <ol>
                 {coursewareStage.slides.map((slide, index) => (
                   <li key={slide.id}>
@@ -187,7 +210,7 @@ export function InstructorPlanView({
                   </li>
                 ))}
               </ol>
-            </section>
+            </details>
           ) : null}
 
           <div className="student-screen-preview">
@@ -206,16 +229,16 @@ export function InstructorPlanView({
             <div className="instructor-activity-preview">
               <span>{uiText(language, "Evidence activities").toUpperCase()}</span>
               {evidenceActivities.map((activity, index) => (
-              <article key={activity.id}>
-                <i>{String(index + 1).padStart(2, "0")}</i>
-                <div>
-                  <small>
-                    {uiText(language, activity.kind.replace("-", " "))}
-                  </small>
-                  <strong>{interactiveText(language, activity.title)}</strong>
-                  <p>{interactiveText(language, activity.instruction)}</p>
-                </div>
-              </article>
+                <article key={activity.id}>
+                  <i>{String(index + 1).padStart(2, "0")}</i>
+                  <div>
+                    <small>
+                      {uiText(language, activity.kind.replace("-", " "))}
+                    </small>
+                    <strong>{interactiveText(language, activity.title)}</strong>
+                    <p>{interactiveText(language, activity.instruction)}</p>
+                  </div>
+                </article>
               ))}
             </div>
           ) : null}
@@ -228,7 +251,7 @@ export function InstructorPlanView({
           <footer>
             <button
               disabled={selected === 0}
-              onClick={() => setSelected((value) => Math.max(0, value - 1))}
+              onClick={() => selectStage(Math.max(0, selected - 1))}
               type="button"
             >
               ← {uiText(language, "Previous")}
@@ -236,7 +259,7 @@ export function InstructorPlanView({
             <button
               disabled={selected === plan.stages.length - 1}
               onClick={() =>
-                setSelected((value) => Math.min(plan.stages.length - 1, value + 1))
+                selectStage(Math.min(plan.stages.length - 1, selected + 1))
               }
               type="button"
             >
@@ -246,16 +269,19 @@ export function InstructorPlanView({
         </section>
       </div>
 
-      <section className="instructor-full-guide">
-        <header>
-          <span>{uiText(language, "Full instructor manuscript")}</span>
-          <h2>{uiText(language, "Detailed teaching guide")}</h2>
-          <p>
-            {language === "ko"
-              ? "강의 대본, 시연 순서, 예상 문제와 대응을 위에서 아래로 확인할 수 있습니다."
-              : "The bilingual stage guide above is the English teaching view. The complete operational manuscript below is currently maintained in Korean."}
-          </p>
-        </header>
+      <details className="instructor-full-guide">
+        <summary>
+          <div>
+            <span>{uiText(language, "Full instructor manuscript")}</span>
+            <h2>{uiText(language, "Detailed teaching guide")}</h2>
+            <p>
+              {language === "ko"
+                ? "강의 대본, 시연 순서, 예상 문제와 대응이 필요할 때 펼쳐 보세요."
+                : "Open this only when you need the complete script, demonstration order, and troubleshooting notes."}
+            </p>
+          </div>
+          <strong>{uiText(language, "Open guide")}</strong>
+        </summary>
         {language === "ko" ? (
           <div lang="ko">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
@@ -271,7 +297,7 @@ export function InstructorPlanView({
             </p>
           </div>
         )}
-      </section>
+      </details>
     </main>
   );
 }

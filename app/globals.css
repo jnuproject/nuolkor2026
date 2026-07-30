@@ -6080,7 +6080,6 @@ a {
 
   .runner-connection strong,
   .setup-flow-header > div,
-  .instructor-plan-header > div:last-child a:first-child,
   .dashboard-header-actions a {
     display: none;
   }
@@ -11365,5 +11364,427 @@ html[data-language="ko"] .book-title {
 
   .setup-os-choice > div {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   Instructor hierarchy
+   One clear page title, one quiet control strip, then the active stage.
+   Secondary slide listings and the full manuscript stay collapsed.
+   ========================================================================== */
+
+.instructor-plan-header {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.instructor-plan-header > div:nth-child(2) {
+  align-items: flex-start;
+  padding-left: 12px;
+}
+
+.instructor-plan-header > div:nth-child(2) span {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.instructor-plan-intro {
+  width: min(980px, calc(100% - 40px));
+  grid-template-columns: minmax(0, 708px) 220px;
+  align-items: start;
+  gap: 48px;
+  padding: 52px 0 32px;
+  border-bottom: 0;
+}
+
+.instructor-plan-intro h1 {
+  max-width: 18ch;
+  margin: 8px 0 12px;
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.instructor-plan-intro .instructor-plan-question {
+  max-width: 60ch;
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.instructor-plan-intro .instructor-plan-direction {
+  max-width: 64ch;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.instructor-plan-intro > div:last-child {
+  margin-top: 28px;
+  padding: 12px 0 0;
+  border-top: 1px solid var(--line-dark);
+}
+
+.instructor-plan-intro > div:last-child span {
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 550;
+  letter-spacing: 0;
+}
+
+.instructor-plan-intro > div:last-child strong {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.presentation-controller {
+  width: min(980px, calc(100% - 40px));
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px 24px;
+  margin: 0 auto;
+  padding: 16px 0 18px;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: #fff;
+}
+
+.presentation-controller-header {
+  align-items: center;
+}
+
+.presentation-controller-header span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 550;
+}
+
+.presentation-controller-header h2 {
+  overflow: visible;
+  margin-top: 2px;
+  font-size: 18px;
+  font-weight: 650;
+  text-overflow: clip;
+  text-wrap: pretty;
+  white-space: normal;
+}
+
+.presentation-controller-header small {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.presentation-controller-header > a {
+  border: 1px solid var(--line-dark);
+  color: var(--ink);
+  background: #fff;
+}
+
+.presentation-controller-actions button.is-primary {
+  color: #fff;
+  border-color: var(--blue);
+  background: var(--blue);
+}
+
+.presentation-controller-actions button.is-primary:disabled {
+  color: #b4b4b0;
+  border-color: var(--line);
+  background: #f1f1ef;
+}
+
+.presentation-controller-transport,
+.presentation-controller-utilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.presentation-controller-utilities {
+  margin-left: auto;
+  padding-left: 12px;
+  border-left: 1px solid var(--line);
+}
+
+.presentation-controller > .stage-timer {
+  min-width: 220px;
+  border-color: var(--line);
+  background: #fff;
+}
+
+.presentation-controller-notes {
+  padding-top: 10px;
+}
+
+.presentation-controller-notes h3 {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.presentation-controller-notes ol {
+  margin-top: 4px;
+  color: var(--ink);
+}
+
+.instructor-plan-layout {
+  width: min(980px, calc(100% - 40px));
+  grid-template-columns: 240px minmax(0, 708px);
+  justify-content: stretch;
+  gap: 32px;
+  margin-top: 32px;
+}
+
+.instructor-stage-list {
+  top: 68px;
+}
+
+.instructor-stage-list button {
+  min-height: 58px;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 8px;
+  padding: 8px;
+}
+
+.instructor-stage-list button > i {
+  display: none;
+}
+
+.instructor-stage-list button small {
+  font-size: 11px;
+}
+
+.instructor-stage-list button strong {
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.instructor-stage-detail > header {
+  padding-bottom: 20px;
+}
+
+.instructor-stage-detail h2 {
+  margin: 8px 0 6px;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.instructor-stage-detail > header p {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.instructor-teaching-sequence {
+  padding: 0;
+}
+
+.instructor-teaching-sequence > summary {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  list-style: none;
+  cursor: pointer;
+}
+
+.instructor-teaching-sequence > summary::-webkit-details-marker,
+.instructor-full-guide > summary::-webkit-details-marker {
+  display: none;
+}
+
+.instructor-teaching-sequence > summary > div {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.instructor-teaching-sequence > summary > div strong {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.instructor-teaching-sequence > summary > i {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border-radius: 3px;
+  color: var(--muted);
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 400;
+  transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.instructor-teaching-sequence[open] > summary > i {
+  transform: rotate(45deg);
+}
+
+.instructor-teaching-sequence > summary span,
+.student-screen-preview > span,
+.instructor-activity-preview > span {
+  display: block;
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 550;
+  letter-spacing: 0;
+}
+
+.instructor-cue-panel > span {
+  color: var(--blue-deep);
+}
+
+.instructor-completion > span {
+  color: var(--green);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.instructor-full-guide {
+  width: min(804px, calc(100% - 40px));
+  margin: 64px auto 0;
+  padding: 0 48px 80px;
+  border-top: 1px solid var(--line);
+}
+
+.instructor-full-guide > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 24px 0;
+  list-style: none;
+  cursor: pointer;
+}
+
+.instructor-full-guide > summary span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 550;
+}
+
+.instructor-full-guide > summary h2 {
+  margin: 3px 0 0;
+  font-size: 22px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+}
+
+.instructor-full-guide > summary p {
+  max-width: 60ch;
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.instructor-full-guide > summary > strong {
+  flex: 0 0 auto;
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.instructor-full-guide[open] > summary > strong {
+  color: var(--muted);
+}
+
+.instructor-full-guide > div {
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .presentation-controller-header > a:hover,
+  .presentation-controller-actions button:hover:not(:disabled),
+  .instructor-teaching-sequence > summary:hover,
+  .instructor-full-guide > summary:hover {
+    background: var(--notion-hover);
+  }
+}
+
+@media (max-width: 900px) {
+  .instructor-plan-intro {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .instructor-plan-intro > div:last-child {
+    margin-top: 0;
+  }
+
+  .instructor-plan-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .presentation-controller {
+    grid-template-columns: 1fr;
+  }
+
+  .presentation-controller > .stage-timer {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 620px) {
+  .instructor-plan-intro {
+    width: calc(100% - 32px);
+    padding-top: 36px;
+  }
+
+  .instructor-plan-intro h1 {
+    font-size: 32px;
+  }
+
+  .presentation-controller,
+  .instructor-plan-layout {
+    width: calc(100% - 32px);
+  }
+
+  .presentation-controller-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .presentation-controller-header > a {
+    align-self: flex-start;
+  }
+
+  .presentation-controller-utilities {
+    width: 100%;
+    margin-left: 0;
+    padding: 10px 0 0;
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+
+  .instructor-full-guide {
+    width: 100%;
+    margin-top: 48px;
+    padding: 0 20px 64px;
+  }
+
+  .instructor-full-guide > summary {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
   }
 }
