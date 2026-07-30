@@ -42,6 +42,7 @@ export type TeachingSlide = {
   items?: TeachingSlideItem[];
   code?: BilingualCopy;
   markdown?: BilingualCopy;
+  presenterMarkdown?: BilingualCopy;
   question?: TeachingSlideQuestion;
   takeaway?: BilingualCopy;
   teacherNotes: BilingualCopy[];

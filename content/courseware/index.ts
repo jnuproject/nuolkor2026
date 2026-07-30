@@ -61,6 +61,66 @@ function parseMarkdownDocument(markdown: string): MarkdownDocument {
   };
 }
 
+function shortenForSlide(value: string, maxLength = 260): string {
+  const compact = value.replace(/\s+/g, " ").trim();
+  if (compact.length <= maxLength) {
+    return compact;
+  }
+
+  const window = compact.slice(0, maxLength + 1);
+  const sentenceEnds = [...window.matchAll(/[.!?。！？](?=\s|$)/g)];
+  const lastSentence = sentenceEnds.at(-1);
+  if (lastSentence?.index !== undefined && lastSentence.index >= maxLength * 0.55) {
+    return window.slice(0, lastSentence.index + 1);
+  }
+
+  const lastSpace = window.lastIndexOf(" ");
+  return `${window.slice(0, lastSpace > maxLength * 0.65 ? lastSpace : maxLength).trim()}…`;
+}
+
+function buildPresenterExcerpt(markdown: string): string {
+  const firstCode = markdown.match(/```([^\n]*)\n([\s\S]*?)```/);
+  const withoutCode = markdown.replace(/```[^\n]*\n[\s\S]*?```/g, "");
+  const listItems = [...withoutCode.matchAll(/^\s*(?:[-*+]|\d+[.)])\s+(.+)$/gm)]
+    .map((match) => shortenForSlide(match[1].replace(/^\[[ xX]\]\s*/, ""), 150))
+    .slice(0, 4);
+  const paragraphs = withoutCode
+    .split(/\n\s*\n+/)
+    .map((block) =>
+      block
+        .split("\n")
+        .filter(
+          (line) =>
+            !/^\s*(?:#{2,}|[-*+]|\d+[.)]|\||---+$)/.test(line),
+        )
+        .map((line) => line.replace(/^\s*>\s?/, "").trim())
+        .filter(Boolean)
+        .join(" "),
+    )
+    .filter(Boolean)
+    .map((paragraph) => shortenForSlide(paragraph));
+
+  const output: string[] = [];
+  if (paragraphs[0]) {
+    output.push(paragraphs[0]);
+  }
+
+  if (listItems.length >= 2) {
+    output.push(listItems.map((item) => `- ${item}`).join("\n"));
+  } else if (firstCode) {
+    const codeLines = firstCode[2].trim().split("\n");
+    if (codeLines.length <= 8 && firstCode[2].trim().length <= 640) {
+      output.push(
+        `\`\`\`${firstCode[1].trim()}\n${codeLines.join("\n")}\n\`\`\``,
+      );
+    }
+  } else if (paragraphs[1]) {
+    output.push(paragraphs[1]);
+  }
+
+  return output.join("\n\n") || shortenForSlide(markdown);
+}
+
 function localizedCopy(value: LocalizedText): { en: string; ko: string } {
   if (typeof value === "string") {
     return {
@@ -168,6 +228,10 @@ function buildDayCourseware(day: DayNumber): DayCourseware | undefined {
         markdown: {
           en: enSection.body,
           ko: koSection.body,
+        },
+        presenterMarkdown: {
+          en: buildPresenterExcerpt(enSection.body),
+          ko: buildPresenterExcerpt(koSection.body),
         },
         teacherNotes: [],
       });

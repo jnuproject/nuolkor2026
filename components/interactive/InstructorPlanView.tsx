@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { getDayInfo } from "@/content/course";
 import type { DayCourseware } from "@/content/courseware";
 import type { InteractiveDayPlan } from "@/content/interactive";
 import {
@@ -13,6 +14,7 @@ import {
 import { uiText } from "@/content/translations/ui-ko";
 import { useLanguage } from "@/lib/language";
 import { LanguageToggle } from "../LanguageToggle";
+import { PresentationController } from "./PresentationController";
 
 export function InstructorPlanView({
   plan,
@@ -24,6 +26,7 @@ export function InstructorPlanView({
   guideMarkdown: string;
 }) {
   const language = useLanguage();
+  const dayInfo = getDayInfo(plan.day);
   const [selected, setSelected] = useState(0);
   const stage = plan.stages[selected];
   const coursewareStage = courseware.stages.find(
@@ -53,7 +56,7 @@ export function InstructorPlanView({
         </div>
         <div>
           <Link href={`/day/${plan.day}/present`} target="_blank">
-            {uiText(language, "Presentation ↗")}
+            {uiText(language, "Projector slides ↗")}
           </Link>
           <Link className="start-live-link" href="/instructor/live">
             {uiText(language, "Start live class")}
@@ -61,6 +64,13 @@ export function InstructorPlanView({
           <LanguageToggle />
         </div>
       </header>
+
+      {dayInfo ? (
+        <PresentationController
+          day={dayInfo}
+          slides={courseware.stages.flatMap((item) => item.slides)}
+        />
+      ) : null}
 
       <section className="instructor-plan-intro">
         <div>
@@ -149,7 +159,7 @@ export function InstructorPlanView({
                   </strong>
                 </div>
                 <Link href={`/day/${plan.day}/present`} target="_blank">
-                  {uiText(language, "Open lecture slides ↗")}
+                  {uiText(language, "Open projector slides ↗")}
                 </Link>
               </header>
               <ol>

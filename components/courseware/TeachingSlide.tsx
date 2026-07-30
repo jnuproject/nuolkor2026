@@ -17,19 +17,27 @@ export function localized(copy: BilingualCopy, language: Language): string {
 export function TeachingSlide({
   slide,
   variant = "lesson",
+  revealed: controlledRevealed,
+  onReveal,
 }: {
   slide: TeachingSlideData;
   variant?: "lesson" | "presenter";
+  revealed?: boolean;
+  onReveal?: () => void;
 }) {
   const language = useLanguage();
-  const [revealed, setRevealed] = useState(false);
-  const isQuestion = Boolean(slide.question);
+  const [internalRevealed, setInternalRevealed] = useState(false);
+  const revealed = controlledRevealed ?? internalRevealed;
   const isLessonOverview =
     variant === "lesson" && slide.id.endsWith("-overview");
   const isSequential = ["flow", "demo", "studio", "run"].includes(
     slide.layout,
   );
   const isFocusedQuestion = slide.layout === "question";
+  const markdown =
+    variant === "presenter"
+      ? slide.presenterMarkdown ?? slide.markdown
+      : slide.markdown;
   const SlideTitle = variant === "presenter" ? "h1" : "h2";
   const titleId = `${slide.id}-title`;
   const answerId = `${slide.id}-answer`;
@@ -110,10 +118,10 @@ export function TeachingSlide({
         </figure>
       ) : null}
 
-      {slide.markdown ? (
+      {markdown ? (
         <div className="course-article-markdown">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {localized(slide.markdown, language)}
+            {localized(markdown, language)}
           </ReactMarkdown>
         </div>
       ) : null}
@@ -156,11 +164,17 @@ export function TeachingSlide({
               <b>{localized(slide.question.answer, language)}</b>
               <p>{localized(slide.question.explanation, language)}</p>
             </div>
-          ) : (
+          ) : variant === "presenter" && onReveal ? null : (
             <button
               aria-controls={answerId}
               aria-expanded="false"
-              onClick={() => setRevealed(true)}
+              onClick={() => {
+                if (onReveal) {
+                  onReveal();
+                } else {
+                  setInternalRevealed(true);
+                }
+              }}
               type="button"
             >
               {language === "ko" ? "답과 해설 보기" : "Reveal answer"}
@@ -174,14 +188,6 @@ export function TeachingSlide({
           <span>{language === "ko" ? "기억할 문장" : "Remember"}</span>
           <strong>{localized(slide.takeaway, language)}</strong>
         </footer>
-      ) : null}
-
-      {isQuestion && variant === "presenter" ? (
-        <small className="course-article-presenter-hint">
-          {language === "ko"
-            ? "먼저 답을 받은 뒤 해설을 공개하세요."
-            : "Collect answers before revealing the explanation."}
-        </small>
       ) : null}
     </article>
   );

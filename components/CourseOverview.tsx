@@ -189,7 +189,10 @@ export function CourseOverview() {
                         <BilingualText en="Guide" ko="강사 가이드" />
                       </Link>
                       <Link href={`/day/${plan.day}/present`}>
-                        <BilingualText en="Class screens" ko="수업 진행 화면" />
+                        <BilingualText
+                          en="Projector slides"
+                          ko="프로젝터 슬라이드"
+                        />
                       </Link>
                     </div>
                   </header>

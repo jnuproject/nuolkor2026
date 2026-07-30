@@ -370,13 +370,28 @@ test("exports the new six-day bilingual course and every public classroom route"
   const pages = await Promise.all(routes.map((route) => readRoute(route)));
 
   pages.forEach((html, index) => {
+    const route = routes[index];
     assert.match(
       html,
       /build-loop:language:v2/,
-      `${routes[index]} does not share the bilingual language state`,
+      `${route} does not share the bilingual language state`,
     );
-    assert.match(html, />한국어</);
-    assert.match(html, />English</);
+    if (!route.endsWith("/present")) {
+      assert.match(html, />한국어</);
+      assert.match(html, />English</);
+    }
+  });
+
+  const presenterPages = routes
+    .map((route, index) => ({ route, html: pages[index] }))
+    .filter(({ route }) => route.endsWith("/present"));
+  presenterPages.forEach(({ html, route }) => {
+    assert.match(html, /class="presenter presenter-projector/);
+    assert.doesNotMatch(
+      html,
+      /presenter-topbar|presenter-controls|presenter-notes|class="language-toggle"/,
+      `${route} contains instructor controls on the projector surface`,
+    );
   });
 
   const dayOne = pages[routes.indexOf("day/1")];
@@ -422,6 +437,47 @@ test("turns the legacy cards route into a bilingual workbook guide", async () =>
   });
 });
 
+test("keeps projector slides clean and moves controls to the instructor page", async () => {
+  const [presenter, instructorPlan, controller, presentationState] =
+    await Promise.all([
+      readFile(path.join(projectRoot, "components", "Presenter.tsx"), "utf8"),
+      readFile(
+        path.join(
+          projectRoot,
+          "components",
+          "interactive",
+          "InstructorPlanView.tsx",
+        ),
+        "utf8",
+      ),
+      readFile(
+        path.join(
+          projectRoot,
+          "components",
+          "interactive",
+          "PresentationController.tsx",
+        ),
+        "utf8",
+      ),
+      readFile(
+        path.join(projectRoot, "lib", "use-presentation-state.ts"),
+        "utf8",
+      ),
+    ]);
+
+  assert.match(presenter, /presenter-projector/);
+  assert.doesNotMatch(
+    presenter,
+    /presenter-topbar|presenter-controls|presenter-notes|LanguageToggle/,
+  );
+  assert.match(instructorPlan, /<PresentationController/);
+  assert.match(controller, /StageTimer/);
+  assert.match(controller, /slide\.teacherNotes/);
+  assert.match(controller, /update\(\{ revealed: true \}\)/);
+  assert.match(presentationState, /BroadcastChannel/);
+  assert.match(presentationState, /localStorage/);
+});
+
 test("derives continuous courseware from lesson Markdown and renders it top to bottom", async () => {
   const [
     generatedModule,
@@ -453,11 +509,13 @@ test("derives continuous courseware from lesson Markdown and renders it top to b
   assert.match(indexSource, /parseMarkdownDocument/);
   assert.doesNotMatch(indexSource, /from ["']\.\/day[1-6]["']/);
   assert.match(typesSource, /markdown\?: BilingualCopy/);
+  assert.match(typesSource, /presenterMarkdown\?: BilingualCopy/);
+  assert.match(indexSource, /buildPresenterExcerpt/);
   assert.match(slideSource, /import ReactMarkdown from "react-markdown"/);
   assert.match(slideSource, /remarkPlugins=\{\[remarkGfm\]\}/);
   assert.match(
     slideSource,
-    /localized\(slide\.markdown,\s*language\)/,
+    /localized\(markdown,\s*language\)/,
   );
   assert.match(deckSource, /slides\.map\(\(slide\)/);
   assert.doesNotMatch(deckSource, /useState|stage-courseware-nav|aria-pressed/);
@@ -513,6 +571,17 @@ test("derives continuous courseware from lesson Markdown and renders it top to b
         ko: expectedKorean[index].body,
       })),
     );
+    markdownSlides.forEach((slide) => {
+      assert.ok(slide.presenterMarkdown);
+      assert.ok(
+        slide.presenterMarkdown.en.split("\n").filter(Boolean).length <= 12,
+        `${slide.id} English projector copy is too dense`,
+      );
+      assert.ok(
+        slide.presenterMarkdown.ko.split("\n").filter(Boolean).length <= 12,
+        `${slide.id} Korean projector copy is too dense`,
+      );
+    });
 
     courseware.stages.forEach((stage, index) => {
       const slideMinutes = stage.slides.reduce(

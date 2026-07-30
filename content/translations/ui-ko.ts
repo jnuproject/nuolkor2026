@@ -272,7 +272,7 @@ const koreanUi: Record<string, string> = {
   "Teacher cue": "강사 진행 안내",
   "Teaching sequence": "강의 전개",
   "{count} authored slides": "실강 슬라이드 {count}장",
-  "Open lecture slides ↗": "강의 슬라이드 열기 ↗",
+  "Open projector slides ↗": "프로젝터 슬라이드 열기 ↗",
   "Evidence activities": "학습 증거 활동",
   "Advance everyone →": "모두 다음 단계로 →",
   "Resume class": "수업 재개",
@@ -409,7 +409,9 @@ const koreanUi: Record<string, string> = {
   Start: "시작",
   Reset: "초기화",
   "Day {day} · Instructor plan": "{day}일차 · 강사 운영안",
-  "Presentation ↗": "발표 화면 ↗",
+  "Projector slides ↗": "프로젝터 슬라이드 ↗",
+  "The projector shows only the slide. Press F there once for full screen, then keep controls and notes here.":
+    "프로젝터에는 슬라이드만 표시됩니다. 그 화면에서 F를 한 번 눌러 전체 화면으로 만든 뒤, 조작 버튼과 강사 노트는 여기에서 사용하세요.",
   "Start live class": "실시간 수업 시작",
   "180-minute run of show": "180분 수업 운영표",
   "Proceed one stage at a time. Check the completion criteria for student activities before moving on.":
@@ -425,6 +427,7 @@ const koreanUi: Record<string, string> = {
   "Criteria for moving to the next stage": "다음 단계로 넘어가는 기준",
   "Next step": "다음 단계",
   "No presentation screens found.": "발표 화면을 찾을 수 없습니다.",
+  "Day {day} projector slides": "{day}일차 프로젝터 슬라이드",
   "Time — move on?": "시간 종료 — 다음으로 넘어갈까요?",
   "Stage remaining": "단계 남은 시간",
   "Slide remaining": "화면 남은 시간",
