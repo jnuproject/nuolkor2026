@@ -7341,69 +7341,6 @@ html[data-language="ko"]
   line-height: 1.55;
 }
 
-.course-references {
-  margin-top: 2.8rem;
-  padding-top: 1.8rem;
-  border-top: 1px solid var(--line);
-}
-
-.course-references header > span {
-  color: var(--blue);
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  font-weight: 830;
-  letter-spacing: 0.1em;
-}
-
-.course-references header h2 {
-  margin: 0.35rem 0 0;
-  font-size: 1.35rem;
-}
-
-.course-references header p {
-  max-width: 680px;
-  margin: 0.55rem 0 0;
-  color: var(--muted);
-  font-size: 0.82rem;
-  line-height: 1.6;
-}
-
-.course-references > div {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.6rem;
-  margin-top: 1rem;
-}
-
-.course-references a {
-  display: block;
-  padding: 0.9rem;
-  border: 1px solid var(--line);
-  border-radius: 0.9rem;
-  background: #fff;
-}
-
-.course-references a:hover {
-  border-color: #b6c8f5;
-  background: var(--blue-soft);
-}
-
-.course-references a strong,
-.course-references a span {
-  display: block;
-}
-
-.course-references a strong {
-  font-size: 0.82rem;
-}
-
-.course-references a span {
-  margin-top: 0.35rem;
-  color: var(--muted);
-  font-size: 0.72rem;
-  line-height: 1.45;
-}
-
 .book-start-primary {
   color: #fff;
   background: var(--blue);
@@ -7539,10 +7476,6 @@ html[data-language="ko"]
   }
 
   .course-material-map {
-    grid-template-columns: 1fr;
-  }
-
-  .course-references > div {
     grid-template-columns: 1fr;
   }
 
@@ -8595,23 +8528,6 @@ html[data-language="ko"]
   box-shadow: none;
 }
 
-.course-references {
-  border-top-color: var(--editorial-rule);
-}
-
-.course-references > div {
-  gap: 0;
-  border-top: 1px solid var(--line);
-}
-
-.course-references a {
-  padding: 1rem 0;
-  border: 0;
-  border-bottom: 1px solid var(--line);
-  border-radius: 0;
-  background: transparent;
-}
-
 .index-day,
 .book-index h2 {
   border-bottom-color: var(--editorial-rule);
@@ -9358,11 +9274,6 @@ html[data-language="ko"]
   .index-day ol a:hover {
     color: var(--ink);
     background: var(--blue-soft);
-  }
-
-  .course-references a:hover {
-    border-bottom-color: var(--editorial-accent);
-    background: transparent;
   }
 
   .choice-grid button:hover,
@@ -10262,8 +10173,7 @@ html[data-language="ko"] .book-title {
   margin-top: 48px;
 }
 
-.book-index h2,
-.course-references header h2 {
+.book-index h2 {
   font-size: 24px;
   font-weight: 650;
 }
@@ -10285,15 +10195,6 @@ html[data-language="ko"] .book-title {
 .index-teacher a {
   font-size: 13px;
   font-weight: 500;
-}
-
-.course-references > div {
-  grid-template-columns: 1fr;
-  gap: 0;
-}
-
-.course-references a {
-  padding: 12px 0;
 }
 
 /* Instructor pages follow the same document scale. */

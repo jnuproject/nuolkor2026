@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { courseReferences } from "@/content/courseware/references";
 import { interactiveDays } from "@/content/interactive";
 import type { LocalizedText } from "@/content/interactive/types";
 import { getOverviewKorean } from "@/content/overview-ko";
@@ -240,40 +239,6 @@ export function CourseOverview() {
             })}
           </section>
 
-          <section className="course-references">
-            <header>
-              <span>RESEARCH BASIS</span>
-              <h2>
-                <BilingualText en="Sources behind the course" ko="교안 설계 참고 자료" />
-              </h2>
-              <p>
-                <BilingualText
-                  en="The course rewrites these principles for this classroom; it does not copy another provider's slides or project topics."
-                  ko="아래 원칙을 이 수업에 맞게 재구성했으며, 다른 기관의 슬라이드나 프로젝트 주제를 복제하지 않았습니다."
-                />
-              </p>
-            </header>
-            <div>
-              {courseReferences.map((reference) => (
-                <a
-                  href={reference.url}
-                  key={reference.url}
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  <strong>
-                    <BilingualText
-                      en={reference.title.en}
-                      ko={reference.title.ko}
-                    />
-                  </strong>
-                  <span>
-                    <BilingualText en={reference.note.en} ko={reference.note.ko} />
-                  </span>
-                </a>
-              ))}
-            </div>
-          </section>
         </main>
       </div>
     </>
