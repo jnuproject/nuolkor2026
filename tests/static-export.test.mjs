@@ -480,8 +480,9 @@ test("keeps projector slides clean and moves controls to the instructor page", a
   assert.match(instructorPlan, /<PresentationController/);
   assert.match(instructorPlan, /state=\{presentationState\}/);
   assert.match(instructorPlan, /slide\.stageId === nextStage\.id/);
+  assert.match(instructorPlan, /stage\.teacherCue\.map/);
   assert.match(controller, /StageTimer/);
-  assert.match(controller, /slide\.teacherNotes/);
+  assert.doesNotMatch(controller, /presentation-controller-notes/);
   assert.match(controller, /update\(\{ revealed: true \}\)/);
   assert.match(presentationState, /BroadcastChannel/);
   assert.match(presentationState, /localStorage/);

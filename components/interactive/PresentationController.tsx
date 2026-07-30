@@ -133,22 +133,6 @@ export function PresentationController({
       </div>
 
       <StageTimer compact key={slide.id} minutes={slide.minutes} />
-
-      {slide.teacherNotes.length ? (
-        <aside
-          aria-label={uiText(language, "Instructor notes")}
-          className="presentation-controller-notes"
-        >
-          <h3>{uiText(language, "Instructor notes")}</h3>
-          <ol>
-            {slide.teacherNotes.map((note, index) => (
-              <li key={`${slide.id}-teacher-note-${index}`}>
-                {localized(language, note.en, note.ko)}
-              </li>
-            ))}
-          </ol>
-        </aside>
-      ) : null}
     </section>
   );
 }

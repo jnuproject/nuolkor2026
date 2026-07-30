@@ -411,6 +411,7 @@ const koreanUi: Record<string, string> = {
   "Projector control": "프로젝터 제어",
   "Open projector ↗": "프로젝터 열기 ↗",
   "Start live class": "실시간 수업 시작",
+  "Learner status": "학습자 현황",
   "180-minute run of show": "180분 수업 운영표",
   "Day {day} · 180-minute run of show": "{day}일차 · 180분 수업 운영표",
   "Proceed one stage at a time. Check the completion criteria for student activities before moving on.":
@@ -470,6 +471,7 @@ const koreanUi: Record<string, string> = {
   "Full instructor manuscript": "전체 강사 원고",
   "Detailed teaching guide": "상세 강사교안",
   "Open guide": "교안 펼치기",
+  "Close guide": "교안 접기",
   "Not found": "페이지를 찾을 수 없음",
   "This lesson is not in the six-day course.": "이 수업은 6일 과정에 포함되어 있지 않습니다.",
   "Choose Day 1–6 from the course overview.": "과정 소개에서 1–6일차 중 하나를 선택하세요.",

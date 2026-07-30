@@ -11703,6 +11703,23 @@ html[data-language="ko"] .book-title {
   font-weight: 600;
 }
 
+.instructor-full-guide > summary > strong span {
+  color: inherit;
+  font: inherit;
+}
+
+.instructor-full-guide > summary .guide-close-label {
+  display: none;
+}
+
+.instructor-full-guide[open] > summary .guide-open-label {
+  display: none;
+}
+
+.instructor-full-guide[open] > summary .guide-close-label {
+  display: inline;
+}
+
 .instructor-full-guide[open] > summary > strong {
   color: var(--muted);
 }

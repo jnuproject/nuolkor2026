@@ -76,8 +76,8 @@ export function InstructorPlanView({
           </span>
         </div>
         <div>
-          <Link className="start-live-link" href="/instructor/live">
-            {uiText(language, "Start live class")}
+          <Link className="class-status-link" href="/instructor/live">
+            {uiText(language, "Learner status")}
           </Link>
           <LanguageToggle />
         </div>
@@ -280,7 +280,14 @@ export function InstructorPlanView({
                 : "Open this only when you need the complete script, demonstration order, and troubleshooting notes."}
             </p>
           </div>
-          <strong>{uiText(language, "Open guide")}</strong>
+          <strong>
+            <span className="guide-open-label">
+              {uiText(language, "Open guide")}
+            </span>
+            <span className="guide-close-label">
+              {uiText(language, "Close guide")}
+            </span>
+          </strong>
         </summary>
         {language === "ko" ? (
           <div lang="ko">
