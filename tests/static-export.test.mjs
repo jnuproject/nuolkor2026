@@ -483,7 +483,8 @@ test("keeps projector slides clean and moves controls to the instructor page", a
   assert.match(instructorPlan, /stage\.teacherCue\.map/);
   assert.match(controller, /StageTimer/);
   assert.doesNotMatch(controller, /presentation-controller-notes/);
-  assert.match(controller, /update\(\{ revealed: true \}\)/);
+  assert.match(controller, /update\(\{ revealed: !state\.revealed \}\)/);
+  assert.match(controller, /index: 0, blank: false, revealed: false/);
   assert.match(presentationState, /BroadcastChannel/);
   assert.match(presentationState, /localStorage/);
 
@@ -860,6 +861,57 @@ test("uses the persistent side signal without separate status activities", async
   );
   assert.match(runner, /onClick=\{\(\) => chooseHelp\(status\)\}/);
   assert.match(styles, /\.book-status\s*\{[\s\S]*?position:\s*fixed/);
+});
+
+test("guards the audited mobile, setup, rejoin, and classroom control flows", async () => {
+  const [setup, join, header, dashboard, access, runner, styles] =
+    await Promise.all([
+      readFile(
+        path.join(projectRoot, "components", "interactive", "SetupFlow.tsx"),
+        "utf8",
+      ),
+      readFile(
+        path.join(projectRoot, "components", "interactive", "JoinClass.tsx"),
+        "utf8",
+      ),
+      readFile(path.join(projectRoot, "components", "BookHeader.tsx"), "utf8"),
+      readFile(
+        path.join(
+          projectRoot,
+          "components",
+          "interactive",
+          "ClassroomDashboard.tsx",
+        ),
+        "utf8",
+      ),
+      readFile(path.join(projectRoot, "lib", "classroom-access.ts"), "utf8"),
+      readFile(
+        path.join(
+          projectRoot,
+          "components",
+          "interactive",
+          "LessonRunner.tsx",
+        ),
+        "utf8",
+      ),
+      readFile(path.join(projectRoot, "app", "globals.css"), "utf8"),
+    ]);
+
+  assert.match(setup, /const allStepsComplete = completeCount === steps\.length/);
+  assert.match(setup, /const canOpenDayOne = allStepsComplete && status !== null/);
+  assert.match(join, /resumeToken/);
+  assert.match(join, /participant-access/);
+  assert.match(header, /className="book-header-status"/);
+  assert.match(header, /aria-live="polite"/);
+  assert.match(access, /sessionStorage/);
+  assert.match(dashboard, /aria-current=\{active \? "step" : undefined\}/);
+  assert.doesNotMatch(
+    dashboard,
+    /currentStage:[^}]+\+ 1,[\s\S]{0,80}status: "open"/,
+  );
+  assert.match(runner, /\{classroomCode \? \(/);
+  assert.match(styles, /\.book-shell > \*\s*\{[\s\S]*?min-width:\s*0/);
+  assert.match(styles, /@media print[\s\S]*?\.book-header[\s\S]*?display:\s*none/);
 });
 
 test("copies the six public labs and offline setup files into the export", async () => {

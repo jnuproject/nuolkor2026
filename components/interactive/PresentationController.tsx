@@ -109,6 +109,15 @@ export function PresentationController({
         </div>
         <div className="presentation-controller-utilities">
           <button
+            disabled={state.index === 0 && !state.blank && !state.revealed}
+            onClick={() =>
+              update({ index: 0, blank: false, revealed: false })
+            }
+            type="button"
+          >
+            {localized(language, "Start from first slide", "첫 화면부터")}
+          </button>
+          <button
             aria-pressed={state.blank}
             onClick={() => update({ blank: !state.blank })}
             type="button"
@@ -120,12 +129,11 @@ export function PresentationController({
           {slide.question ? (
             <button
               aria-pressed={state.revealed}
-              disabled={state.revealed}
-              onClick={() => update({ revealed: true })}
+              onClick={() => update({ revealed: !state.revealed })}
               type="button"
             >
               {state.revealed
-                ? localized(language, "Answer revealed", "정답 공개됨")
+                ? localized(language, "Hide answer", "답과 해설 숨기기")
                 : localized(language, "Reveal answer", "답과 해설 공개")}
             </button>
           ) : null}

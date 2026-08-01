@@ -551,15 +551,19 @@ export function LessonRunner({
       />
 
       {classroomError ? (
-        <div className="classroom-banner is-closed">
+        <div className="classroom-banner is-closed" role="alert">
           {uiText(language, classroomError)}
         </div>
       ) : progressError ? (
-        <div className="classroom-banner">
+        <div className="classroom-banner" role="alert">
           {uiText(language, progressError)}
         </div>
       ) : classStatus !== "open" ? (
-        <div className={`classroom-banner is-${classStatus}`}>
+        <div
+          aria-live="polite"
+          className={`classroom-banner is-${classStatus}`}
+          role="status"
+        >
           {classStatus === "paused"
             ? uiText(
                 language,
@@ -730,10 +734,14 @@ export function LessonRunner({
               </nav>
 
               <div className="book-section-head">
-                <h1>
-                  R{activeReading + 1}{" "}
-                  {localizedReadings[activeReading].title}
-                </h1>
+                <span className="book-section-kicker">
+                  R{activeReading + 1} ·{" "}
+                  {uiText(
+                    language,
+                    activeReading === 0 ? "Lesson" : "Workbook",
+                  )}
+                </span>
+                <h1>{localizedReadings[activeReading].title}</h1>
                 <div className="book-section-meta">
                   <span className="book-section-time">
                     {uiText(language, "Reading · about {minutes} min", {
@@ -746,6 +754,15 @@ export function LessonRunner({
                       ),
                     })}
                   </span>
+                  {activeReading === 1 ? (
+                    <button
+                      className="book-print-button"
+                      onClick={() => window.print()}
+                      type="button"
+                    >
+                      {uiText(language, "Print workbook")}
+                    </button>
+                  ) : null}
                 </div>
               </div>
 
@@ -948,26 +965,28 @@ export function LessonRunner({
         </main>
       </div>
 
-      <aside
-        className={`book-status help-${helpStatus}`}
-        aria-label={uiText(language, "Help signal")}
-      >
-        <strong>{uiText(language, helpLabels[helpStatus])}</strong>
-        <div>
-          {(["green", "yellow", "red"] as const).map((status) => (
-            <button
-              aria-label={uiText(language, helpLabels[status])}
-              aria-pressed={helpStatus === status}
-              className={helpStatus === status ? "is-active" : ""}
-              key={status}
-              onClick={() => chooseHelp(status)}
-              type="button"
-            >
-              {status === "green" ? "✓" : status === "yellow" ? "?" : "!"}
-            </button>
-          ))}
-        </div>
-      </aside>
+      {classroomCode ? (
+        <aside
+          className={`book-status help-${helpStatus}`}
+          aria-label={uiText(language, "Help signal")}
+        >
+          <strong>{uiText(language, helpLabels[helpStatus])}</strong>
+          <div>
+            {(["green", "yellow", "red"] as const).map((status) => (
+              <button
+                aria-label={uiText(language, helpLabels[status])}
+                aria-pressed={helpStatus === status}
+                className={helpStatus === status ? "is-active" : ""}
+                key={status}
+                onClick={() => chooseHelp(status)}
+                type="button"
+              >
+                {status === "green" ? "✓" : status === "yellow" ? "?" : "!"}
+              </button>
+            ))}
+          </div>
+        </aside>
+      ) : null}
     </div>
   );
 }

@@ -11805,3 +11805,522 @@ html[data-language="ko"] .book-title {
     gap: 8px;
   }
 }
+
+/* ==========================================================================
+   2026 audit corrections
+   Final cascade guardrails for shared navigation, classroom notices, touch
+   controls, narrow reading layouts, printing, and the instructor controller.
+   ========================================================================== */
+
+/* Grid and flex children must be allowed to shrink before code starts to
+   scroll. This prevents one long command from widening the whole workbook. */
+:root {
+  --blue: #0b6e99;
+  --editorial-accent: #0b6e99;
+}
+
+html[data-language="ko"] :is(h1, h2, h3) {
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+}
+
+.book-shell,
+.book-content,
+.book-main,
+.lesson-reading,
+.lesson-reading > .course-article,
+.course-article,
+.course-article-heading,
+.course-article-sections,
+.course-article-section,
+.course-article-markdown,
+.book-read,
+.course-code-example {
+  min-width: 0;
+}
+
+.book-shell > * {
+  min-width: 0;
+}
+
+.book-toc details summary,
+.book-toc details li a {
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.book-toc details li {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.book-toc details li a {
+  display: block;
+}
+
+.toc-open li button > div,
+.toc-open li button strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.book-read pre,
+.course-article-markdown pre,
+.course-code-example,
+.course-code-example pre,
+.instructor-full-guide > div pre {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.book-header-status {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+.book-section-kicker {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 550;
+  letter-spacing: 0.02em;
+}
+
+.book-print-button {
+  min-height: 36px;
+  margin-left: auto;
+  padding: 6px 10px;
+  border: 1px solid var(--line-dark);
+  border-radius: 4px;
+  color: var(--ink);
+  background: #fff;
+  font-size: 13px;
+  font-weight: 550;
+  cursor: pointer;
+}
+
+/* The classroom notice now sits directly below the 48px application header. */
+.classroom-banner {
+  top: 48px;
+}
+
+.book-page:has(> .classroom-banner) .book-toc {
+  top: 102px;
+  max-height: calc(100dvh - 102px);
+}
+
+/* Compact controls still need a dependable hit area. */
+.book-header-nav a,
+.language-toggle button,
+.mobile-toc-toggle,
+.stage-timer button,
+.presentation-controller-header > a,
+.presentation-controller-actions button,
+.dashboard-code button,
+.dashboard-header-actions a,
+.dashboard-header-actions button,
+.setup-code button,
+.prompt-box button {
+  min-height: 36px;
+}
+
+.book-start-primary,
+.book-start-ghost,
+.book-finish-row button,
+.stage-finish button,
+.activity-done-button,
+.dashboard-control-buttons button,
+.setup-flow-main > footer button,
+.setup-flow-main > footer a,
+.setup-final-status button,
+.launch-class-button {
+  min-height: 40px;
+}
+
+.page-round {
+  width: 40px;
+  height: 40px;
+}
+
+.book-status button {
+  width: 36px;
+  height: 36px;
+}
+
+.book-content .stage-timer button,
+.book-main .stage-timer button,
+.instructor-plan .stage-timer button {
+  min-height: 36px;
+}
+
+.dashboard-summary article.has-critical {
+  background: var(--red-soft);
+}
+
+/* Overview day metadata and actions stay document-like, but are easier to
+   scan and tap when the day list becomes compact. */
+.index-day-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+  margin: 6px 0 10px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.index-day-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.index-day-actions a,
+.index-day-actions button {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border: 1px solid var(--line-dark);
+  border-radius: 4px;
+  color: var(--ink);
+  background: #fff;
+  font-size: 13px;
+  font-weight: 550;
+}
+
+.index-day-actions a.is-primary {
+  color: #fff;
+  border-color: var(--blue-deep);
+  background: var(--blue-deep);
+}
+
+/* Keep projector transport available while the instructor scrolls through
+   the active stage. The page header remains above it at z-index 50. */
+@media (min-width: 901px) {
+  .presentation-controller {
+    position: sticky;
+    top: 48px;
+    z-index: 30;
+    background: rgb(255 255 255 / 0.98);
+  }
+
+  .instructor-stage-list {
+    top: 214px;
+    max-height: calc(100dvh - 230px);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .index-day-actions a:hover,
+  .index-day-actions button:hover,
+  .book-print-button:hover {
+    background: var(--notion-hover);
+  }
+}
+
+@media (max-width: 860px) {
+  .classroom-banner {
+    position: relative;
+    top: 0;
+  }
+
+  .book-page:has(> .classroom-banner) .book-toc {
+    top: 48px;
+    max-height: calc(100dvh - 48px);
+  }
+
+  .presentation-controller-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .presentation-controller-header > a {
+    align-self: flex-start;
+  }
+
+  .book-shell,
+  .book-content,
+  .book-main,
+  .lesson-reading,
+  .lesson-reading > .course-article,
+  .course-article,
+  .course-article-heading,
+  .course-article-sections,
+  .course-article-section,
+  .course-article-markdown,
+  .book-read {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .book-read pre,
+  .course-article-markdown pre,
+  .course-code-example pre,
+  .instructor-full-guide > div pre {
+    white-space: pre;
+  }
+
+}
+
+@media (max-width: 620px) {
+  /* Keep both the default links and LessonRunner's custom connection status.
+     The navigation may scroll, while the language switch remains reachable. */
+  .book-header.has-language-toggle {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .book-header.has-language-toggle .book-logo {
+    min-width: 36px;
+    min-height: 36px;
+    justify-content: center;
+  }
+
+  .book-header.has-language-toggle .language-toggle button {
+    min-height: 36px;
+  }
+
+  .book-header.has-language-toggle .book-header-actions {
+    width: 100%;
+    min-width: 0;
+    flex: 1 1 auto;
+    gap: 4px;
+  }
+
+  .book-header.has-language-toggle .book-header-status {
+    overflow: hidden;
+    flex: 1 1 auto;
+  }
+
+  .book-header.has-language-toggle .book-header-nav {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 auto;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .book-header.has-language-toggle .book-header-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .book-header.has-language-toggle .book-header-nav a {
+    flex: 0 0 auto;
+    padding-right: 7px;
+    padding-left: 7px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .book-header .runner-connection {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    justify-content: flex-end;
+  }
+
+  .book-header .runner-connection span {
+    display: block;
+    overflow: hidden;
+    max-width: 100%;
+    font-size: 11px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* The setup header previously hid every direct div, including language. */
+  .setup-flow-header {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 6px;
+  }
+
+  .setup-flow-header .runner-brand strong {
+    display: none;
+  }
+
+  .setup-flow-header > div {
+    display: flex;
+    min-width: 0;
+  }
+
+  .setup-flow-header > div:nth-child(2) {
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .setup-flow-header > div:nth-child(2) span {
+    display: none;
+  }
+
+  .setup-flow-header > div:nth-child(2) strong {
+    overflow: hidden;
+    max-width: 100%;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .setup-flow-header > div:last-child {
+    align-items: center;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 4px;
+  }
+
+  .setup-flow-header > div:last-child > a {
+    display: inline-flex;
+    min-height: 36px;
+    align-items: center;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .setup-flow-rail > a,
+  .join-header a {
+    display: flex;
+    min-height: 36px;
+    align-items: center;
+  }
+
+  .setup-flow-header .language-toggle button {
+    min-height: 36px;
+    padding-right: 6px;
+    padding-left: 6px;
+  }
+
+  /* Reserve space for the persistent classroom signal, then keep it compact
+     at the lower-right rather than spanning the whole viewport. */
+  .book-content,
+  .book-main {
+    padding-bottom: 128px;
+  }
+
+  .book-status {
+    right: 12px;
+    bottom: 12px;
+    left: auto;
+    width: auto;
+    max-width: calc(100vw - 24px);
+    gap: 4px;
+    padding: 4px 5px 4px 8px;
+  }
+
+  .book-status strong {
+    overflow: hidden;
+    max-width: 104px;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .index-day {
+    padding: 16px 0;
+  }
+
+  .index-day-meta {
+    gap: 3px 10px;
+    margin-bottom: 8px;
+    font-size: 12px;
+  }
+
+  .index-day-actions {
+    width: 100%;
+  }
+
+  .index-day-actions a,
+  .index-day-actions button {
+    flex: 1 1 auto;
+  }
+}
+
+@media print {
+  .book-header,
+  .book-toc,
+  .book-status,
+  .mobile-toc-toggle,
+  .book-print-button,
+  .book-pagenav,
+  .stage-timer,
+  .classroom-banner,
+  .instructor-plan-header,
+  .presentation-controller,
+  .instructor-stage-list,
+  .instructor-stage-detail > footer,
+  .setup-flow-header,
+  .setup-flow-rail,
+  .setup-safety,
+  .setup-flow-main > footer,
+  .dashboard-header,
+  .dashboard-control-buttons,
+  .dashboard-stage-strip {
+    display: none !important;
+  }
+
+  html,
+  body,
+  .book-page,
+  .book-shell,
+  .book-content,
+  .book-main,
+  .lesson-reading,
+  .lesson-reading > .course-article,
+  .instructor-plan,
+  .instructor-plan-layout,
+  .instructor-stage-detail,
+  .instructor-full-guide {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #000 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+  }
+
+  .book-shell,
+  .instructor-plan-layout {
+    display: block !important;
+  }
+
+  .lesson-reading > .course-article {
+    break-inside: auto;
+  }
+
+  .instructor-full-guide > summary {
+    display: none !important;
+  }
+
+  .instructor-full-guide > div {
+    display: block !important;
+  }
+
+  .book-read pre,
+  .course-article-markdown pre,
+  .course-code-example pre,
+  .instructor-full-guide > div pre {
+    overflow: visible !important;
+    white-space: pre-wrap !important;
+  }
+
+  @page {
+    margin: 16mm;
+  }
+}

@@ -11,7 +11,7 @@ import {
   teacherCueText,
 } from "@/content/translations/interactive-ko";
 import { uiText } from "@/content/translations/ui-ko";
-import { useLanguage } from "@/lib/language";
+import { localized, useLanguage } from "@/lib/language";
 import { usePresentationState } from "@/lib/use-presentation-state";
 import { LanguageToggle } from "../LanguageToggle";
 import { PresentationController } from "./PresentationController";
@@ -47,6 +47,7 @@ export function InstructorPlanView({
       activity.kind !== "timer" &&
       !activity.hidden,
   );
+  const guideBody = guideMarkdown.replace(/^#\s+.+(?:\r?\n|$)/, "").trim();
   const selectStage = (index: number) => {
     const nextStage = plan.stages[index];
     const nextSlideIndex = slides.findIndex(
@@ -214,8 +215,16 @@ export function InstructorPlanView({
           ) : null}
 
           <div className="student-screen-preview">
-            <span>{uiText(language, "Student screen").toUpperCase()}</span>
-            <h3>{uiText(language, "What students see now")}</h3>
+            <span>
+              {localized(language, "Stage guidance", "단계 안내").toUpperCase()}
+            </span>
+            <h3>
+              {localized(
+                language,
+                "What to tell students in this stage",
+                "이 단계에서 학생에게 안내할 내용",
+              )}
+            </h3>
             <ol>
               {stage.studentBrief.map((line, index) => (
                 <li key={`${stage.id}-brief-${index}`}>
@@ -292,7 +301,7 @@ export function InstructorPlanView({
         {language === "ko" ? (
           <div lang="ko">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {guideMarkdown}
+              {guideBody}
             </ReactMarkdown>
           </div>
         ) : (

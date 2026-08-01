@@ -114,8 +114,8 @@ export function CourseOverview() {
           </section>
 
           <div className="book-start">
-            <Link className="book-start-primary" href="/day/1">
-              <BilingualText en="Start Day 1 →" ko="1일차 시작하기 →" />
+            <Link className="book-start-primary" href="/start">
+              <BilingualText en="Set up for Day 1 →" ko="1일차 시작 설정 →" />
             </Link>
             <Link className="book-start-ghost" href="/join">
               <BilingualText
@@ -166,7 +166,7 @@ export function CourseOverview() {
 
           <section className="book-index">
             <h2>
-              <BilingualText en="Contents" ko="목차" />
+              <BilingualText en="Six-day course" ko="6일 과정" />
             </h2>
             {interactiveDays.map((plan) => {
               const readings = getReadings(plan.day);
@@ -184,59 +184,35 @@ export function CourseOverview() {
                         <Copy>{plan.title}</Copy>
                       </Link>
                     </h3>
-                    <div className="index-teacher">
-                      <Link href={`/instructor/day/${plan.day}`}>
-                        <BilingualText en="Guide" ko="강사 가이드" />
-                      </Link>
-                      <Link href={`/day/${plan.day}/present`}>
-                        <BilingualText
-                          en="Projector slides"
-                          ko="프로젝터 슬라이드"
-                        />
-                      </Link>
-                    </div>
                   </header>
                   <p className="index-question">
                     <Copy>{plan.question}</Copy>
                   </p>
-                  <ol>
-                    <li className="index-section-label">
-                      <BilingualText en="Lesson and workbook" ko="교재와 워크북" />
-                    </li>
-                    {readings.map((reading, index) => (
-                      <li key={reading.id}>
-                        <Link href={`/day/${plan.day}?reading=${index}`}>
-                          <span className="index-item-number">
-                            R{index + 1}
-                          </span>
-                          <BilingualText
-                            en={reading.title}
-                            ko={
-                              reading.translations?.ko.title ??
-                              getOverviewKorean(reading.title)
-                            }
-                          />
-                          <i>
-                            <BilingualText en="read" ko="읽기" />
-                          </i>
-                        </Link>
-                      </li>
+                  <p className="index-day-meta">
+                    <BilingualText
+                      en={`${plan.stages.length} stages · 180 minutes`}
+                      ko={`${plan.stages.length}단계 · 180분`}
+                    />
+                  </p>
+                  <nav
+                    aria-label={`Day ${plan.day} materials / ${plan.day}일차 자료`}
+                    className="index-day-actions"
+                  >
+                    <Link className="is-primary" href={`/day/${plan.day}`}>
+                      <BilingualText en="Open day →" ko="수업 열기 →" />
+                    </Link>
+                    {readings.slice(0, 2).map((reading, index) => (
+                      <Link
+                        href={`/day/${plan.day}?reading=${index}`}
+                        key={reading.id}
+                      >
+                        <BilingualText
+                          en={index === 0 ? "Lesson" : "Workbook"}
+                          ko={index === 0 ? "교재" : "워크북"}
+                        />
+                      </Link>
                     ))}
-                    <li className="index-section-label">
-                      <BilingualText en="Class timeline and practice" ko="수업 시간표와 실습" />
-                    </li>
-                    {plan.stages.map((stage, index) => (
-                      <li key={stage.id}>
-                        <Link href={`/day/${plan.day}?stage=${index}`}>
-                          <span className="index-item-number">
-                            {String(index + 1).padStart(2, "0")}
-                          </span>
-                          <Copy>{stage.title}</Copy>
-                          <i>{stage.start}</i>
-                        </Link>
-                      </li>
-                    ))}
-                  </ol>
+                  </nav>
                 </article>
               );
             })}

@@ -8,6 +8,65 @@ import { classroomFetch } from "@/lib/classroom-api";
 import { useLanguage } from "@/lib/language";
 import { LanguageToggle } from "../LanguageToggle";
 
+const PARTICIPANT_TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+
+type StoredParticipantAccess = {
+  expiresAt: number;
+  token: string;
+};
+
+function participantAccessKey(storageKey: string): string {
+  return `${storageKey}:participant-access`;
+}
+
+function readParticipantToken(storageKey: string): string {
+  const key = participantAccessKey(storageKey);
+  try {
+    const saved = localStorage.getItem(key);
+    if (!saved) return "";
+
+    const parsed = JSON.parse(saved) as Partial<StoredParticipantAccess>;
+    const validToken =
+      typeof parsed.token === "string" && /^[0-9a-f]{48}$/.test(parsed.token);
+    const validExpiry =
+      typeof parsed.expiresAt === "number" &&
+      Number.isFinite(parsed.expiresAt) &&
+      parsed.expiresAt > Date.now();
+    if (validToken && validExpiry) return parsed.token!;
+
+    localStorage.removeItem(key);
+  } catch {
+    try {
+      localStorage.removeItem(key);
+    } catch {
+      // The classroom can still be joined when browser storage is unavailable.
+    }
+  }
+  return "";
+}
+
+function storeParticipantToken(storageKey: string, token: string): void {
+  try {
+    localStorage.setItem(
+      participantAccessKey(storageKey),
+      JSON.stringify({
+        expiresAt: Date.now() + PARTICIPANT_TOKEN_TTL_MS,
+        token,
+      } satisfies StoredParticipantAccess),
+    );
+  } catch {
+    // The current tab still receives the token through the URL fragment.
+  }
+}
+
+function clearParticipantToken(storageKey: string): void {
+  try {
+    localStorage.removeItem(participantAccessKey(storageKey));
+  } catch {
+    // Ignore storage restrictions; the server response remains authoritative.
+  }
+}
+
 export function JoinClass({ initialCode = "" }: { initialCode?: string }) {
   const language = useLanguage();
   const [code, setCode] = useState(initialCode.toUpperCase());
@@ -21,7 +80,12 @@ export function JoinClass({ initialCode = "" }: { initialCode?: string }) {
     }
     const frame = window.requestAnimationFrame(() => {
       const key = `build-loop:class:${initialCode.toUpperCase()}`;
-      setDisplayName(localStorage.getItem(`${key}:display-name`) ?? "");
+      try {
+        setDisplayName(localStorage.getItem(`${key}:display-name`) ?? "");
+      } catch {
+        setDisplayName("");
+      }
+      readParticipantToken(key);
     });
     return () => window.cancelAnimationFrame(frame);
   }, [initialCode]);
@@ -30,6 +94,16 @@ export function JoinClass({ initialCode = "" }: { initialCode?: string }) {
     event.preventDefault();
     const normalizedCode = code.replace(/[^A-Z0-9]/g, "").toUpperCase();
     const storageKey = `build-loop:class:${normalizedCode}`;
+    let savedDisplayName = "";
+    try {
+      savedDisplayName = localStorage.getItem(`${storageKey}:display-name`) ?? "";
+    } catch {
+      // Continue without a resume token when browser storage is unavailable.
+    }
+    const resumeToken =
+      savedDisplayName.trim() === displayName.trim()
+        ? readParticipantToken(storageKey)
+        : "";
     setSubmitting(true);
     setError("");
 
@@ -39,6 +113,7 @@ export function JoinClass({ initialCode = "" }: { initialCode?: string }) {
         {
           body: JSON.stringify({
             displayName,
+            ...(resumeToken ? { resumeToken } : {}),
           }),
           headers: { "content-type": "application/json" },
           method: "POST",
@@ -50,15 +125,23 @@ export function JoinClass({ initialCode = "" }: { initialCode?: string }) {
         participantToken?: string;
       };
       if (!response.ok || !data.participantToken) {
+        if (resumeToken && (response.status === 404 || response.status === 409)) {
+          clearParticipantToken(storageKey);
+        }
         throw new Error(
           data.error ?? uiText(language, "Could not join this class."),
         );
       }
 
-      localStorage.setItem(`${storageKey}:display-name`, displayName.trim());
-      if (data.day) {
-        localStorage.setItem(`${storageKey}:day`, String(data.day));
+      try {
+        localStorage.setItem(`${storageKey}:display-name`, displayName.trim());
+        if (data.day) {
+          localStorage.setItem(`${storageKey}:day`, String(data.day));
+        }
+      } catch {
+        // The classroom remains usable in this tab through the access fragment.
       }
+      storeParticipantToken(storageKey, data.participantToken);
       window.location.assign(
         classroomPathWithAccess(
           `/class/?code=${encodeURIComponent(normalizedCode)}`,
@@ -102,7 +185,7 @@ export function JoinClass({ initialCode = "" }: { initialCode?: string }) {
           </p>
         </div>
 
-        <form onSubmit={join}>
+        <form aria-busy={submitting} onSubmit={join}>
           <label>
             <span>{uiText(language, "Class code").toUpperCase()}</span>
             <input
@@ -132,7 +215,9 @@ export function JoinClass({ initialCode = "" }: { initialCode?: string }) {
             />
           </label>
           {error ? (
-            <div className="join-error">{uiText(language, error)}</div>
+            <div className="join-error" role="alert">
+              {uiText(language, error)}
+            </div>
           ) : null}
           <button disabled={submitting || code.length !== 6} type="submit">
             {uiText(language, submitting ? "Joining…" : "Join classroom →")}

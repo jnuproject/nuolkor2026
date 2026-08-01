@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import type { DayNumber } from "@/content/course";
+import { getClassSlides } from "@/content/courseware";
 import { interactiveDays } from "@/content/interactive";
 import { stageReportsProgress } from "@/content/interactive/types";
 import {
@@ -12,11 +14,13 @@ import { uiText } from "@/content/translations/ui-ko";
 import {
   clearClassroomAccessToken,
   consumeClassroomAccessToken,
+  rememberedClassroomAccessPath,
   rememberClassroomAccessToken,
 } from "@/lib/classroom-access";
 import { classroomFetch } from "@/lib/classroom-api";
-import { useLanguage, type Language } from "@/lib/language";
+import { localized, useLanguage, type Language } from "@/lib/language";
 import { absoluteSiteUrl } from "@/lib/site-path";
+import { usePresentationState } from "@/lib/use-presentation-state";
 import { LanguageToggle } from "../LanguageToggle";
 import { StageTimer } from "./StageTimer";
 
@@ -76,11 +80,22 @@ export function ClassroomDashboard() {
   const [dashboard, setDashboard] = useState<DashboardState | null>(null);
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState("");
-  const [copied, setCopied] = useState(false);
+  const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">(
+    "idle",
+  );
   const [clock, setClock] = useState(0);
 
+  const activeDay = (dashboard?.session.day ??
+    teacherSession?.day ??
+    selectedDay) as DayNumber;
+  const projectorSlides = getClassSlides(activeDay);
+  const [, updatePresentation] = usePresentationState(
+    activeDay,
+    projectorSlides.length,
+  );
+
   const plan = interactiveDays.find(
-    (day) => day.day === (dashboard?.session.day ?? teacherSession?.day ?? selectedDay),
+    (day) => day.day === activeDay,
   );
   const currentStage = plan?.stages[dashboard?.session.currentStage ?? 0];
   const currentStageReportsProgress = currentStage
@@ -91,7 +106,16 @@ export function ClassroomDashboard() {
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
-      const params = new URLSearchParams(window.location.search);
+      const currentParams = new URLSearchParams(window.location.search);
+      const rememberedPath = rememberedClassroomAccessPath("teacher");
+      const rememberedParams = rememberedPath
+        ? new URL(rememberedPath, window.location.origin).searchParams
+        : new URLSearchParams();
+      const params = /^[A-Z0-9]{6}$/.test(
+        (currentParams.get("code") ?? "").toUpperCase(),
+      )
+        ? currentParams
+        : rememberedParams;
       const code = (params.get("code") ?? "").toUpperCase();
       const day = Number(params.get("day"));
       const teacherToken = consumeClassroomAccessToken("teacher");
@@ -101,6 +125,13 @@ export function ClassroomDashboard() {
         !teacherToken
       ) {
         return;
+      }
+      if (!currentParams.get("code") && rememberedPath) {
+        window.history.replaceState(
+          window.history.state,
+          "",
+          rememberedPath,
+        );
       }
       setTeacherSession({ code, day, teacherToken });
     });
@@ -181,6 +212,19 @@ export function ClassroomDashboard() {
         next.teacherToken,
         `/instructor/live/?code=${encodeURIComponent(next.code)}&day=${next.day}`,
       );
+      const firstStage = interactiveDays.find(
+        (day) => day.day === next.day,
+      )?.stages[0];
+      const firstSlideIndex = firstStage
+        ? projectorSlides.findIndex((slide) => slide.stageId === firstStage.id)
+        : -1;
+      if (firstSlideIndex >= 0) {
+        updatePresentation({
+          index: firstSlideIndex,
+          blank: false,
+          revealed: false,
+        });
+      }
       setLaunchPin("");
       setTeacherSession(next);
     } catch (createError) {
@@ -216,6 +260,21 @@ export function ClassroomDashboard() {
       if (!response.ok) {
         throw new Error(uiText(language, "Could not update the classroom."));
       }
+      if (typeof input.currentStage === "number") {
+        const nextStage = plan?.stages[input.currentStage];
+        const nextSlideIndex = nextStage
+          ? projectorSlides.findIndex(
+              (slide) => slide.stageId === nextStage.id,
+            )
+          : -1;
+        if (nextSlideIndex >= 0) {
+          updatePresentation({
+            index: nextSlideIndex,
+            blank: false,
+            revealed: false,
+          });
+        }
+      }
       await loadDashboard();
     } catch (updateError) {
       setError(
@@ -233,10 +292,11 @@ export function ClassroomDashboard() {
     doneCurrent: currentStage
       ? Number(dashboard?.stageCounts[currentStage.id] ?? 0)
       : 0,
-    needsHelp: participants.filter(
-      (item) => item.helpStatus === "yellow" || item.helpStatus === "red",
-    ).length,
+    blocked: participants.filter((item) => item.helpStatus === "red").length,
+    needsCheck: participants.filter((item) => item.helpStatus === "yellow")
+      .length,
   };
+  const isClosed = dashboard?.session.status === "closed";
   const helpOrder = { red: 0, yellow: 1, green: 2 };
   const sortedParticipants = [...participants].sort(
     (a, b) =>
@@ -310,7 +370,9 @@ export function ClassroomDashboard() {
             </small>
           </label>
           {error ? (
-            <div className="dashboard-error">{uiText(language, error)}</div>
+            <div className="dashboard-error" role="alert">
+              {uiText(language, error)}
+            </div>
           ) : null}
           <button
             className="launch-class-button"
@@ -360,78 +422,71 @@ export function ClassroomDashboard() {
           <span>{uiText(language, "Join code").toUpperCase()}</span>
           <strong>{teacherSession.code}</strong>
           <button
+            aria-live="polite"
             onClick={async () => {
-              await navigator.clipboard.writeText(joinUrl);
-              setCopied(true);
-              window.setTimeout(() => setCopied(false), 1500);
+              try {
+                if (!navigator.clipboard?.writeText) {
+                  throw new Error("Clipboard unavailable");
+                }
+                await navigator.clipboard.writeText(joinUrl);
+                setCopyStatus("copied");
+              } catch {
+                setCopyStatus("failed");
+              }
+              window.setTimeout(() => setCopyStatus("idle"), 1800);
             }}
             type="button"
           >
-            {uiText(language, copied ? "Copied ✓" : "Copy join link")}
+            {copyStatus === "copied"
+              ? uiText(language, "Copied ✓")
+              : copyStatus === "failed"
+                ? localized(language, "Copy failed", "복사하지 못했습니다")
+                : uiText(language, "Copy join link")}
           </button>
         </div>
         <div className="dashboard-header-actions">
+          <Link
+            href={`/instructor/day/${teacherSession.day}`}
+            rel="noreferrer"
+            target="_blank"
+          >
+            {localized(language, "Teaching plan ↗", "강의 진행 화면 ↗")}
+          </Link>
           <a href={joinUrl} rel="noreferrer" target="_blank">
             {uiText(language, "Student view ↗")}
           </a>
           <button
             onClick={() => {
+              const confirmed = window.confirm(
+                localized(
+                  language,
+                  "Leave this classroom on this tab? The classroom will remain open for its participants.",
+                  "이 탭에서 현재 강의실을 나갈까요? 학생들의 강의실은 열린 상태로 유지됩니다.",
+                ),
+              );
+              if (!confirmed) {
+                return;
+              }
               clearClassroomAccessToken("teacher", "/instructor/live/");
               setTeacherSession(null);
               setDashboard(null);
             }}
             type="button"
           >
-            {uiText(language, "New class")}
+            {localized(language, "Leave classroom", "강의실 나가기")}
           </button>
           <LanguageToggle />
         </div>
       </header>
 
       {error ? (
-        <div className="dashboard-error dashboard-error-wide">
+        <div
+          className="dashboard-error dashboard-error-wide"
+          role="alert"
+        >
           {uiText(language, error)}
         </div>
       ) : null}
-
-      <section className="dashboard-summary">
-        <article>
-          <span>{uiText(language, "Joined").toUpperCase()}</span>
-          <strong>{summary.total}</strong>
-          <small>
-            {uiText(language, "{count} active now", { count: summary.online })}
-          </small>
-        </article>
-        <article>
-          <span>{uiText(language, "Current stage done").toUpperCase()}</span>
-          <strong>
-            {!currentStageReportsProgress
-              ? "—"
-              : `${summary.doneCurrent}/${summary.total}`}
-          </strong>
-          <small>
-            {!currentStageReportsProgress
-              ? uiText(language, "Class operation")
-              : currentStage
-                ? interactiveText(language, currentStage.title)
-                : ""}
-          </small>
-        </article>
-        <article className={summary.needsHelp ? "has-alert" : ""}>
-          <span>{uiText(language, "Need a check").toUpperCase()}</span>
-          <strong>{summary.needsHelp}</strong>
-          <small>{uiText(language, "yellow or red signals")}</small>
-        </article>
-        <article>
-          <span>{uiText(language, "Room status").toUpperCase()}</span>
-          <strong className="status-word">
-            {dashboard?.session.status
-              ? uiText(language, dashboard.session.status)
-              : "…"}
-          </strong>
-          <small>{uiText(language, "updates every 3 seconds")}</small>
-        </article>
-      </section>
 
       <section className="dashboard-control">
         <div className="current-stage-card">
@@ -446,6 +501,10 @@ export function ClassroomDashboard() {
                 current: (dashboard?.session.currentStage ?? 0) + 1,
                 total: plan?.stages.length ?? 0,
               })}
+              {" · "}
+              {uiText(language, "Room status")}: {dashboard?.session.status
+                ? uiText(language, dashboard.session.status)
+                : "…"}
             </small>
             <h1>
               {currentStage ? interactiveText(language, currentStage.title) : ""}
@@ -470,7 +529,7 @@ export function ClassroomDashboard() {
         </div>
         <div className="dashboard-control-buttons">
           <button
-            disabled={(dashboard?.session.currentStage ?? 0) === 0}
+            disabled={isClosed || (dashboard?.session.currentStage ?? 0) === 0}
             onClick={() =>
               void updateClassroom({
                 currentStage: (dashboard?.session.currentStage ?? 0) - 1,
@@ -483,13 +542,13 @@ export function ClassroomDashboard() {
           <button
             className="control-main"
             disabled={
+              isClosed ||
               !plan ||
               (dashboard?.session.currentStage ?? 0) >= plan.stages.length - 1
             }
             onClick={() =>
               void updateClassroom({
                 currentStage: (dashboard?.session.currentStage ?? 0) + 1,
-                status: "open",
               })
             }
             type="button"
@@ -497,6 +556,8 @@ export function ClassroomDashboard() {
             {uiText(language, "Advance everyone →")}
           </button>
           <button
+            aria-pressed={dashboard?.session.status === "paused"}
+            disabled={isClosed}
             onClick={() =>
               void updateClassroom({
                 status: dashboard?.session.status === "paused" ? "open" : "paused",
@@ -512,6 +573,7 @@ export function ClassroomDashboard() {
             )}
           </button>
           <button
+            aria-pressed={isClosed}
             className="control-close"
             onClick={() =>
               void updateClassroom({
@@ -529,6 +591,44 @@ export function ClassroomDashboard() {
       </section>
 
       <section
+        aria-label={localized(language, "Classroom summary", "강의실 요약")}
+        className="dashboard-summary"
+      >
+        <article>
+          <span>{uiText(language, "Joined").toUpperCase()}</span>
+          <strong>{summary.total}</strong>
+          <small>
+            {uiText(language, "{count} active now", { count: summary.online })}
+          </small>
+        </article>
+        <article>
+          <span>{uiText(language, "Current stage done").toUpperCase()}</span>
+          <strong>
+            {!currentStageReportsProgress
+              ? "—"
+              : `${summary.doneCurrent}/${summary.total}`}
+          </strong>
+          <small>
+            {!currentStageReportsProgress
+              ? uiText(language, "Class operation")
+              : currentStage
+                ? interactiveText(language, currentStage.title)
+                : ""}
+          </small>
+        </article>
+        <article className={summary.blocked ? "has-alert has-critical" : ""}>
+          <span>{localized(language, "Blocked", "진행 불가").toUpperCase()}</span>
+          <strong>{summary.blocked}</strong>
+          <small>{localized(language, "red signals", "빨강 신호")}</small>
+        </article>
+        <article className={summary.needsCheck ? "has-alert" : ""}>
+          <span>{uiText(language, "Need a check").toUpperCase()}</span>
+          <strong>{summary.needsCheck}</strong>
+          <small>{localized(language, "yellow signals", "노랑 신호")}</small>
+        </article>
+      </section>
+
+      <section
         className="dashboard-stage-strip"
         aria-label={uiText(language, "Class timeline")}
       >
@@ -537,7 +637,9 @@ export function ClassroomDashboard() {
           const count = Number(dashboard?.stageCounts[stage.id] ?? 0);
           return (
             <button
+              aria-current={active ? "step" : undefined}
               className={active ? "is-active" : ""}
+              disabled={isClosed}
               key={stage.id}
               onClick={() => void updateClassroom({ currentStage: index })}
               type="button"

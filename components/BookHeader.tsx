@@ -30,24 +30,31 @@ export function BookHeader({
       </Link>
       <div className="book-header-crumb">{crumb}</div>
       <div className="book-header-actions">
-        <nav
-          aria-label="Site navigation / 사이트 메뉴"
-          className="book-header-nav"
-        >
-          {right ?? (
-            <>
-              <Link href="/start">
-                <BilingualText en="Setup" ko="시작 설정" />
-              </Link>
-              <Link href="/join">
-                <BilingualText en="Join" ko="수업 참여" />
-              </Link>
-              <Link href="/instructor/live">
-                <BilingualText en="Teach" ko="강사 화면" />
-              </Link>
-            </>
-          )}
-        </nav>
+        {right ? (
+          <div
+            aria-atomic="true"
+            aria-live="polite"
+            className="book-header-status"
+            role="status"
+          >
+            {right}
+          </div>
+        ) : (
+          <nav
+            aria-label="Site navigation / 사이트 메뉴"
+            className="book-header-nav"
+          >
+            <Link href="/start">
+              <BilingualText en="Setup" ko="시작 설정" />
+            </Link>
+            <Link href="/join">
+              <BilingualText en="Join" ko="수업 참여" />
+            </Link>
+            <Link href="/instructor/live">
+              <BilingualText en="Teach" ko="강사 화면" />
+            </Link>
+          </nav>
+        )}
         {showLanguageToggle ? <LanguageToggle /> : null}
       </div>
     </header>

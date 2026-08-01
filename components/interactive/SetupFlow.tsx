@@ -8,6 +8,7 @@ import { sitePath } from "@/lib/site-path";
 import { LanguageToggle } from "../LanguageToggle";
 
 type OperatingSystem = "mac" | "windows";
+type SetupStatus = "green" | "yellow" | "red";
 
 type SetupStep = {
   id: string;
@@ -144,7 +145,7 @@ export function SetupFlow() {
   const [active, setActive] = useState(0);
   const [os, setOs] = useState<OperatingSystem>("mac");
   const [checks, setChecks] = useState<Record<string, string[]>>({});
-  const [status, setStatus] = useState<"green" | "yellow" | "red">("green");
+  const [status, setStatus] = useState<SetupStatus | null>(null);
   const storageKey = "build-loop:setup:v2";
   const step = steps[active];
   const selected = checks[step.id] ?? [];
@@ -152,6 +153,8 @@ export function SetupFlow() {
   const completeCount = steps.filter(
     (item) => (checks[item.id] ?? []).length === item.checks.length,
   ).length;
+  const allStepsComplete = completeCount === steps.length;
+  const canOpenDayOne = allStepsComplete && status !== null;
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -162,12 +165,25 @@ export function SetupFlow() {
           active?: number;
           os?: OperatingSystem;
           checks?: Record<string, string[]>;
-          status?: "green" | "yellow" | "red";
+          status?: SetupStatus | null;
         };
+        const restoredChecks = parsed.checks ?? {};
+        const restoredStatus = ["green", "yellow", "red"].includes(
+          parsed.status ?? "",
+        )
+          ? parsed.status ?? null
+          : null;
         setActive(Math.max(0, Math.min(steps.length - 1, parsed.active ?? 0)));
         setOs(parsed.os === "windows" ? "windows" : "mac");
-        setChecks(parsed.checks ?? {});
-        setStatus(parsed.status ?? "green");
+        setChecks(restoredChecks);
+        setStatus(
+          steps.every(
+            (item) =>
+              (restoredChecks[item.id] ?? []).length === item.checks.length,
+          )
+            ? restoredStatus
+            : null,
+        );
       } catch {
         localStorage.removeItem(storageKey);
       }
@@ -197,8 +213,14 @@ export function SetupFlow() {
       ? selected.filter((value) => value !== item)
       : [...selected, item];
     const nextChecks = { ...checks, [step.id]: nextSelected };
+    const nextAllStepsComplete = steps.every(
+      (entry) =>
+        (nextChecks[entry.id] ?? []).length === entry.checks.length,
+    );
+    const nextStatus = nextAllStepsComplete ? status : null;
     setChecks(nextChecks);
-    persist(nextChecks);
+    setStatus(nextStatus);
+    persist(nextChecks, active, os, nextStatus);
   }
 
   function goTo(next: number) {
@@ -403,12 +425,18 @@ export function SetupFlow() {
             </div>
           </section>
 
-          {active === steps.length - 1 && stepComplete ? (
-            <section className={`setup-final-status status-${status}`}>
+          {active === steps.length - 1 && allStepsComplete ? (
+            <section
+              className={`setup-final-status${status ? ` status-${status}` : ""}`}
+            >
               <div>
                 <span>{uiText(language, "My setup status").toUpperCase()}</span>
                 <strong>
-                  {status === "green"
+                  {status === null
+                    ? language === "ko"
+                      ? "아래에서 현재 상태를 선택하세요."
+                      : "Choose your current status below."
+                    : status === "green"
                     ? uiText(language, "Everything works")
                     : status === "yellow"
                       ? uiText(language, "OpenCode opens, but one check needs help")
@@ -440,12 +468,22 @@ export function SetupFlow() {
               ← {uiText(language, "Previous")}
             </button>
             <span>
-              {uiText(
-                language,
-                stepComplete
-                  ? "Step complete ✓"
-                  : "Complete every check to continue",
-              )}
+              {active === steps.length - 1 && stepComplete && !allStepsComplete
+                ? language === "ko"
+                  ? "남은 설정 단계를 모두 완료하세요"
+                  : "Complete the remaining setup steps"
+                : active === steps.length - 1 &&
+                    allStepsComplete &&
+                    status === null
+                  ? language === "ko"
+                    ? "현재 설정 상태를 선택하세요"
+                    : "Choose your current setup status"
+                  : uiText(
+                      language,
+                      stepComplete
+                        ? "Step complete ✓"
+                        : "Complete every check to continue",
+                    )}
             </span>
             {active < steps.length - 1 ? (
               <button
@@ -458,9 +496,13 @@ export function SetupFlow() {
               </button>
             ) : (
               <Link
-                aria-disabled={!stepComplete}
-                className={`setup-next ${stepComplete ? "" : "is-disabled"}`}
-                href={stepComplete ? "/day/1" : "#"}
+                aria-disabled={!canOpenDayOne}
+                className={`setup-next ${canOpenDayOne ? "" : "is-disabled"}`}
+                href={canOpenDayOne ? "/day/1" : "#"}
+                onClick={(event) => {
+                  if (!canOpenDayOne) event.preventDefault();
+                }}
+                tabIndex={canOpenDayOne ? undefined : -1}
               >
                 {uiText(language, "Open Day 1 →")}
               </Link>
