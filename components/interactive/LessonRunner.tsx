@@ -612,7 +612,7 @@ export function LessonRunner({
                   {localizedReadings.length > 0 ? (
                     <>
                       <p className="toc-group-label">
-                        {uiText(language, "Lesson and workbook")}
+                        {uiText(language, "Lesson")}
                       </p>
                       <ul>
                         {localizedReadings.map((reading, index) => (
@@ -628,7 +628,7 @@ export function LessonRunner({
                               }}
                               type="button"
                             >
-                              <span>R{index + 1}</span>
+                              <span aria-hidden="true">R</span>
                               <em>{reading.title}</em>
                             </button>
                           </li>
@@ -726,20 +726,13 @@ export function LessonRunner({
                 aria-label={uiText(language, "Breadcrumb")}
                 className="book-crumb"
               >
-                {uiText(language, "Day {day} · Reading {current} of {total}", {
-                  day: plan.day,
-                  current: activeReading + 1,
-                  total: localizedReadings.length,
-                })}
+                {uiText(language, "Day {day}", { day: plan.day })} ·{" "}
+                {uiText(language, "Lesson")}
               </nav>
 
               <div className="book-section-head">
                 <span className="book-section-kicker">
-                  R{activeReading + 1} ·{" "}
-                  {uiText(
-                    language,
-                    activeReading === 0 ? "Lesson" : "Workbook",
-                  )}
+                  {uiText(language, "Lesson")}
                 </span>
                 <h1>{localizedReadings[activeReading].title}</h1>
                 <div className="book-section-meta">
@@ -754,15 +747,6 @@ export function LessonRunner({
                       ),
                     })}
                   </span>
-                  {activeReading === 1 ? (
-                    <button
-                      className="book-print-button"
-                      onClick={() => window.print()}
-                      type="button"
-                    >
-                      {uiText(language, "Print workbook")}
-                    </button>
-                  ) : null}
                 </div>
               </div>
 
@@ -786,10 +770,7 @@ export function LessonRunner({
                   ←
                 </button>
                 <span>
-                  {uiText(language, "Reading {current} / {total}", {
-                    current: activeReading + 1,
-                    total: localizedReadings.length,
-                  })}
+                  {uiText(language, "Lesson")}
                 </span>
                 <button
                   aria-label={uiText(language, "Next")}

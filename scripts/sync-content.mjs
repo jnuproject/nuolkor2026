@@ -69,26 +69,16 @@ const days = {};
 
 for (let day = 1; day <= 6; day += 1) {
   const base = `day${day}`;
-  const [
-    instructor,
-    lessonEn,
-    lessonKo,
-    workbookEn,
-    workbookKo,
-  ] = await Promise.all([
+  const [instructor, lessonEn, lessonKo] = await Promise.all([
     read(`${base}/01-강사교안-ko.md`),
     read(`${base}/02-student-lesson-en.md`),
     read(`${base}/02-student-lesson-ko.md`),
-    read(`${base}/03-student-workbook-en.md`),
-    read(`${base}/03-student-workbook-ko.md`),
   ]);
 
   days[day] = {
     instructor,
     lessonEn,
     lessonKo,
-    workbookEn,
-    workbookKo,
     labs: labsByDay[day],
   };
 }

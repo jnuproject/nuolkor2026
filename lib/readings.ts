@@ -36,19 +36,12 @@ export function getReadings(day: number): Reading[] {
 
   const lessonEn = documentCopy(content.lessonEn, "Lesson");
   const lessonKo = documentCopy(content.lessonKo, "수업 읽기");
-  const workbookEn = documentCopy(content.workbookEn, "Workbook");
-  const workbookKo = documentCopy(content.workbookKo, "워크북");
 
   return [
     {
       id: `day${day}-lesson`,
       ...lessonEn,
       translations: { ko: lessonKo },
-    },
-    {
-      id: `day${day}-workbook`,
-      ...workbookEn,
-      translations: { ko: workbookKo },
     },
   ];
 }

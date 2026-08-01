@@ -94,8 +94,8 @@ export const day1Plan: InteractiveDayPlan = {
           kind: "read",
           title: text("Prepared tool check", "준비된 도구 확인"),
           instruction: text(
-            "Complete the setup check in the workbook or with the support teacher. Use the persistent side signal if help is needed.",
-            "워크북 또는 지원 강사와 함께 세팅 확인을 마치세요. 도움이 필요하면 계속 보이는 옆 상태 신호를 사용하세요.",
+            "Complete the setup check or ask the support teacher. Use the persistent side signal if help is needed.",
+            "세팅 확인을 마치거나 지원 강사에게 도움을 요청하세요. 도움이 필요하면 계속 보이는 옆 상태 신호를 사용하세요.",
           ),
           hidden: true,
         },

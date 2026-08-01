@@ -5,7 +5,7 @@ the National University of Laos.
 
 ## Classroom views
 
-- **Student** — continuous Korean/English lessons and workbooks, focused evidence activities, and help signals
+- **Student** — continuous Korean/English lessons, focused evidence activities, and help signals
 - **Instructor** — Korean/English stage guidance, the complete Korean teaching manuscript, timing, and recovery guidance
 - **Present** — projector-ready screens derived from the same canonical lessons, with timers and keyboard controls
 - **Live classroom** — room code, participant progress, help status, and instructor controls

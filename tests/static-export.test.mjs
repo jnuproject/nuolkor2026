@@ -16,38 +16,26 @@ const DAY_TITLES = [
   {
     en: "Day 1 — Build Your First Working Page",
     ko: "1일차 — 처음으로 작동하는 페이지 만들기",
-    workbookEn: "Day 1 Workbook — First Working Page",
-    workbookKo: "1일차 워크북 — 처음으로 작동하는 페이지",
   },
   {
     en: "Day 2 — Turn Your Idea into a Buildable Service",
     ko: "2일차 — 아이디어를 실제로 만들 수 있는 서비스로 바꾸기",
-    workbookEn: "Day 2 Workbook — My Project v1",
-    workbookKo: "2일차 워크북 — 나의 프로젝트 v1",
   },
   {
     en: "Day 3 — Make the Design Intentional",
     ko: "3일차 — 의도가 보이는 디자인 만들기",
-    workbookEn: "Day 3 Workbook — Design Decisions",
-    workbookKo: "3일차 워크북 — 디자인 결정",
   },
   {
     en: "Day 4 — Complete One Core Interaction",
     ko: "4일차 — 핵심 상호작용 하나 완성하기",
-    workbookEn: "Day 4 Workbook — Core Interaction",
-    workbookKo: "4일차 워크북 — 핵심 상호작용",
   },
   {
     en: "Day 5 — Make It Work for Someone Else",
     ko: "5일차 — 다른 사람도 사용할 수 있게 만들기",
-    workbookEn: "Day 5 Workbook — User Test and Release Candidate",
-    workbookKo: "5일차 워크북 — 사용자 테스트와 배포 후보 버전",
   },
   {
     en: "Day 6 — Publish, Recheck, and Hand It to Someone Else",
     ko: "6일차 — 배포하고, 다시 확인하고, 다른 사람에게 넘겨주기",
-    workbookEn: "Day 6 Workbook — Final Release",
-    workbookKo: "6일차 워크북 — 최종 배포",
   },
 ];
 
@@ -158,7 +146,7 @@ function loadInteractiveFixture() {
   return interactiveFixturePromise;
 }
 
-test("syncs six substantial bilingual lessons and workbooks into canonical fields", async () => {
+test("syncs six substantial bilingual lessons into canonical fields", async () => {
   const [generatedModule, syncSource] = await Promise.all([
     loadTypeScriptData(path.join(projectRoot, "content", "generated.ts")),
     readFile(path.join(projectRoot, "scripts", "sync-content.mjs"), "utf8"),
@@ -181,15 +169,13 @@ test("syncs six substantial bilingual lessons and workbooks into canonical field
     "01-강사교안-ko.md",
     "02-student-lesson-en.md",
     "02-student-lesson-ko.md",
-    "03-student-workbook-en.md",
-    "03-student-workbook-ko.md",
   ]) {
     assert.ok(
       syncSource.includes(fileName),
       `The content sync must read ${fileName}`,
     );
   }
-  assert.match(syncSource, /lessonEn,\s*lessonKo,\s*workbookEn,\s*workbookKo/);
+  assert.doesNotMatch(syncSource, /student-workbook|workbookEn|workbookKo/);
   assert.match(syncSource, /copyFile\(/);
 
   assert.ok(
@@ -210,8 +196,6 @@ test("syncs six substantial bilingual lessons and workbooks into canonical field
       "instructor",
       "lessonEn",
       "lessonKo",
-      "workbookEn",
-      "workbookKo",
       "labs",
     ]) {
       assert.ok(
@@ -223,26 +207,17 @@ test("syncs six substantial bilingual lessons and workbooks into canonical field
     assert.ok(content.instructor.length > 5_000);
     assert.ok(content.lessonEn.length > 1_800);
     assert.ok(content.lessonKo.length > 1_800);
-    assert.ok(content.workbookEn.length > 1_000);
-    assert.ok(content.workbookKo.length > 1_000);
+    assert.equal(Object.hasOwn(content, "workbookEn"), false);
+    assert.equal(Object.hasOwn(content, "workbookKo"), false);
     assert.equal(firstHeading(content.lessonEn), titles.en);
     assert.equal(firstHeading(content.lessonKo), titles.ko);
-    assert.equal(firstHeading(content.workbookEn), titles.workbookEn);
-    assert.equal(firstHeading(content.workbookKo), titles.workbookKo);
 
     const lessonEnSections = markdownSections(content.lessonEn);
     const lessonKoSections = markdownSections(content.lessonKo);
-    const workbookEnSections = markdownSections(content.workbookEn);
-    const workbookKoSections = markdownSections(content.workbookKo);
     assert.equal(lessonEnSections.length, lessonKoSections.length);
-    assert.equal(workbookEnSections.length, workbookKoSections.length);
     assert.ok(
       lessonEnSections.length >= 6,
       `Day ${day} lesson is too abbreviated`,
-    );
-    assert.ok(
-      workbookEnSections.length >= 7,
-      `Day ${day} workbook is too abbreviated`,
     );
   }
 
@@ -265,7 +240,7 @@ test("syncs six substantial bilingual lessons and workbooks into canonical field
   assert.doesNotMatch(allCurriculum, PROHIBITED_PROJECT_EXAMPLES);
 });
 
-test("exposes exactly one long lesson and one long workbook per day", async () => {
+test("exposes exactly one long lesson per day", async () => {
   const generatedModule = await loadTypeScriptData(
     path.join(projectRoot, "content", "generated.ts"),
   );
@@ -283,32 +258,18 @@ test("exposes exactly one long lesson and one long workbook per day", async () =
 
     assert.deepEqual(
       plain(readings.map((reading) => reading.id)),
-      [`day${day}-lesson`, `day${day}-workbook`],
+      [`day${day}-lesson`],
     );
     assert.equal(readings[0].title, DAY_TITLES[day - 1].en);
     assert.equal(
       readings[0].translations.ko.title,
       DAY_TITLES[day - 1].ko,
     );
-    assert.equal(readings[1].title, DAY_TITLES[day - 1].workbookEn);
-    assert.equal(
-      readings[1].translations.ko.title,
-      DAY_TITLES[day - 1].workbookKo,
-    );
     assert.equal(readings[0].body, source.lessonEn.replace(/^#\s+.+$/m, "").trim());
     assert.equal(
       readings[0].translations.ko.body,
       source.lessonKo.replace(/^#\s+.+$/m, "").trim(),
     );
-    assert.equal(
-      readings[1].body,
-      source.workbookEn.replace(/^#\s+.+$/m, "").trim(),
-    );
-    assert.equal(
-      readings[1].translations.ko.body,
-      source.workbookKo.replace(/^#\s+.+$/m, "").trim(),
-    );
-
     const english = translationsModule.getLocalizedReadings(
       day,
       "en",
@@ -321,7 +282,8 @@ test("exposes exactly one long lesson and one long workbook per day", async () =
     );
     assert.equal(english[0].title, DAY_TITLES[day - 1].en);
     assert.equal(korean[0].title, DAY_TITLES[day - 1].ko);
-    assert.equal(korean[1].title, DAY_TITLES[day - 1].workbookKo);
+    assert.equal(english.length, 1);
+    assert.equal(korean.length, 1);
   }
 });
 
@@ -335,8 +297,9 @@ test("exports the new six-day bilingual course and every public classroom route"
     assert.match(html, /<title>Build Loop — Vibe Coding Bootcamp<\/title>/i);
     assert.match(html, /Vibe Coding Bootcamp/);
     assert.match(html, /바이브 코딩 부트캠프/);
-    assert.match(html, /Lesson and workbook/);
-    assert.match(html, /교재와 워크북/);
+    assert.match(html, />Lesson</);
+    assert.match(html, />교재</);
+    assert.doesNotMatch(html, /Workbook|워크북/);
     assert.match(html, /Class timeline/);
     assert.match(html, /수업 시간표/);
     assert.match(html, /\/nuolkor2026\/_next\//);
@@ -361,10 +324,6 @@ test("exports the new six-day bilingual course and every public classroom route"
     ...Array.from(
       { length: 6 },
       (_, index) => `instructor/day/${index + 1}`,
-    ),
-    ...Array.from(
-      { length: 6 },
-      (_, index) => `cards/day/${index + 1}`,
     ),
   ];
   const pages = await Promise.all(routes.map((route) => readRoute(route)));
@@ -398,43 +357,11 @@ test("exports the new six-day bilingual course and every public classroom route"
   assert.match(dayOne, /SELF-PACED/);
   assert.match(dayOne, /What you will make today/);
   assert.match(dayOne, /<article class="book-read">/);
+  assert.doesNotMatch(home, /reading=/);
 });
 
-test("turns the legacy cards route into a bilingual workbook guide", async () => {
-  const [cardsSource, ...cardPages] = await Promise.all([
-    readFile(
-      path.join(projectRoot, "app", "cards", "day", "[day]", "page.tsx"),
-      "utf8",
-    ),
-    ...Array.from({ length: 6 }, (_, index) =>
-      readRoute(path.join("cards", "day", String(index + 1))),
-    ),
-  ]);
-
-  assert.doesNotMatch(cardsSource, /CardsGrid|ActivityCard|card deck component/i);
-  assert.match(cardsSource, /href=\{`\/day\/\$\{value\}\?reading=1`\}/);
-  assert.match(
-    cardsSource,
-    /The activities now live in one continuous workbook\./,
-  );
-  assert.match(
-    cardsSource,
-    /활동은 이제 하나의 연속된 워크북에서 진행합니다\./,
-  );
-
-  cardPages.forEach((html, index) => {
-    assert.ok(html.includes(`Day ${index + 1} · Workbook`));
-    assert.ok(html.includes(`${index + 1}일차 · 워크북`));
-    assert.match(
-      html,
-      /The activities now live in one continuous workbook\./,
-    );
-    assert.match(
-      html,
-      /활동은 이제 하나의 연속된 워크북에서 진행합니다\./,
-    );
-    assert.doesNotMatch(html, /class="cards-grid"|CURRENT SIGNAL/i);
-  });
+test("does not export the retired workbook route", async () => {
+  await assert.rejects(stat(path.join(outputRoot, "cards")));
 });
 
 test("keeps projector slides clean and moves controls to the instructor page", async () => {

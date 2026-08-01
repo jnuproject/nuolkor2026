@@ -2832,44 +2832,6 @@ a {
   text-decoration: none;
 }
 
-.legacy-workbook-link {
-  width: min(70ch, calc(100% - 2.4rem));
-  margin: 0 auto;
-  padding: clamp(4rem, 10vw, 8rem) 0;
-}
-
-.legacy-workbook-link > span {
-  color: var(--editorial-accent);
-  font-size: 0.78rem;
-  font-weight: 720;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.legacy-workbook-link h1 {
-  max-width: 20ch;
-  margin: 1rem 0;
-  font-size: clamp(2.3rem, 6vw, 4.5rem);
-  letter-spacing: -0.045em;
-  line-height: 1.05;
-}
-
-.legacy-workbook-link p {
-  max-width: 55ch;
-  color: var(--muted);
-  font-size: 1.05rem;
-}
-
-.legacy-workbook-link a {
-  display: inline-block;
-  margin-top: 1.5rem;
-  padding: 0.7rem 0;
-  border-bottom: 2px solid var(--editorial-accent);
-  color: var(--blue-deep);
-  font-weight: 720;
-  text-decoration: none;
-}
-
 .instructor-full-guide {
   width: min(74ch, calc(100% - 2.4rem));
   margin: 2rem auto 0;
@@ -11813,7 +11775,7 @@ html[data-language="ko"] .book-title {
    ========================================================================== */
 
 /* Grid and flex children must be allowed to shrink before code starts to
-   scroll. This prevents one long command from widening the whole workbook. */
+   scroll. This prevents one long command from widening the whole lesson. */
 :root {
   --blue: #0b6e99;
   --editorial-accent: #0b6e99;
@@ -11896,19 +11858,6 @@ html[data-language="ko"] :is(h1, h2, h3) {
   font-size: 12px;
   font-weight: 550;
   letter-spacing: 0.02em;
-}
-
-.book-print-button {
-  min-height: 36px;
-  margin-left: auto;
-  padding: 6px 10px;
-  border: 1px solid var(--line-dark);
-  border-radius: 4px;
-  color: var(--ink);
-  background: #fff;
-  font-size: 13px;
-  font-weight: 550;
-  cursor: pointer;
 }
 
 /* The classroom notice now sits directly below the 48px application header. */
@@ -12028,8 +11977,7 @@ html[data-language="ko"] :is(h1, h2, h3) {
 
 @media (hover: hover) and (pointer: fine) {
   .index-day-actions a:hover,
-  .index-day-actions button:hover,
-  .book-print-button:hover {
+  .index-day-actions button:hover {
     background: var(--notion-hover);
   }
 }
@@ -12255,7 +12203,6 @@ html[data-language="ko"] :is(h1, h2, h3) {
   .book-toc,
   .book-status,
   .mobile-toc-toggle,
-  .book-print-button,
   .book-pagenav,
   .stage-timer,
   .classroom-banner,

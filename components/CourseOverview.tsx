@@ -39,14 +39,13 @@ export function CourseOverview() {
                     </span>{" "}
                     <Copy>{plan.title}</Copy>
                   </summary>
-                      <p className="toc-group-label">
-                        <BilingualText en="Lesson and workbook" ko="교재와 워크북" />
-                      </p>
+                  <p className="toc-group-label">
+                    <BilingualText en="Lesson" ko="교재" />
+                  </p>
                   <ul>
-                    {readings.map((reading, index) => (
+                    {readings.map((reading) => (
                       <li key={reading.id}>
-                        <Link href={`/day/${plan.day}?reading=${index}`}>
-                          R{index + 1}{" "}
+                        <Link href={`/day/${plan.day}`}>
                           <BilingualText
                             en={reading.title}
                             ko={
@@ -58,8 +57,8 @@ export function CourseOverview() {
                       </li>
                     ))}
                   </ul>
-                      <p className="toc-group-label">
-                        <BilingualText en="Class timeline" ko="수업 시간표" />
+                  <p className="toc-group-label">
+                    <BilingualText en="Class timeline" ko="수업 시간표" />
                   </p>
                   <ul>
                     {plan.stages.map((stage, index) => (
@@ -201,15 +200,12 @@ export function CourseOverview() {
                     <Link className="is-primary" href={`/day/${plan.day}`}>
                       <BilingualText en="Open day →" ko="수업 열기 →" />
                     </Link>
-                    {readings.slice(0, 2).map((reading, index) => (
+                    {readings.map((reading) => (
                       <Link
-                        href={`/day/${plan.day}?reading=${index}`}
+                        href={`/day/${plan.day}`}
                         key={reading.id}
                       >
-                        <BilingualText
-                          en={index === 0 ? "Lesson" : "Workbook"}
-                          ko={index === 0 ? "교재" : "워크북"}
-                        />
+                        <BilingualText en="Lesson" ko="교재" />
                       </Link>
                     ))}
                   </nav>
