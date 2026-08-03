@@ -826,6 +826,8 @@ test("guards the audited mobile, setup, rejoin, and classroom control flows", as
 
   assert.match(setup, /const allStepsComplete = completeCount === steps\.length/);
   assert.match(setup, /const canOpenDayOne = allStepsComplete && status !== null/);
+  assert.match(setup, /os === "mac"[\s\S]*?source ~\/\.zshrc/);
+  assert.match(setup, /completely close Terminal and open it again/);
   assert.match(join, /resumeToken/);
   assert.match(join, /participant-access/);
   assert.match(header, /className="book-header-status"/);
@@ -881,6 +883,8 @@ test("copies the six public labs and offline setup files into the export", async
 
   assert.match(setting, /OpenCode/i);
   assert.match(setting, /NVIDIA_API_KEY/);
+  assert.match(setting, /source ~\/\.zshrc/);
+  assert.match(setting, /터미널을 완전히 닫고 새로 열었다면 건너뛰어도 됩니다/);
   assert.doesNotMatch(setting, /NVIDIA_NIM_API_KEY/);
   assert.doesNotMatch(setting, /@ai-sdk\/openai-compatible|provider\.nvidia/);
   assert.match(serviceWorker, /self\.location\.href/);

@@ -124,7 +124,13 @@ const koreanUi: Record<string, string> = {
   "Never enter your API key on this course website.":
     "이 강의 웹사이트에는 API 키를 절대 입력하지 마세요.",
   "1 · Install": "1 · 설치",
-  "2 · Verify in a new terminal": "2 · 새 터미널에서 확인",
+  "2 · Reload terminal settings": "2 · 터미널 설정 다시 불러오기",
+  "2 · Open a new terminal": "2 · 새 터미널 열기",
+  "3 · Verify installation": "3 · 설치 확인",
+  "Run this once after installation to reload the PATH setting in the current terminal. You can skip it if you completely close Terminal and open it again.":
+    "설치 후 현재 터미널에 PATH 설정을 다시 불러오려면 이 명령을 한 번 실행하세요. 터미널을 완전히 닫고 새로 열었다면 건너뛰어도 됩니다.",
+  "Close this terminal completely and open a new one before checking the version.":
+    "버전을 확인하기 전에 현재 터미널을 완전히 닫고 새 터미널을 여세요.",
   "If the command is not found, stop and use the detailed guide or ask the instructor. Do not change unrelated computer settings.":
     "명령을 찾을 수 없다면 멈추고 상세 안내를 보거나 강사에게 질문하세요. 관련 없는 컴퓨터 설정은 바꾸지 마세요.",
   "1 · Open your practice folder": "1 · 실습 폴더 열기",
@@ -153,11 +159,12 @@ const koreanUi: Record<string, string> = {
   "The key is not visible in a screenshot, chat, file, or message.":
     "스크린샷, 채팅, 파일 또는 메시지에 키가 보이지 않습니다.",
   "Install OpenCode": "OpenCode 설치",
-  "Run the command for your computer, open a fresh terminal, and verify the installation.":
-    "내 컴퓨터용 명령을 실행하고 새 터미널을 열어 설치를 확인하세요.",
+  "Run the command for your computer, reload the terminal settings or open a fresh terminal, and verify the installation.":
+    "내 컴퓨터용 명령을 실행하고 터미널 설정을 다시 불러오거나 새 터미널을 연 뒤 설치를 확인하세요.",
   "The install command finished without an unresolved error.":
     "설치 명령이 해결되지 않은 오류 없이 끝났습니다.",
-  "I opened a new terminal after installation.": "설치 후 새 터미널을 열었습니다.",
+  "I reloaded the terminal settings or opened a new terminal after installation.":
+    "설치 후 터미널 설정을 다시 불러오거나 새 터미널을 열었습니다.",
   "The version command shows an OpenCode version.": "버전 명령에 OpenCode 버전이 표시됩니다.",
   "Connect NVIDIA inside OpenCode": "OpenCode에서 NVIDIA 연결",
   "Connect the provider from inside OpenCode. The API key belongs only in the provider key box.":

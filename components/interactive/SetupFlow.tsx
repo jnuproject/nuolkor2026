@@ -52,10 +52,10 @@ const steps: SetupStep[] = [
     title: "Install OpenCode",
     minutes: "15–30 min",
     intro:
-      "Run the command for your computer, open a fresh terminal, and verify the installation.",
+      "Run the command for your computer, reload the terminal settings or open a fresh terminal, and verify the installation.",
     checks: [
       "The install command finished without an unresolved error.",
-      "I opened a new terminal after installation.",
+      "I reloaded the terminal settings or opened a new terminal after installation.",
       "The version command shows an OpenCode version.",
     ],
   },
@@ -283,7 +283,31 @@ export function SetupFlow() {
         <div className="setup-command-stack">
           <span>{uiText(language, "1 · Install").toUpperCase()}</span>
           <CodeCopy code={installCommands[os]} />
-          <span>{uiText(language, "2 · Verify in a new terminal").toUpperCase()}</span>
+          {os === "mac" ? (
+            <>
+              <span>
+                {uiText(language, "2 · Reload terminal settings").toUpperCase()}
+              </span>
+              <CodeCopy code="source ~/.zshrc" />
+              <p>
+                {uiText(
+                  language,
+                  "Run this once after installation to reload the PATH setting in the current terminal. You can skip it if you completely close Terminal and open it again.",
+                )}
+              </p>
+            </>
+          ) : (
+            <>
+              <span>{uiText(language, "2 · Open a new terminal").toUpperCase()}</span>
+              <p>
+                {uiText(
+                  language,
+                  "Close this terminal completely and open a new one before checking the version.",
+                )}
+              </p>
+            </>
+          )}
+          <span>{uiText(language, "3 · Verify installation").toUpperCase()}</span>
           <CodeCopy code="opencode --version" />
           <p>
             {uiText(

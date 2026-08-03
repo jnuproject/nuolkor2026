@@ -199,8 +199,17 @@
   <h3>3-3. npm</h3>
   <pre><code>npm install -g opencode-ai</code></pre>
 
+  <h3>3-4. 현재 터미널에 설치 경로 적용</h3>
+  <p>권장 설치 스크립트는 OpenCode 실행 경로를 <code>~/.zshrc</code>에 추가합니다. 설치 직후 같은 터미널을 계속 사용한다면 다음 명령으로 새 설정을 한 번 불러오세요.</p>
+  <pre><code>source ~/.zshrc</code></pre>
   <div class="tip">
-    설치 후 <code>opencode --version</code>으로 확인합니다. <code>command not found</code>가 나오면 설치 스크립트가 안내한 PATH 줄을 <code>~/.zshrc</code>에 추가하고 <code>source ~/.zshrc</code>를 실행하세요.
+    이 명령은 설치를 다시 하는 것이 아니라 현재 터미널에 새 PATH 설정을 적용합니다. 터미널을 완전히 닫고 새로 열었다면 건너뛰어도 됩니다.
+  </div>
+
+  <h3>3-5. 설치 확인</h3>
+  <pre><code>opencode --version</code></pre>
+  <div class="tip">
+    OpenCode 버전 번호가 표시되면 설치가 완료된 것입니다. 설정을 다시 불러온 뒤에도 <code>command not found</code>가 나오면 아래 문제 해결 항목을 확인하거나 강사에게 도움을 요청하세요.
   </div>
 </div>
 
@@ -334,7 +343,7 @@ Before editing, tell me the exact file you will change.</code></pre>
 
 <ul class="os-mac">
   <li><strong>모델 목록에 NVIDIA가 안 보임</strong>: 위의 값 비노출 명령으로 환경 변수 설정 여부를 확인. 설정되지 않았다면 <code>source ~/.zshrc</code> 후 재실행. 또는 <code>/connect</code>로 NVIDIA를 다시 연결.</li>
-  <li><strong>opencode: command not found</strong>: 설치 경로가 PATH에 없습니다. <code>~/.zshrc</code>에 <code>export PATH="$HOME/.opencode/bin:$PATH"</code>를 추가하고 <code>source ~/.zshrc</code>.</li>
+  <li><strong>opencode: command not found</strong>: 먼저 <code>source ~/.zshrc</code>를 실행합니다. 계속 인식하지 못하면 <code>~/.zshrc</code>에 <code>export PATH="$HOME/.opencode/bin:$PATH"</code>가 있는지 확인하고 강사에게 도움을 요청하세요.</li>
   <li><strong>모델을 못 찾음 (model not found)</strong>: <code>/models</code>를 다시 열고, 목록에 실제로 표시되는 NVIDIA 모델을 선택하세요. 예전에 복사한 모델 ID나 임의로 줄인 ID는 사용하지 않습니다.</li>
   <li><strong>401 / 인증 오류</strong>: build.nvidia.com에서 키가 유효한지 확인. 만료/삭제된 키는 새로 발급.</li>
   <li><strong>429 / Rate limit</strong>: 무료 tier 제한. 호출 간격을 늘리거나 다른 모델로 전환.</li>
@@ -361,7 +370,7 @@ Before editing, tell me the exact file you will change.</code></pre>
 </ul>
 
 <div class="footer">
-  OpenCode + NVIDIA 무료 LLM API · 마지막 업데이트: 2026-07-27
+  OpenCode + NVIDIA 무료 LLM API · 마지막 업데이트: 2026-08-03
 </div>
 
 </div>
