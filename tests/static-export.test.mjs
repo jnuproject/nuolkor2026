@@ -14,40 +14,39 @@ const outputRoot = path.join(projectRoot, "out");
 
 const DAY_TITLES = [
   {
-    en: "Day 1 — Build Your First Working Page",
-    ko: "1일차 — 처음으로 작동하는 페이지 만들기",
+    en: "Day 1 — Build a Bot That Answers You",
+    ko: "1일차 — 말을 걸면 답하는 봇 만들기",
   },
   {
-    en: "Day 2 — Turn Your Idea into a Buildable Service",
-    ko: "2일차 — 아이디어를 실제로 만들 수 있는 서비스로 바꾸기",
+    en: "Day 2 — Make the Bot Check on Its Own",
+    ko: "2일차 — 스스로 확인하는 봇 만들기",
   },
   {
-    en: "Day 3 — Make the Design Intentional",
-    ko: "3일차 — 의도가 보이는 디자인 만들기",
+    en: "Day 3 — Let the Model Choose the Tool",
+    ko: "3일차 — 모델이 도구를 고르게 하기",
   },
   {
-    en: "Day 4 — Complete One Core Interaction",
-    ko: "4일차 — 핵심 상호작용 하나 완성하기",
+    en: "Day 4 — Build Your Own Tool and Plug It In",
+    ko: "4일차 — 내 도구 만들어 꽂기",
   },
   {
-    en: "Day 5 — Make It Work for Someone Else",
-    ko: "5일차 — 다른 사람도 사용할 수 있게 만들기",
+    en: "Day 5 — Lend Your Tool to Another Agent",
+    ko: "5일차 — 내 도구를 다른 에이전트에게 빌려주기",
   },
   {
-    en: "Day 6 — Publish, Recheck, and Hand It to Someone Else",
-    ko: "6일차 — 배포하고, 다시 확인하고, 다른 사람에게 넘겨주기",
+    en: "Day 6 — Finish It and Show Someone",
+    ko: "6일차 — 마무리하고 보여 주기",
   },
 ];
 
-const STAGE_COUNTS = [10, 10, 12, 10, 10, 9];
+const STAGE_COUNTS = [9, 8, 8, 7, 8, 6];
 
 const LAB_FILES = [
-  "day1-starter.html",
-  "day3-ai-looking.html",
-  "day3-refined.html",
-  "day4-filter-start.html",
-  "day4-filter-working.html",
-  "day5-test-candidate.html",
+  "day1-bot.py",
+  "day2-watch.py",
+  "day3-tools.py",
+  "day4-safe.py",
+  "day5-mcp-server.py",
 ];
 
 const PROHIBITED_PROJECT_EXAMPLES =
@@ -179,13 +178,13 @@ test("syncs six substantial bilingual lessons into canonical fields", async () =
   assert.match(syncSource, /copyFile\(/);
 
   assert.ok(
-    curriculumContent.days["2"].lessonEn.includes(
-      "Your project topic is your choice. You do not need to choose from a list.",
+    curriculumContent.days["4"].lessonEn.includes(
+      "Your topic is free. But the data has to be reachable.",
     ),
   );
   assert.match(
-    curriculumContent.days["2"].lessonKo,
-    /프로젝트 주제는 여러분이 자유롭게 정합니다.*정해진 목록에서 고를 필요는 없습니다/s,
+    curriculumContent.days["4"].lessonKo,
+    /주제는 자유입니다.*데이터에 접근할 수 있어야 합니다/s,
   );
 
   for (let day = 1; day <= 6; day += 1) {
@@ -222,12 +221,12 @@ test("syncs six substantial bilingual lessons into canonical fields", async () =
   }
 
   const flowChecks = [
-    [/GitHub Pages/, /공개/],
-    [/one complete path/i, /하나의 완전한 흐름/],
-    [/looks AI-made/i, /AI가 만든 것 같아요/],
-    [/input → action → result/i, /상태\(state\)/],
-    [/Watch without teaching/i, /가르쳐 주지 말고 관찰하세요/],
-    [/another device/i, /다른 기기/],
+    [/Three different things/i, /서로 다른 세 가지/],
+    [/Prove that it remembers/i, /기억하는지 증명하기/],
+    [/The model does not execute functions/i, /모델은 함수를 실행하지 않습니다/],
+    [/orchestration/i, /오케스트레이션/],
+    [/MCP/, /MCP/],
+    [/showcase/i, /쇼케이스/],
   ];
 
   flowChecks.forEach(([english, korean], index) => {
@@ -855,11 +854,11 @@ test("copies the six public labs and offline setup files into the export", async
   ]);
 
   assert.deepEqual(
-    publicFiles.filter((file) => file.endsWith(".html")).sort(),
+    publicFiles.filter((file) => file.endsWith(".py")).sort(),
     LAB_FILES,
   );
   assert.deepEqual(
-    exportedFiles.filter((file) => file.endsWith(".html")).sort(),
+    exportedFiles.filter((file) => file.endsWith(".py")).sort(),
     LAB_FILES,
   );
   assert.deepEqual(

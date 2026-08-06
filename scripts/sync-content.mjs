@@ -4,7 +4,7 @@ import path from "node:path";
 const projectRoot = process.cwd();
 const sourceRoot = path.resolve(
   projectRoot,
-  process.env.CURRICULUM_SOURCE ?? "../교안완성본",
+  process.env.CURRICULUM_SOURCE ?? "../교안-에이전트",
 );
 const outputDir = path.join(projectRoot, "content");
 const outputFile = path.join(outputDir, "generated.ts");
@@ -14,51 +14,45 @@ const publicLabsDir = path.join(projectRoot, "public", "labs");
 const labsByDay = {
   1: [
     {
-      fileName: "day1-starter.html",
-      titleEn: "Day 1 starter page",
-      titleKo: "Day 1 시작 페이지",
+      fileName: "day1-bot.py",
+      titleEn: "Day 1 recovery reference — a bot that replies",
+      titleKo: "Day 1 복구용 참고본 — 답하는 봇",
+      student: false,
     },
   ],
-  2: [],
+  2: [
+    {
+      fileName: "day2-watch.py",
+      titleEn: "Day 2 recovery reference — polling and memory",
+      titleKo: "Day 2 복구용 참고본 — 폴링과 기억",
+      student: false,
+    },
+  ],
   3: [
     {
-      fileName: "day3-ai-looking.html",
-      titleEn: "Design diagnosis practice",
-      titleKo: "디자인 진단 실습본",
-    },
-    {
-      fileName: "day3-refined.html",
-      titleEn: "Refined comparison page",
-      titleKo: "개선 비교본",
+      fileName: "day3-tools.py",
+      titleEn: "Day 3 recovery reference — tool calling",
+      titleKo: "Day 3 복구용 참고본 — 도구 호출",
+      student: false,
     },
   ],
   4: [
     {
-      fileName: "day4-filter-start.html",
-      titleEn: "Interaction practice starter",
-      titleKo: "상호작용 실습 시작본",
-    },
-    {
-      fileName: "day4-filter-working.html",
-      titleEn: "Interaction practice reference",
-      titleKo: "상호작용 실습 확인본",
+      fileName: "day4-safe.py",
+      titleEn: "Day 4 recovery reference — failure isolation",
+      titleKo: "Day 4 복구용 참고본 — 실패 격리",
       student: false,
     },
   ],
   5: [
     {
-      fileName: "day5-test-candidate.html",
-      titleEn: "User-test candidate",
-      titleKo: "사용자 테스트 후보",
+      fileName: "day5-mcp-server.py",
+      titleEn: "Day 5 recovery reference — minimal MCP server",
+      titleKo: "Day 5 복구용 참고본 — 최소 MCP 서버",
+      student: false,
     },
   ],
-  6: [
-    {
-      fileName: "day5-test-candidate.html",
-      titleEn: "Publish and republish practice file",
-      titleKo: "배포·재배포 실습 파일",
-    },
-  ],
+  6: [],
 };
 
 async function read(relativePath) {
