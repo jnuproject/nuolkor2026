@@ -3,20 +3,18 @@ export const overviewKorean: Record<string, string> = {
   "AI Agent Bootcamp": "AI 에이전트 부트캠프",
   Break: "휴식",
 
-  "Build a Bot That Answers You": "말을 걸면 답하는 봇 만들기",
-  "How do you build a running bot and read the code it was given?":
-    "작동하는 봇을 만들고, 받은 코드를 읽으려면 어떻게 해야 하는가?",
-  "Finished result demo": "완성본 시연",
-  "Three layers: OpenCode, your bot, the model":
-    "세 층위 — OpenCode, 내 봇, 모델",
-  "Get a Telegram bot token": "텔레그램 봇 토큰 발급",
-  "Build the send script and receive it on your phone":
-    "발송 스크립트 제작과 휴대전화 수신 확인",
-  "Read the code and ask why each line is there":
-    "코드를 읽고 각 줄이 왜 있는지 묻기",
-  "Answer an incoming message with the model": "받은 메시지에 모델이 답하게 하기",
-  "Change how your bot replies": "봇이 답하는 방식 바꾸기",
-  "Move the token to .env and save": "토큰을 .env로 옮기고 저장",
+  "Wake Up Your Assistant": "비서를 깨운다",
+  "How do you install an assistant that acts instead of only talking?":
+    "말만 하는 것이 아니라 행동하는 비서를 어떻게 설치하는가?",
+  "Join the class group and start the install": "그룹 참여와 설치 시작",
+  "A chatbot talks, an agent does": "챗봇은 말하고, 에이전트는 한다",
+  "Three lines: what would you hand over?": "세 줄 — 무엇을 넘기고 싶은가",
+  "Finish the install": "설치 마무리",
+  "Connect a model and say hello": "모델 연결하고 인사하기",
+  "Give it real work and watch a file appear":
+    "실제로 일 시키고 파일이 생기는 것 보기",
+  "Reach your assistant from your phone": "폰에서 비서에게 닿기",
+  "Check what works and what is next": "무엇이 되는지 확인하고 다음 예고",
 
   "Make the Bot Check on Its Own": "스스로 확인하는 봇 만들기",
   "How does a bot notice something new without being asked?":

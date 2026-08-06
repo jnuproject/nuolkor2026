@@ -26,45 +26,41 @@ export const COURSE_MANIFEST = {
   1: {
     "stages": [
       {
-        "id": "day1-finished-demo",
+        "id": "day1-join-and-install",
         "activities": [
           {
-            "id": "day1-finished-demo-read",
-            "required": false
-          }
-        ]
-      },
-      {
-        "id": "day1-three-layers",
-        "activities": [
-          {
-            "id": "day1-three-layers-choice",
+            "id": "day1-join-and-install-checklist",
             "required": true
           }
         ]
       },
       {
-        "id": "day1-bot-token",
+        "id": "day1-chatbot-vs-agent",
         "activities": [
           {
-            "id": "day1-bot-token-checklist",
+            "id": "day1-chatbot-vs-agent-try",
             "required": true
           },
           {
-            "id": "day1-bot-token-setup-check",
+            "id": "day1-chatbot-vs-agent-why",
             "required": true
           }
         ]
       },
       {
-        "id": "day1-first-send",
+        "id": "day1-three-lines",
         "activities": [
           {
-            "id": "day1-first-send-prompt",
+            "id": "day1-three-lines-answer",
             "required": true
-          },
+          }
+        ]
+      },
+      {
+        "id": "day1-finish-install",
+        "activities": [
           {
-            "id": "day1-first-send-arrived",
+            "id": "day1-finish-install-checklist",
             "required": true
           }
         ]
@@ -79,49 +75,41 @@ export const COURSE_MANIFEST = {
         ]
       },
       {
-        "id": "day1-read-and-ask",
+        "id": "day1-connect-model",
         "activities": [
           {
-            "id": "day1-read-and-ask-prompt",
-            "required": true
-          },
-          {
-            "id": "day1-read-and-ask-notes",
+            "id": "day1-connect-model-record",
             "required": true
           }
         ]
       },
       {
-        "id": "day1-model-answers",
+        "id": "day1-real-work",
         "activities": [
           {
-            "id": "day1-model-answers-receive",
+            "id": "day1-real-work-record",
             "required": true
           },
           {
-            "id": "day1-model-answers-reply",
+            "id": "day1-real-work-safety",
             "required": true
           }
         ]
       },
       {
-        "id": "day1-character",
+        "id": "day1-phone",
         "activities": [
           {
-            "id": "day1-character-decide",
-            "required": true
-          },
-          {
-            "id": "day1-character-prompt",
+            "id": "day1-phone-record",
             "required": true
           }
         ]
       },
       {
-        "id": "day1-secrets-and-save",
+        "id": "day1-wrap",
         "activities": [
           {
-            "id": "day1-secrets-checklist",
+            "id": "day1-wrap-checklist",
             "required": true
           }
         ]

@@ -12,25 +12,7 @@ const labsOutputFile = path.join(outputDir, "generated-labs.ts");
 const publicLabsDir = path.join(projectRoot, "public", "labs");
 
 const labsByDay = {
-  1: [
-    {
-      fileName: "day1-setup-check.py",
-      titleEn: "Setup check — run this before Day 1",
-      titleKo: "설정 확인 — Day 1 시작 전에 실행",
-    },
-    {
-      fileName: "day1-preflight.py",
-      titleEn: "Instructor preflight — run the night before",
-      titleKo: "강사 사전 점검 — 수업 전날 실행",
-      student: false,
-    },
-    {
-      fileName: "day1-bot.py",
-      titleEn: "Day 1 recovery reference — a bot that replies",
-      titleKo: "Day 1 복구용 참고본 — 답하는 봇",
-      student: false,
-    },
-  ],
+  1: [],
   2: [
     {
       fileName: "day2-watch.py",

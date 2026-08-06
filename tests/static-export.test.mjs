@@ -14,8 +14,8 @@ const outputRoot = path.join(projectRoot, "out");
 
 const DAY_TITLES = [
   {
-    en: "Day 1 — Build a Bot That Answers You",
-    ko: "1일차 — 말을 걸면 답하는 봇 만들기",
+    en: "Day 1 — Wake Up Your Assistant",
+    ko: "1일차 — 비서를 깨운다",
   },
   {
     en: "Day 2 — Make the Bot Check on Its Own",
@@ -42,9 +42,6 @@ const DAY_TITLES = [
 const STAGE_COUNTS = [9, 8, 8, 7, 8, 6];
 
 const LAB_FILES = [
-  "day1-bot.py",
-  "day1-preflight.py",
-  "day1-setup-check.py",
   "day2-watch.py",
   "day3-tools.py",
   "day4-safe.py",
@@ -223,7 +220,7 @@ test("syncs six substantial bilingual lessons into canonical fields", async () =
   }
 
   const flowChecks = [
-    [/Three different things/i, /서로 다른 세 가지/],
+    [/A chatbot talks\. An agent does\./i, /챗봇은 말하고, 에이전트는 한다/],
     [/Prove that it remembers/i, /기억하는지 증명하기/],
     [/The model does not execute functions/i, /모델은 함수를 실행하지 않습니다/],
     [/orchestration/i, /오케스트레이션/],
@@ -356,7 +353,7 @@ test("exports the new six-day bilingual course and every public classroom route"
 
   const dayOne = pages[routes.indexOf("day/1")];
   assert.match(dayOne, /SELF-PACED/);
-  assert.match(dayOne, /What you will make today/);
+  assert.match(dayOne, /What you will do today/);
   assert.match(dayOne, /<article class="book-read">/);
   assert.doesNotMatch(home, /reading=/);
 });
