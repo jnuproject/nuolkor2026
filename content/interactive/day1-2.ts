@@ -174,7 +174,22 @@ export const day1Plan: InteractiveDayPlan = {
             text("The token is saved somewhere private", "토큰을 다른 사람이 못 보는 곳에 저장했습니다"),
             text("I sent /start to my own bot", "내 봇에게 /start를 보냈습니다"),
             text("I found my chat id in getUpdates", "getUpdates에서 채팅 ID를 찾았습니다"),
+            text("My .env has all four lines filled in", ".env의 네 줄을 모두 채웠습니다"),
           ],
+        },
+        {
+          id: "day1-bot-token-setup-check",
+          kind: "test-record",
+          title: text("Run the setup check", "설정 확인 실행"),
+          instruction: text(
+            "Run python3 day1-setup-check.py. Write which step it stopped at, or that a message reached your phone.",
+            "python3 day1-setup-check.py 를 실행하세요. 어느 단계에서 멈췄는지, 또는 휴대전화에 메시지가 왔는지 적으세요.",
+          ),
+          placeholder: text(
+            "It stopped at step… / A message arrived saying…",
+            "…단계에서 멈췄습니다 / …라는 메시지가 왔습니다",
+          ),
+          minimum: 1,
         },
       ],
     },

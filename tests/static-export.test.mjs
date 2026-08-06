@@ -43,6 +43,8 @@ const STAGE_COUNTS = [9, 8, 8, 7, 8, 6];
 
 const LAB_FILES = [
   "day1-bot.py",
+  "day1-preflight.py",
+  "day1-setup-check.py",
   "day2-watch.py",
   "day3-tools.py",
   "day4-safe.py",

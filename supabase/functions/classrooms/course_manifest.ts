@@ -49,6 +49,10 @@ export const COURSE_MANIFEST = {
           {
             "id": "day1-bot-token-checklist",
             "required": true
+          },
+          {
+            "id": "day1-bot-token-setup-check",
+            "required": true
           }
         ]
       },
