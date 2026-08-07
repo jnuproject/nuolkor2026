@@ -161,6 +161,28 @@
   .tiny{font-size:clamp(12px,1.05vw,16px);color:var(--muted);line-height:1.45;margin-top:1vh}
   @media (max-width:1100px){.prompt-grid{grid-template-columns:1fr}.prompt-preview{max-height:15vh}}
 
+
+  .hero-qr{
+    position:absolute;
+    right:4vw;
+    bottom:7vh;
+    width:min(18vw,230px);
+    background:#fff;
+    border:2px solid var(--line);
+    border-radius:18px;
+    padding:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+    text-align:center;
+  }
+  .hero-qr img{width:100%;height:auto;display:block;border-radius:8px}
+  .hero-qr .qr-label{
+    margin-top:8px;
+    font-size:clamp(12px,1.05vw,16px);
+    line-height:1.25;
+    color:#111;
+    font-weight:800;
+  }
+
 </style>
 </head>
 <body>
@@ -170,7 +192,10 @@
     <p class="eyebrow">OPENING QUESTION</p>
     <h1>Have you heard of<br />AI Agents?</h1>
     <p class="sub">ChatGPT answers. But what if AI could actually do the work?</p>
-    <div class="note">Ask students: “Who has used ChatGPT?” → “Who has heard the term AI Agent?”</div>
+    <div class="hero-qr">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXIAAAFyAQAAAADAX2ykAAAC/UlEQVR4nO2cTYrkOBCFvxgJemlDHSCPorxZ0kfqG9hHyQM02MsEmTcLSfnDTFVOMW5jQ8QiSZe/xYNHSIoIZZn4Tox/fQsH5513/o/ys9U4sxijmcFs9dvYQ3sft9Hj/Mp8kCS1hbrLmPVBdpmAdI2QJEnTVnqcX5uvyTn/kF2ukeplcRpKip831OP8Wnx8eVpMICz9WkxjP/3z8LU3/c5/m19MP08SzBFGi+/4P63H+f/BF/danoZs6VePQcwkgSUBdALmLfQ4vz6/lONx+1MQaQI7z5GWxGZ1J96jfuc/j1iTE4AZNJ5y+WDsKZ4/78J70+/8m5CmUA1MykBXPzR0EnS6v5U07E2/82+i1kKlCM5oIIhUyuGgZnKGNAX393D83V8oWaspSAOhNjTSFFRTvPP8PSxfFt+51kJ2mWitDcDOLEaaNtTj/Ep8dXQ0IE0fuSQx3EwAVh5n0Ggh70+/819HBEIu38c+AHNfnoxugrH//XLE3pt+57+Okr8GIRdDoRZElgYQLABLVHm7N/3O/xdeAyBdYx0dldYGi5X+BtQ9ea/6nf80HsfkesiCUgmXmWFqNVM9WO9Nv/NvotkoaegeXrac9vr32Hz1tzjY8reaXKL1PLz+PSL/sgy3NK1eAq2TBZR21t70O/+Wb2Miu1wj0N1MupoBoQyBH8v1LvU7/0XU+e/YhwwIgyCjEwaLaTxljC5H0vSxgR7n1+Xb/KjLwOOY/NJ/Ltzg++8B+Xb7Zo5PY95Hp6ONC39H8/7zkfnHXUlAA4vV0e9spclRpw971e/8J6GneF2a6Z5bG17/HpJ/nv8mvdRHUt2Tn2umvel3/j1///3CHOvSnK6R1oS+L9eb6XF+bb7+foH7VL97pO5Srk56/XtI/n6/rt6Krb1Inu/cPRBfnw/Pl01YNyvt6J99kNkpU7fj3et3/l/4al4n2blMfX+U0sgu03073lCP82vxER6Hp/kji/lDwM2AkG00YDzdTGM/baDH+XV58//P4Lzzh+X/BsCs8ejHeiJ2AAAAAElFTkSuQmCC" alt="QR code for Day 1 setup page" />
+      <div class="qr-label">Scan for Day 1 setup</div>
+    </div>
   </section>
 
   <section class="slide">
