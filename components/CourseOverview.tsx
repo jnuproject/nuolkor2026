@@ -3,6 +3,7 @@ import { interactiveDays } from "@/content/interactive";
 import type { LocalizedText } from "@/content/interactive/types";
 import { getOverviewKorean } from "@/content/overview-ko";
 import { getReadings } from "@/lib/readings";
+import { sitePath } from "@/lib/site-path";
 import { BilingualText } from "./BilingualText";
 import { BookHeader } from "./BookHeader";
 
@@ -113,9 +114,9 @@ export function CourseOverview() {
           </section>
 
           <div className="book-start">
-            <Link className="book-start-primary" href="/start">
+            <a className="book-start-primary" href={sitePath("/day1-setup.html")}>
               <BilingualText en="Set up for Day 1 →" ko="1일차 시작 설정 →" />
-            </Link>
+            </a>
             <Link className="book-start-ghost" href="/join">
               <BilingualText
                 en="I have a class code"

@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { BilingualText } from "./BilingualText";
 import { LanguageToggle } from "./LanguageToggle";
+import { sitePath } from "@/lib/site-path";
 
 export function BookHeader({
   crumb,
@@ -44,9 +45,9 @@ export function BookHeader({
             aria-label="Site navigation / 사이트 메뉴"
             className="book-header-nav"
           >
-            <Link href="/start">
+            <a href={sitePath("/day1-setup.html")}>
               <BilingualText en="Setup" ko="시작 설정" />
-            </Link>
+            </a>
             <Link href="/join">
               <BilingualText en="Join" ko="수업 참여" />
             </Link>
