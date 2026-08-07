@@ -5426,6 +5426,12 @@ a {
   background: var(--blue-soft);
 }
 
+.setup-command-stack > .setup-os-choice {
+  margin-bottom: 1.05rem;
+  padding-bottom: 0.95rem;
+  border-bottom: 1px solid var(--line);
+}
+
 .setup-os-choice p,
 .setup-command-stack p {
   margin: 0.8rem 0 0;

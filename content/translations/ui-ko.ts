@@ -108,6 +108,12 @@ const koreanUi: Record<string, string> = {
   "Use Terminal.app or another terminal.": "Terminal.app 또는 다른 터미널을 사용하세요.",
   "Windows Terminal with PowerShell is recommended.":
     "PowerShell을 사용하는 Windows Terminal을 권장합니다.",
+  "Windows Terminal with PowerShell is recommended. Node.js must be installed first.":
+    "PowerShell을 사용하는 Windows Terminal을 권장합니다. Node.js가 먼저 설치되어 있어야 합니다.",
+  "Choose your operating system to continue.":
+    "계속하려면 운영체제를 선택하세요.",
+  "Choose your computer above to see the commands for it.":
+    "위에서 내 컴퓨터를 선택하면 해당 명령어가 표시됩니다.",
   "Open NVIDIA Build ↗": "NVIDIA Build 열기 ↗",
   PREPARE: "준비",
   ACCESS: "접근",
@@ -149,6 +155,9 @@ const koreanUi: Record<string, string> = {
   "Use one computer for the course. You need a terminal and an NVIDIA account.":
     "강의 동안 사용할 컴퓨터 한 대를 정하세요. 터미널과 NVIDIA 계정이 필요합니다.",
   "I know which operating system I am using.": "내 운영체제를 알고 있습니다.",
+  "I selected my operating system above.": "위에서 내 운영체제를 선택했습니다.",
+  "Node.js is installed — node --version prints a version number.":
+    "Node.js가 설치되어 있습니다 — node --version에 버전 번호가 표시됩니다.",
   "I can open a terminal.": "터미널을 열 수 있습니다.",
   "I can sign in to build.nvidia.com.": "build.nvidia.com에 로그인할 수 있습니다.",
   "Create and protect your API key": "API 키 발급 및 보호",

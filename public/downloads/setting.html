@@ -160,7 +160,7 @@
 <div class="step os-win">
   <ol>
     <li>Windows Terminal + PowerShell 7 권장. 기본 PowerShell도 동작합니다. OpenCode 공식 문서는 완전한 호환성을 위해 WSL 사용도 권장합니다.</li>
-    <li>현재 Node.js LTS (npm으로 설치할 경우에만 필요).</li>
+    <li><strong>현재 Node.js LTS — Windows는 필수입니다.</strong> Windows 설치 경로는 npm뿐이므로 Node.js가 없으면 진행할 수 없습니다. <a href="https://nodejs.org" target="_blank">nodejs.org</a>에서 LTS를 먼저 설치하세요.</li>
     <li>NVIDIA 계정. 없으면 <a href="https://build.nvidia.com" target="_blank">build.nvidia.com</a>에서 가입.</li>
   </ol>
 </div>
@@ -217,6 +217,10 @@
 <div class="os-win">
   <h3>3-1. 네이티브 — npm</h3>
   <pre><code>npm install -g opencode-ai</code></pre>
+
+  <div class="note">
+    Windows에는 <code>curl -fsSL https://opencode.ai/install | bash</code>에 해당하는 설치 스크립트가 없습니다. 위 npm 명령을 사용하세요.
+  </div>
 
   <div class="tip">
     설치 후 <code>opencode --version</code>으로 확인합니다. <code>opencode : 용어가 ... 인식되지 않습니다</code> 오류가 나오면 터미널을 새로 열어 PATH를 다시 읽게 하세요.

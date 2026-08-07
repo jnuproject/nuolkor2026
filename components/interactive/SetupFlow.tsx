@@ -17,6 +17,8 @@ type SetupStep = {
   minutes: string;
   intro: string;
   checks: string[];
+  osChecks?: Record<OperatingSystem, string[]>;
+  requiresOs?: boolean;
 };
 
 const steps: SetupStep[] = [
@@ -28,10 +30,17 @@ const steps: SetupStep[] = [
     intro:
       "Use one computer for the course. You need a terminal and an NVIDIA account.",
     checks: [
-      "I know which operating system I am using.",
+      "I selected my operating system above.",
       "I can open a terminal.",
       "I can sign in to build.nvidia.com.",
     ],
+    osChecks: {
+      mac: [],
+      windows: [
+        "Node.js is installed — node --version prints a version number.",
+      ],
+    },
+    requiresOs: true,
   },
   {
     id: "key",
@@ -58,6 +67,7 @@ const steps: SetupStep[] = [
       "I reloaded the terminal settings or opened a new terminal after installation.",
       "The version command shows an OpenCode version.",
     ],
+    requiresOs: true,
   },
   {
     id: "connect",
@@ -71,6 +81,7 @@ const steps: SetupStep[] = [
       "I selected NVIDIA after using /connect.",
       "I selected the class model after using /models.",
     ],
+    requiresOs: true,
   },
   {
     id: "response",
@@ -109,6 +120,64 @@ const openCommands: Record<OperatingSystem, string> = {
   windows: "cd C:\\path\\to\\practice-folder\nopencode",
 };
 
+function stepChecks(step: SetupStep, os: OperatingSystem | null): string[] {
+  if (!os || !step.osChecks) return step.checks;
+  return [...step.checks, ...step.osChecks[os]];
+}
+
+function isStepComplete(
+  step: SetupStep,
+  checks: Record<string, string[]>,
+  os: OperatingSystem | null,
+): boolean {
+  if (step.requiresOs && os === null) return false;
+  const selected = checks[step.id] ?? [];
+  return stepChecks(step, os).every((item) => selected.includes(item));
+}
+
+function OsChoice({
+  os,
+  onChoose,
+  withHint,
+}: {
+  os: OperatingSystem | null;
+  onChoose: (value: OperatingSystem) => void;
+  withHint?: boolean;
+}) {
+  const language = useLanguage();
+
+  return (
+    <div className="setup-os-choice">
+      <span>{uiText(language, "My computer").toUpperCase()}</span>
+      <div>
+        {(["mac", "windows"] as const).map((value) => (
+          <button
+            aria-pressed={os === value}
+            className={os === value ? "is-selected" : ""}
+            key={value}
+            onClick={() => onChoose(value)}
+            type="button"
+          >
+            {value === "mac" ? "macOS" : "Windows"}
+          </button>
+        ))}
+      </div>
+      {withHint ? (
+        <p>
+          {os === null
+            ? uiText(language, "Choose your operating system to continue.")
+            : os === "mac"
+              ? uiText(language, "Use Terminal.app or another terminal.")
+              : uiText(
+                  language,
+                  "Windows Terminal with PowerShell is recommended. Node.js must be installed first.",
+                )}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
 const safeResponsePrompt =
   "Reply with only the word READY.\nDo not create, edit, rename, or delete any file.";
 const safeResponsePromptKo =
@@ -143,15 +212,17 @@ function CodeCopy({ code }: { code: string }) {
 export function SetupFlow() {
   const language = useLanguage();
   const [active, setActive] = useState(0);
-  const [os, setOs] = useState<OperatingSystem>("mac");
+  const [os, setOs] = useState<OperatingSystem | null>(null);
   const [checks, setChecks] = useState<Record<string, string[]>>({});
   const [status, setStatus] = useState<SetupStatus | null>(null);
-  const storageKey = "build-loop:setup:v2";
+  const storageKey = "build-loop:setup:v3";
   const step = steps[active];
   const selected = checks[step.id] ?? [];
-  const stepComplete = selected.length === step.checks.length;
-  const completeCount = steps.filter(
-    (item) => (checks[item.id] ?? []).length === item.checks.length,
+  const activeChecks = stepChecks(step, os);
+  const needsOsChoice = Boolean(step.requiresOs) && os === null;
+  const stepComplete = isStepComplete(step, checks, os);
+  const completeCount = steps.filter((item) =>
+    isStepComplete(item, checks, os),
   ).length;
   const allStepsComplete = completeCount === steps.length;
   const canOpenDayOne = allStepsComplete && status !== null;
@@ -168,19 +239,18 @@ export function SetupFlow() {
           status?: SetupStatus | null;
         };
         const restoredChecks = parsed.checks ?? {};
+        const restoredOs =
+          parsed.os === "windows" || parsed.os === "mac" ? parsed.os : null;
         const restoredStatus = ["green", "yellow", "red"].includes(
           parsed.status ?? "",
         )
           ? parsed.status ?? null
           : null;
         setActive(Math.max(0, Math.min(steps.length - 1, parsed.active ?? 0)));
-        setOs(parsed.os === "windows" ? "windows" : "mac");
+        setOs(restoredOs);
         setChecks(restoredChecks);
         setStatus(
-          steps.every(
-            (item) =>
-              (restoredChecks[item.id] ?? []).length === item.checks.length,
-          )
+          steps.every((item) => isStepComplete(item, restoredChecks, restoredOs))
             ? restoredStatus
             : null,
         );
@@ -194,7 +264,7 @@ export function SetupFlow() {
   function persist(
     nextChecks = checks,
     nextActive = active,
-    nextOs = os,
+    nextOs: OperatingSystem | null = os,
     nextStatus = status,
   ) {
     localStorage.setItem(
@@ -213,14 +283,22 @@ export function SetupFlow() {
       ? selected.filter((value) => value !== item)
       : [...selected, item];
     const nextChecks = { ...checks, [step.id]: nextSelected };
-    const nextAllStepsComplete = steps.every(
-      (entry) =>
-        (nextChecks[entry.id] ?? []).length === entry.checks.length,
+    const nextAllStepsComplete = steps.every((entry) =>
+      isStepComplete(entry, nextChecks, os),
     );
     const nextStatus = nextAllStepsComplete ? status : null;
     setChecks(nextChecks);
     setStatus(nextStatus);
     persist(nextChecks, active, os, nextStatus);
+  }
+
+  function chooseOs(value: OperatingSystem) {
+    const nextStatus = steps.every((item) => isStepComplete(item, checks, value))
+      ? status
+      : null;
+    setOs(value);
+    setStatus(nextStatus);
+    persist(checks, active, value, nextStatus);
   }
 
   function goTo(next: number) {
@@ -231,32 +309,7 @@ export function SetupFlow() {
 
   const stepTool = (() => {
     if (step.id === "prepare") {
-      return (
-        <div className="setup-os-choice">
-          <span>{uiText(language, "My computer").toUpperCase()}</span>
-          <div>
-            {(["mac", "windows"] as const).map((value) => (
-              <button
-                aria-pressed={os === value}
-                className={os === value ? "is-selected" : ""}
-                key={value}
-                onClick={() => {
-                  setOs(value);
-                  persist(checks, active, value);
-                }}
-                type="button"
-              >
-                {value === "mac" ? "macOS" : "Windows"}
-              </button>
-            ))}
-          </div>
-          <p>
-            {os === "mac"
-              ? uiText(language, "Use Terminal.app or another terminal.")
-              : uiText(language, "Windows Terminal with PowerShell is recommended.")}
-          </p>
-        </div>
-      );
+      return <OsChoice onChoose={chooseOs} os={os} withHint />;
     }
 
     if (step.id === "key") {
@@ -281,40 +334,59 @@ export function SetupFlow() {
     if (step.id === "install") {
       return (
         <div className="setup-command-stack">
-          <span>{uiText(language, "1 · Install").toUpperCase()}</span>
-          <CodeCopy code={installCommands[os]} />
-          {os === "mac" ? (
-            <>
-              <span>
-                {uiText(language, "2 · Reload terminal settings").toUpperCase()}
-              </span>
-              <CodeCopy code="source ~/.zshrc" />
-              <p>
-                {uiText(
-                  language,
-                  "Run this once after installation to reload the PATH setting in the current terminal. You can skip it if you completely close Terminal and open it again.",
-                )}
-              </p>
-            </>
+          <OsChoice onChoose={chooseOs} os={os} />
+          {os === null ? (
+            <p>
+              {uiText(
+                language,
+                "Choose your computer above to see the commands for it.",
+              )}
+            </p>
           ) : (
             <>
-              <span>{uiText(language, "2 · Open a new terminal").toUpperCase()}</span>
+              <span>{uiText(language, "1 · Install").toUpperCase()}</span>
+              <CodeCopy code={installCommands[os]} />
+              {os === "mac" ? (
+                <>
+                  <span>
+                    {uiText(
+                      language,
+                      "2 · Reload terminal settings",
+                    ).toUpperCase()}
+                  </span>
+                  <CodeCopy code="source ~/.zshrc" />
+                  <p>
+                    {uiText(
+                      language,
+                      "Run this once after installation to reload the PATH setting in the current terminal. You can skip it if you completely close Terminal and open it again.",
+                    )}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <span>
+                    {uiText(language, "2 · Open a new terminal").toUpperCase()}
+                  </span>
+                  <p>
+                    {uiText(
+                      language,
+                      "Close this terminal completely and open a new one before checking the version.",
+                    )}
+                  </p>
+                </>
+              )}
+              <span>
+                {uiText(language, "3 · Verify installation").toUpperCase()}
+              </span>
+              <CodeCopy code="opencode --version" />
               <p>
                 {uiText(
                   language,
-                  "Close this terminal completely and open a new one before checking the version.",
+                  "If the command is not found, stop and use the detailed guide or ask the instructor. Do not change unrelated computer settings.",
                 )}
               </p>
             </>
           )}
-          <span>{uiText(language, "3 · Verify installation").toUpperCase()}</span>
-          <CodeCopy code="opencode --version" />
-          <p>
-            {uiText(
-              language,
-              "If the command is not found, stop and use the detailed guide or ask the instructor. Do not change unrelated computer settings.",
-            )}
-          </p>
         </div>
       );
     }
@@ -322,18 +394,36 @@ export function SetupFlow() {
     if (step.id === "connect") {
       return (
         <div className="setup-command-stack">
-          <span>{uiText(language, "1 · Open your practice folder").toUpperCase()}</span>
-          <CodeCopy code={openCommands[os]} />
-          <span>{uiText(language, "2 · Connect the provider").toUpperCase()}</span>
-          <CodeCopy code="/connect" />
-          <p>
-            {uiText(
-              language,
-              "Select NVIDIA. Paste your key only when OpenCode shows its API key box.",
-            )}
-          </p>
-          <span>{uiText(language, "3 · Choose the class model").toUpperCase()}</span>
-          <CodeCopy code="/models" />
+          <OsChoice onChoose={chooseOs} os={os} />
+          {os === null ? (
+            <p>
+              {uiText(
+                language,
+                "Choose your computer above to see the commands for it.",
+              )}
+            </p>
+          ) : (
+            <>
+              <span>
+                {uiText(language, "1 · Open your practice folder").toUpperCase()}
+              </span>
+              <CodeCopy code={openCommands[os]} />
+              <span>
+                {uiText(language, "2 · Connect the provider").toUpperCase()}
+              </span>
+              <CodeCopy code="/connect" />
+              <p>
+                {uiText(
+                  language,
+                  "Select NVIDIA. Paste your key only when OpenCode shows its API key box.",
+                )}
+              </p>
+              <span>
+                {uiText(language, "3 · Choose the class model").toUpperCase()}
+              </span>
+              <CodeCopy code="/models" />
+            </>
+          )}
         </div>
       );
     }
@@ -436,7 +526,7 @@ export function SetupFlow() {
           <section className="setup-proof">
             <span>{uiText(language, "Check the result yourself").toUpperCase()}</span>
             <div>
-              {step.checks.map((item) => (
+              {activeChecks.map((item) => (
                 <label key={item}>
                   <input
                     checked={selected.includes(item)}
@@ -492,7 +582,9 @@ export function SetupFlow() {
               ← {uiText(language, "Previous")}
             </button>
             <span>
-              {active === steps.length - 1 && stepComplete && !allStepsComplete
+              {needsOsChoice
+                ? uiText(language, "Choose your operating system to continue.")
+                : active === steps.length - 1 && stepComplete && !allStepsComplete
                 ? language === "ko"
                   ? "남은 설정 단계를 모두 완료하세요"
                   : "Complete the remaining setup steps"
