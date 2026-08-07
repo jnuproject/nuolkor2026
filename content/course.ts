@@ -133,6 +133,16 @@ export const courseDays: DayInfo[] = [
   },
 ];
 
+/**
+ * Days above this are hidden from learners until the course catches up.
+ * Raise it by one the evening before each day runs.
+ */
+export const RELEASED_THROUGH_DAY = 1;
+
+export function isDayReleased(day: number): boolean {
+  return day <= RELEASED_THROUGH_DAY;
+}
+
 export function isDayNumber(value: number): value is DayNumber {
   return Number.isInteger(value) && value >= 1 && value <= 6;
 }

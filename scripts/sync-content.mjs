@@ -12,7 +12,28 @@ const labsOutputFile = path.join(outputDir, "generated-labs.ts");
 const publicLabsDir = path.join(projectRoot, "public", "labs");
 
 const labsByDay = {
-  1: [],
+  1: [
+    {
+      fileName: "opencode-hermes-setup-prompt-mac-en.md",
+      titleEn: "Setup prompt — macOS (English)",
+      titleKo: "설치 프롬프트 — macOS (영어)",
+    },
+    {
+      fileName: "opencode-hermes-setup-prompt-en.md",
+      titleEn: "Setup prompt — Windows (English)",
+      titleKo: "설치 프롬프트 — Windows (영어)",
+    },
+    {
+      fileName: "opencode-hermes-setup-prompt-mac.md",
+      titleEn: "Setup prompt — macOS (Korean)",
+      titleKo: "설치 프롬프트 — macOS (한국어)",
+    },
+    {
+      fileName: "opencode-hermes-setup-prompt.md",
+      titleEn: "Setup prompt — Windows (Korean)",
+      titleKo: "설치 프롬프트 — Windows (한국어)",
+    },
+  ],
   2: [
     {
       fileName: "day2-watch.py",

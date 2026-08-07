@@ -46,6 +46,10 @@ const LAB_FILES = [
   "day3-tools.py",
   "day4-safe.py",
   "day5-mcp-server.py",
+  "opencode-hermes-setup-prompt-en.md",
+  "opencode-hermes-setup-prompt-mac-en.md",
+  "opencode-hermes-setup-prompt-mac.md",
+  "opencode-hermes-setup-prompt.md",
 ];
 
 const PROHIBITED_PROJECT_EXAMPLES =
@@ -328,6 +332,15 @@ test("exports the new six-day bilingual course and every public classroom route"
 
   pages.forEach((html, index) => {
     const route = routes[index];
+    const lockedDay = /day\/([2-9])/.test(route);
+    if (lockedDay) {
+      assert.match(
+        html,
+        /아직 열리지 않았습니다/,
+        `${route} must be locked until the class reaches it`,
+      );
+      return;
+    }
     assert.match(
       html,
       /build-loop:language:v2/,
@@ -341,7 +354,7 @@ test("exports the new six-day bilingual course and every public classroom route"
 
   const presenterPages = routes
     .map((route, index) => ({ route, html: pages[index] }))
-    .filter(({ route }) => route.endsWith("/present"));
+    .filter(({ route }) => route.endsWith("/present") && !/day\/([2-9])/.test(route));
   presenterPages.forEach(({ html, route }) => {
     assert.match(html, /class="presenter presenter-projector/);
     assert.doesNotMatch(
@@ -853,11 +866,11 @@ test("copies the six public labs and offline setup files into the export", async
   ]);
 
   assert.deepEqual(
-    publicFiles.filter((file) => file.endsWith(".py")).sort(),
+    publicFiles.slice().sort(),
     LAB_FILES,
   );
   assert.deepEqual(
-    exportedFiles.filter((file) => file.endsWith(".py")).sort(),
+    exportedFiles.slice().sort(),
     LAB_FILES,
   );
   assert.deepEqual(

@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 import { InstructorPlanView } from "@/components/interactive/InstructorPlanView";
+import { LockedDay } from "@/components/LockedDay";
+import { isDayReleased } from "@/content/course";
 import { getDayCourseware } from "@/content/courseware";
 import { curriculumContent } from "@/content/generated";
 import { getInteractiveDay } from "@/content/interactive";
@@ -18,6 +20,9 @@ export default async function InstructorDayPage({
   const courseware = getDayCourseware(value);
   if (!plan || !courseware) {
     notFound();
+  }
+  if (!isDayReleased(value)) {
+    return <LockedDay day={value} />;
   }
 
   const content =
